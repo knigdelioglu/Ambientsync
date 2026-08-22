@@ -10,7 +10,7 @@ final class PrivateDisplayConnectionBackend: DisplayConnectionBackend, @unchecke
     ) -> CGError
 
     private typealias ConfigureDisplayEnabledFunc = @convention(c) (
-        CGDisplayConfigRef,
+        CGDisplayConfigRef?,
         CGDirectDisplayID,
         Bool
     ) -> CGError
@@ -57,26 +57,26 @@ final class PrivateDisplayConnectionBackend: DisplayConnectionBackend, @unchecke
             throw DisplayConnectionBackendError.beginConfigurationFailed(beginResult.rawValue)
         }
 
-        do {
-            if !enabled {
+        if !enabled {
+            do {
                 try detachFromMirrorSetIfNeeded(displayID: displayID, config: config)
-            }
-
-            let configureResult = configureDisplayEnabled(config, displayID, enabled)
-            guard configureResult == .success else {
+            } catch {
                 CGCancelDisplayConfiguration(config)
-                throw DisplayConnectionBackendError.configureEnabledFailed(configureResult.rawValue)
+                throw error
             }
+        }
 
-            // Session-scoped is intentionally safer than a permanent configuration:
-            // a reboot restores the display even if a private API regression leaves it disabled.
-            let completeResult = CGCompleteDisplayConfiguration(config, .forSession)
-            guard completeResult == .success else {
-                throw DisplayConnectionBackendError.completeConfigurationFailed(completeResult.rawValue)
-            }
-        } catch {
+        let configureResult = configureDisplayEnabled(config, displayID, enabled)
+        guard configureResult == .success else {
             CGCancelDisplayConfiguration(config)
-            throw error
+            throw DisplayConnectionBackendError.configureEnabledFailed(configureResult.rawValue)
+        }
+
+        // Session-scoped is intentionally safer than a permanent configuration:
+        // a reboot restores the display even if a private API regression leaves it disabled.
+        let completeResult = CGCompleteDisplayConfiguration(config, .forSession)
+        guard completeResult == .success else {
+            throw DisplayConnectionBackendError.completeConfigurationFailed(completeResult.rawValue)
         }
     }
 
