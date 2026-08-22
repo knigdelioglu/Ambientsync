@@ -67,12 +67,14 @@ jobs:
           cat > "$RUNNER_TEMP/release-notes.md" <<EOF
           ## AmbientSync $VERSION
 
-          - Samsung S60UD için kabloyu çıkarmadan yazılımsal ekran ayırma/yeniden bağlama desteği.
-          - Son aktif ekranı kapatmama, mirror-set güvenliği ve fresh display-ID reconnect akışı.
-          - Soft-disconnect isteğinin uyku/uyanma sonrasında korunması.
-          - HiDPI ve DDC recovery entegrasyonu.
-          - DMG paket yapısı düzeltildi: uygulama kaynakları standart Contents/Resources altında paketleniyor.
-          - Uygulama ad-hoc imzalanıyor; final DMG mount edilip codesign ve resource smoke testinden geçiriliyor.
+          - Quick Actions paneli baştan sona UX polish aldı; panel genişliği ve dikey ritim iyileştirildi.
+          - Üst durum alanı tek bir kompakt şeride dönüştürüldü; güç durumu “Fişte / Pil” olarak sadeleştirildi.
+          - Monitör sesi, dahili/harici parlaklık ve değer rozetleri ortak görsel sistem altında toplandı.
+          - Parlaklık kartında dahili ve harici ekran kontrolleri ayrıştırıldı; Ortam / Hedef / DDC metrikleri kompakt kutulara taşındı.
+          - Harici ekran bağlantı kartı sadeleştirildi; Ayır/Bağla eyleminin görsel ağırlığı azaltıldı.
+          - Ekranı Açık Tut seçenekleri tek satırlık kompakt süre kontrolüne dönüştürüldü.
+          - Mevcut soft-disconnect, HiDPI, DDC recovery ve güvenlik davranışları korunuyor.
+          - Final DMG mount edilip codesign ve resource smoke testinden geçiriliyor.
 
           ### Dağıtım notu
 
