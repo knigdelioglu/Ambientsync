@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/display-soft-disconnect
   pull_request:
 
 permissions:
@@ -27,3 +26,10 @@ jobs:
 
       - name: Build and test
         run: swift test
+
+      - name: Build and verify release DMG
+        run: |
+          chmod +x build_app.sh scripts/build_release_dmg.sh
+          ./scripts/build_release_dmg.sh
+          VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' Info.plist)
+          test -f "dist/AmbientSync-${VERSION}.dmg"

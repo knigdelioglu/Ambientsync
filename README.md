@@ -1,6 +1,6 @@
 # AmbientSync
 
-AmbientSync, macOS için menü çubuğunda çalışan bir ortam ışığı ve harici ekran yardımcı uygulamasıdır. Ortam ışığı sensörünü kullanarak ekran parlaklığını otomatik ayarlar; ayrıca harici monitör parlaklığı, monitör sesi, HiDPI modu ve uyanık tutma özelliklerini tek bir arayüzde sunar.
+AmbientSync, macOS için menü çubuğunda çalışan bir ortam ışığı ve harici ekran yardımcı uygulamasıdır. Ortam ışığı sensörünü kullanarak ekran parlaklığını otomatik ayarlar; ayrıca harici monitör parlaklığı, monitör sesi, HiDPI modu, yazılımsal ekran ayırma ve uyanık tutma özelliklerini tek bir arayüzde sunar.
 
 ## Özellikler
 
@@ -9,6 +9,7 @@ AmbientSync, macOS için menü çubuğunda çalışan bir ortam ışığı ve ha
 - Harici ekran parlaklığını DDC/CI üzerinden kontrol etme
 - Monitör sesini macOS ses tuşlarıyla yönlendirme
 - HiDPI modunu desteklenen harici ekranlarda açma/kapatma
+- Desteklenen harici ekranı kabloyu çıkarmadan macOS masaüstünden yazılımsal olarak ayırma ve yeniden bağlama
 - Mac’in uykuya geçmesini geçici veya kalıcı olarak engelleme
 - Ekran, EDID, DDC ve HiDPI tanılama araçları
 - Tercihleri ve ekran profillerini saklama
@@ -20,6 +21,9 @@ AmbientSync, macOS için menü çubuğunda çalışan bir ortam ışığı ve ha
 - Swift 6 araç zinciri
 - Otomatik parlaklık için ortam ışığı sensörü erişimi
 - Harici monitör parlaklık/ses kontrolü için DDC/CI destekli bağlantı
+- Harici monitör parlaklık ve ses kontrolü için `m1ddc` (`/opt/homebrew/bin/m1ddc` veya `/usr/local/bin/m1ddc`)
+
+Yazılımsal ekran ayırma özelliği private SkyLight/CoreGraphics API’lerini çalışma zamanında çözer. Şu anda Samsung S60UD (`vendor 0x4C2D`, `product 0x76AB`) profili üzerinde hedeflenmiştir. Private API davranışı macOS güncellemeleriyle değişebilir; gerekli semboller bulunamazsa özellik güvenli biçimde devre dışı kalır.
 
 ## Derleme ve çalıştırma
 
@@ -47,11 +51,19 @@ Uygulama paketi oluşturup `/Applications` altına kurma:
 ./build_app.sh
 ```
 
-Bu script `AmbientSync.app` paketini oluşturur ve mevcut uygulama paketini `/Applications/AmbientSync.app` konumuna kopyalar. Uygulamayı kaldırmak için Finder veya aşağıdaki komut kullanılabilir:
+Yalnız `.app` paketini oluşturmak için:
 
 ```bash
-rm -rf /Applications/AmbientSync.app
+INSTALL_APP=0 ./build_app.sh
 ```
+
+Dağıtıma uygun DMG üretmek için:
+
+```bash
+./scripts/build_release_dmg.sh
+```
+
+DMG `dist/AmbientSync-<sürüm>.dmg` olarak oluşturulur ve `hdiutil verify` ile doğrulanır. Paket ad-hoc imzalanır; Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir.
 
 ## Tanılama komutları
 
@@ -86,6 +98,19 @@ Bu nedenle HiDPI davranışı:
 
 HiDPI araştırmasının ayrıntıları için [`docs/hidpi_final_status.md`](docs/hidpi_final_status.md) ve [`AmbientSync_HiDPI_Kesif_Raporu.md`](AmbientSync_HiDPI_Kesif_Raporu.md) dosyalarına bakın.
 
+## Yazılımsal ekran ayırma
+
+Quick Actions içindeki **Harici Ekran** kartından desteklenen monitör **Ayır** ile macOS masaüstü topolojisinden çıkarılabilir; kablo fiziksel olarak bağlı kalır. **Bağla** işlemi private display listesinden güncel ekran kimliğini yeniden çözer ve ekranı geri etkinleştirir.
+
+Güvenlik davranışları:
+
+- Son aktif ekran hiçbir zaman yazılımsal olarak kapatılmaz.
+- Mirror setindeki hedef ekran ayırmadan önce güvenli biçimde mirror ilişkisinden çıkarılır.
+- Yeniden bağlama sırasında eski `CGDirectDisplayID` değerine güvenilmez; ekran her denemede yeniden enumerate edilir.
+- Yeniden bağlama üç kez denenir.
+- Soft-disconnect isteği uyku/uyanma sonrasında korunur; sistem ekranı geri açarsa AmbientSync güvenlik koşulları uygunsa tekrar ayırır.
+- Yapılandırma `.forSession` kapsamındadır; uygulama/WindowServer davranışında sorun olması halinde yeniden başlatma fiziksel ekranı kalıcı olarak kapalı bırakmaz.
+
 ## Proje yapısı
 
 ```text
@@ -94,7 +119,8 @@ Tests/                 Birim testleri
 Resources/             Uygulama kaynakları ve ikonlar
 docs/                  Mimari, tanılama ve HiDPI araştırma notları
 Tools/                 Yardımcı araçlar
-build_app.sh           .app paketi oluşturma ve kurulum script’i
+scripts/               Dağıtım/paketleme scriptleri
+build_app.sh           .app paketi oluşturma ve isteğe bağlı kurulum script’i
 Package.swift          Swift Package Manager tanımı
 Info.plist             macOS uygulama bundle ayarları
 ```
@@ -103,7 +129,9 @@ Info.plist             macOS uygulama bundle ayarları
 
 AmbientSync’in HiDPI akışı `sudo` kullanmaz, `/Library/Displays` altına yazmaz, sanal/dummy/mirror ekran oluşturmaz ve dahili ekranı hedeflemez. Harici ekran işlemleri fingerprint eşleşmesiyle sınırlandırılmıştır.
 
-Uygulama henüz imzalanmış veya notarize edilmiş bir dağıtım paketi olarak sunulmamaktadır. GitHub’dan klonlanan bir build, macOS Gatekeeper uyarılarıyla karşılaşabilir.
+Yazılımsal ekran ayırma ve HiDPI özellikleri private macOS API’lerine dayandığından Mac App Store dağıtımına uygun kabul edilmemelidir ve macOS güncellemelerinde yeniden doğrulanmalıdır.
+
+GitHub Releases üzerindeki DMG Developer ID ile imzalanmış veya notarize edilmiş değildir. İnternetten indirilen build macOS Gatekeeper uyarısıyla karşılaşabilir.
 
 ## Lisans
 
