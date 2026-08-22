@@ -77,14 +77,37 @@ public final class HiDPIOverrideReferenceStore {
     private static let bundledReferenceFileExtension = "plist"
 
     public static var bundledReferenceURL: URL? {
-        let bundle = Bundle.module
-        let candidates: [URL?] = [
-            bundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension, subdirectory: "HiDPIOverrides"),
-            bundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension),
-            bundle.resourceURL?.appendingPathComponent("HiDPIOverrides/\(bundledReferenceFileName).\(bundledReferenceFileExtension)"),
-            bundle.resourceURL?.appendingPathComponent("\(bundledReferenceFileName).\(bundledReferenceFileExtension)")
+        // Packaged macOS apps must keep resources under Contents/Resources.
+        // Prefer Bundle.main so release builds do not need a SwiftPM bundle
+        // beside Contents at the .app root, which invalidates code signing.
+        let mainCandidates: [URL?] = [
+            Bundle.main.url(
+                forResource: bundledReferenceFileName,
+                withExtension: bundledReferenceFileExtension,
+                subdirectory: "HiDPIOverrides"
+            ),
+            Bundle.main.url(
+                forResource: bundledReferenceFileName,
+                withExtension: bundledReferenceFileExtension
+            )
         ]
-        return candidates.compactMap { $0 }.first(where: { FileManager.default.fileExists(atPath: $0.path) })
+        if let packagedURL = mainCandidates.compactMap({ $0 }).first(where: {
+            FileManager.default.fileExists(atPath: $0.path)
+        }) {
+            return packagedURL
+        }
+
+        // SwiftPM test/debug builds continue to resolve the generated resource bundle.
+        let packageBundle = Bundle.module
+        let packageCandidates: [URL?] = [
+            packageBundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension, subdirectory: "HiDPIOverrides"),
+            packageBundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension),
+            packageBundle.resourceURL?.appendingPathComponent("HiDPIOverrides/\(bundledReferenceFileName).\(bundledReferenceFileExtension)"),
+            packageBundle.resourceURL?.appendingPathComponent("\(bundledReferenceFileName).\(bundledReferenceFileExtension)")
+        ]
+        return packageCandidates.compactMap { $0 }.first(where: {
+            FileManager.default.fileExists(atPath: $0.path)
+        })
     }
 
     public static var applicationSupportBackupURL: URL? {
