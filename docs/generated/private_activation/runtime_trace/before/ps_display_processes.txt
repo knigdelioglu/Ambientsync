@@ -1,0 +1,7 @@
+root              1421   0,0  0,0 435356640   7664   ??  Ss    1:39ÖS   0:00.06 /System/Library/PrivateFrameworks/AmbientDisplay.framework/Versions/A/XPCServices/com.apple.AmbientDisplayAgent.xpc/Contents/MacOS/com.apple.AmbientDisplayAgent
+kadir              774   0,0  0,1 435445424  24016   ??  Ss    1:39ÖS   0:00.13 /System/Library/CoreServices/ControlCenter.app/Contents/PlugIns/DisplayControls.appex/Contents/MacOS/DisplayControls -LaunchArguments eyJzZXJ2aWNlTmFtZSI6ImNvbS5hcHBsZS5jb250cm9scy5kaXNwbGF5IiwiZW5oYW5jZWRTZWN1cml0eSI6ZmFsc2UsInR5cGUiOjF9
+_accessoryupdater   608   0,0  0,0 435363728   5184   ??  Ss    1:38ÖS   0:00.06 /System/Library/PrivateFrameworks/MobileAccessoryUpdater.framework/XPCServices/UARPUpdaterServiceDisplay.xpc/Contents/MacOS/UARPUpdaterServiceDisplay
+root               579   0,0  0,0 435320832   4032   ??  Ss    1:38ÖS   0:00.09 /usr/libexec/colorsync.displayservices
+kadir            11967   0,0  0,0 435300320   1376 s015  S+    2:48ÖS   0:00.00 grep -i display
+kadir            11946   0,0  0,0 435303424   2272 s015  S+    2:48ÖS   0:00.01 /bin/bash ./scripts/capture_runtime_display_state.sh docs/generated/private_activation/runtime_trace/before
+kadir            11945   0,0  0,0 435299456   1984 s015  Ss+   2:48ÖS   0:00.01 /bin/bash -c shopt -u promptvars nullglob extglob nocaseglob dotglob; (\012./scripts/capture_runtime_display_state.sh docs/generated/private_activation/runtime_trace/before\012)\012__code=$?; pgrep -g 0 >/var/folders/j4/7k54blqs0ylg5m731hfd0vvw0000gn/T/gemini-shell-mCStY0/pgrep.tmp 2>&1; exit $__code;

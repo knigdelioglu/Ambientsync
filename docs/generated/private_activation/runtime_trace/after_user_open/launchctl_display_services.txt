@@ -1,0 +1,3 @@
+-	0	com.apple.preference.displays.MirrorDisplays
+-	0	com.apple.sidecar-display-agent
+36184	0	application.pro.betterdisplay.BetterDisplay.76693030.76693037

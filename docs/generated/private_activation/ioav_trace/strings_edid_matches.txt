@@ -1,0 +1,593 @@
+2333:yEDID
+27947:EDID
+27953: EDID
+28012:EDID ver
+28133:_EDID.biH
+29355:tomEDID
+29383:osEDID
+29426:i2cEDID
+34663:yEDID
+35082:edidProd]
+35087:edidData]
+35109:edidH
+35483:overrideH
+35778:edidProdL
+35779:edidDataL
+63814:RetrieveEDIDSheetView
+63815:CustomizeEDIDSheetView
+63941:reinitialize
+63945:customEDID
+63946:applyCustomEDID
+63947:applyFactoryEDID
+63948:autoApplyCustomEDID
+63949:i2cEDID
+63950:osEDID
+64060:displayServices
+64182:_TtC13BetterDisplay15DisplayOverride
+64187:_overridesRequireApply
+64188:_overridesEnabled
+64197:_overrideNativeResolution
+64200:_overrideDefaultResolution
+64201:_overrideDefaultResolutionHiDPI
+64205:_overrideDisplayName
+64207:_overrideDisplayIsTV
+64209:_intelEDIDOverride
+64210:_intelEDIDOverrideData
+64211:overridesRequireApply
+64212:overridesEnabled
+64220:overrideNativeResolution
+64223:overrideDefaultResolution
+64224:overrideDefaultResolutionHiDPI
+64228:overrideDisplayName
+64229:overrideDisplayIsTV
+64230:intelEDIDOverride
+64231:intelEDIDOverrideData
+64235:/Library/Displays/Contents/Resources/Overrides/DisplayVendorID-
+64245:override configuration
+64305:_overrideSettingsLastChangedBootID
+64306:_overrideSettingsLastAppliedDisplayTagIdList
+64452:_displayEDIDFormat
+64456:_reinitializeExternalDisplaysWithOverrideOnConnect
+64510:_updateChannelOverride
+64528:_showCustomizeEDIDSheet
+64529:_showCustomEDIDImporter
+64540:_silenceSettingsOverrideMessage
+64551:Virtual screens are not connected automatically, brightness and other adjustments are not restored and reverted to defaults, custom EDIDs are not automatically applied.
+64575:Not enough time elapsed since last EDID operation
+64613:DDC, XDR/HDR upscaling, EDID overrides are not available. Please open the app in native mode - to achieve this, unselect 'Open using Rosetta' in the app's Info sheet!
+64623:overrideSettingsLastChangedBootID
+64624:overrideSettingsLastAppliedDisplayTagIdList
+64743:displayEDIDFormat
+64746:reinitializeExternalDisplaysWithOverrideOnConnect
+64792:updateChannelOverride
+64803:Setting custom EDIDs
+64890:_displayServicesBrightnessChangedTrigger
+65152:Reinitialize external displays
+65332:The app menu will show this name instead of the system name for the display. If you want to change the system-wide name, you can do so by enabling the configuration override option and editing the system display name.
+65468:_overrideSettingsRequirePostApplyAction
+65763:Provided by EDID
+65774:Display EDID override
+65775:Apply EDID override on startup or when the display is next connected. A modified EDID allows you to alter display capabilities perceived by your Mac.
+65776:Load Custom EDID
+65790:Enable flexible scaling, create custom scaled resolutions, modify native and default resolutions, change display name and role, override display EDID. Please note that all displays with the same vendor and model number are affected by the changes!
+65791: An alternate EDID identity is in effect - system configuration changes will be tied to this identity!
+65804:Restore factory EDID for 
+65805:Restore Factory EDID
+65806:Apply configured custom EDID for 
+65807:Apply Custom EDID
+65808:Base64 Encoded EDID
+65809: as custom EDID for 
+65810:Configure Custom EDID
+65814:Reinitialize Display
+66405:reinitializeAllDisplays keyboard event registered
+66406:reinitializeAllDisplays
+66673:_minValueOverride
+66674:_maxValueOverride
+66675:_neutralValueOverride
+66676:_formatStringOverride
+66688:minValueOverride
+66689:maxValueOverride
+66690:neutralValueOverride
+66691:formatStringOverride
+66715:arm64IOAVService
+66739:I2C EDID write chunk
+66740:I2C EDID write retrying after wait for
+66741:I2C EDID write giving up for
+66742:IODisplayEDIDOriginal
+66772:EDID, or Extended Display Identification Data, is a standard for displays to convey their capabilities to a connected computer, including resolution, supported video formats, timings, and manufacturer information.
+66773:Retrieve EDID
+66774:Write EDID to Device
+66775:EDID Retrieval Method
+66776:Retrieved EDID Data
+66777:EDID data not retrieved.
+66778: EDID data retrieval failed.
+66780:Retrieve EDID Data
+66781:Export EDID Data
+66782:EDID data file could not be exported!
+66783:EDID data file successfully exported.
+66785:Reads EDID data acquired by the operating system. This data might be altered by the system for various reasons.
+66787:Attempts to directly read the EDID data from the display.
+66788:Attempts to directly read the EDID data from the display. Might not yield valid results on some systems.
+66790:Loaded EDID Data
+66791:Write EDID to Device
+66792:EDID write communication settings
+66797:Unlock EDID write - I understand the risks involved
+66798: An EDID write operation modifies the EDID and DisplayID data on the device itself. Erroneous EDID data or a problem during EDID write might render the display permanently unusable!
+66799:Most displays do not allow EDID write for security reasons, some displays require EDID write to be activated in a service menu. Most EDID emulators or pass-thru dongles support EDID write. EDID write (if supported) usually works over HDMI.
+66800: EDID write is not available for the supplied EDID as its size exceeds 256 bytes.
+66803:Proceed With EDID Write
+66804:An error occured during writing the EDID data.
+66805:Device EDID may have been corrupted!
+66806:Custom EDID write failed with
+66807:EDID data binary data sent successfully.
+66809:EDID data not loaded.
+66810: Unable to present EDID data.
+66811:Load an EDID binary image exported by 
+66812: (or other tools). You can also use an EDID binary created/modified by an EDID editor like AW EDID Editor. If you have a Base64 text representation of an EDID image, use the 'Paste Base64' button to load it.
+66813:Load EDID Data
+66814:_EDID_override.bin
+66816:EDID data successfully pasted.
+66817:EDID data file could not be imported!
+66818:EDID data binary successfully loaded.
+66819: EDID data cannot be interpreted (might be invalid).
+66823:EDID data is available - 
+66890:Reinitialize External Displays
+66982:Identify a device using its product name (as recorded in the display EDID).
+66983:Identify a device using a part of its name (as recorded in the display EDID, case insensitive).
+67067:Reinitialize display connection and reload custom configuration. Works with natively connected displays with EDID.
+67079:Custom EDID binary in Base64 format. Use `
+67081:Apply custom EDID. use `
+67082:` to set the EDID data to be applied. Works on Apple Silicon Macs only.
+67083:Restore the factory EDID. Works on Apple Silicon Macs only.
+67084:Configures custom EDID auto-apply.
+67085:Reads the display's EDID using I2C.
+67086:Shows the display EDID recorded by the OS. Might be malformed and have some identifiers removed on newer macOS versions.
+67285:rm -rf /Library/Displays/Contents/Resources/Overrides/*
+67574:You can override the default meaning of the on/off switch under Settings > Displays.
+67607: Certain displays are set to hide the menu bar icon, which may override this setting.
+67671:reinitializeIfNeededForFlexibleScalingPass1Time
+67719:edid
+67720:_customEdidApplied
+67721:customEdidAppliedConfigurationId
+67746:_storedIdentifiers
+67761:_overrideCapable
+67800:_audioDeviceNameOverride
+67819:_displayEDIDMethod
+67820:_displayEDIDLength
+67821:_displayEDIDOverrideFormat
+67822:_upscalePeakOverride
+67842:_EDIDOverrideData
+67843:_autoApplyEDIDOverride
+67845:_restoreFactoryEDIDOnQuit
+67850:_softwareBrightnessMinOverride
+67856:_reinitializeOnWake
+67857:_reinitializeOnUnlock
+67858:_reinitializeOnsTriggerVMM7100Reset
+67901:_showOverrideAdvancedSettings
+67904:_showEDIDOverrideDetails
+67919:storedIdentifiers
+67948:audioDeviceNameOverride
+67965:displayEDIDMethod
+67966:displayEDIDLength
+67967:displayEDIDOverrideFormat
+67968:upscalePeakOverride
+67986:EDIDOverrideData
+67987:autoApplyEDIDOverride
+67989:restoreFactoryEDIDOnQuit
+67994:softwareBrightnessMinOverride
+67999:reinitializeOnWake
+68000:reinitializeOnUnlock
+68001:reinitializeOnsTriggerVMM7100Reset
+68032:showOverrideAdvancedSettings
+68035:showEDIDOverrideDetails
+68184:as an earlier display. Custom EDID was applied to the display with the original display ID and the original display remained connected until now - treating new identity as an alternative for the original display with high confidence
+68533: Display group layout protection is in effect. This might alter or override the result of a move operation!
+68736:displayServicesRegisteredDisplayID
+68739:_displayServicesAmbientLightChangedTrigger
+68748:_TtC13BetterDisplay10EDIDParser
+68756:$__lazy_storage_$_edidVersion
+68757:$__lazy_storage_$_edidRevision
+69070:SimplyCoreAudio.streamIsActiveDidChange
+69073:SimplyCoreAudio.deviceHogModeDidChange
+69076:SimplyCoreAudio.deviceIsRunningSomewhereDidChange
+69078:SimplyCoreAudio.deviceIsAliveDidChange
+69079:SimplyCoreAudio.deviceMuteDidChange
+69080:SimplyCoreAudio.deviceVolumeDidChange
+69082:SimplyCoreAudio.deviceNameDidChange
+69083:SimplyCoreAudio.deviceClockSourceDidChange
+69085:SimplyCoreAudio.deviceNominalSampleRateDidChange
+69172:KeyboardShortcuts_shortcutByNameDidChange
+71103:paddleDidError:
+72518:currentLocaleDidChange
+74694:DisplayOverride
+74704:DisplayEDIDFormat
+74828:@DisplayOverrideView
+74836:ApplyFactoryEDIDIntent
+74837:ApplyCustomEDIDIntent
+74838:CustomEDIDIntent
+74841:ReinitializeIntent
+75050:DisplayEDIDView
+75051:CustomizeEDIDSheetView
+75052:RetrieveEDIDSheetView
+75053:EDIDText
+75111:EDID
+75122:DisplayEDIDMethod
+75269:EDIDParser
+104567:_overridesRequireApply
+104568:_overridesEnabled
+104577:_overrideNativeResolution
+104580:_overrideDefaultResolution
+104581:_overrideDefaultResolutionHiDPI
+104585:_overrideDisplayName
+104587:_overrideDisplayIsTV
+104589:_intelEDIDOverride
+104590:_intelEDIDOverrideData
+104657:_overrideSettingsLastChangedBootID
+104658:_overrideSettingsLastAppliedDisplayTagIdList
+104804:_displayEDIDFormat
+104808:_reinitializeExternalDisplaysWithOverrideOnConnect
+104862:_updateChannelOverride
+104880:_showCustomizeEDIDSheet
+104881:_showCustomEDIDImporter
+104892:_silenceSettingsOverrideMessage
+105024:_displayServicesBrightnessChangedTrigger
+105422:_overridesRequireApply
+105423:_overrideSettingsRequirePostApplyAction
+105438:overrideBlock
+105449:_pressedIdentifier
+105583:_displayOverride
+105587:_showCustomizeEDIDSheet
+105627:_customEDID
+105995:RetrieveEDIDSheetView
+105996:CustomizeEDIDSheetView
+106129:_minValueOverride
+106130:_maxValueOverride
+106131:_neutralValueOverride
+106132:_formatStringOverride
+106154:arm64IOAVService
+106222:_showRetrieveEDIDSheet
+106224:_edid
+106228:asDisplayOverride
+106229:_showCustomEDIDExporter
+106230:_showApplyEDIDAlert
+106231:_showResetEDIDAlert
+106232:_showWriteEDIDAlert
+106234:_showCustomEDIDWriteSettings
+106239:_edidString
+106399:reinitialize
+106407:customEDID
+106408:applyCustomEDID
+106409:applyFactoryEDID
+106410:autoApplyCustomEDID
+106411:i2cEDID
+106412:osEDID
+106631:_neutralValueOverride
+106705:reinitializeIfNeededForFlexibleScalingPass1Time
+106754:edid
+106755:_customEdidApplied
+106756:customEdidAppliedConfigurationId
+106781:_storedIdentifiers
+106797:_overrideCapable
+106836:_audioDeviceNameOverride
+106855:_displayEDIDMethod
+106856:_displayEDIDLength
+106857:_displayEDIDOverrideFormat
+106858:_upscalePeakOverride
+106878:_EDIDOverrideData
+106879:_autoApplyEDIDOverride
+106881:_restoreFactoryEDIDOnQuit
+106886:_softwareBrightnessMinOverride
+106892:_reinitializeOnWake
+106893:_reinitializeOnUnlock
+106894:_reinitializeOnsTriggerVMM7100Reset
+106937:_showOverrideAdvancedSettings
+106940:_showEDIDOverrideDetails
+107024:edidProductName
+107025:edidData
+107044:edidVersionString
+107823:displayServicesRegisteredDisplayID
+107826:_displayServicesAmbientLightChangedTrigger
+107831:displayServices
+107906:$__lazy_storage_$_edidVersion
+107907:$__lazy_storage_$_edidRevision
+122638:DisplayOverride
+122650:DisplayEDIDFormat
+122791:DisplayOverrideView
+122801:ApplyFactoryEDIDIntent
+122802:ApplyCustomEDIDIntent
+122803:CustomEDIDIntent
+122806:ReinitializeIntent
+123033:DisplayEDIDView
+123034:CustomizeEDIDSheetView
+123035:RetrieveEDIDSheetView
+123036:EDIDText
+123102:EDID
+123113:DisplayEDIDMethod
+123279:EDIDParser
+123646:RetrieveEDIDSheetView
+123647:CustomizeEDIDSheetView
+123773:reinitialize
+123777:customEDID
+123778:applyCustomEDID
+123779:applyFactoryEDID
+123780:autoApplyCustomEDID
+123781:i2cEDID
+123782:osEDID
+123892:displayServices
+124014:_TtC13BetterDisplay15DisplayOverride
+124019:_overridesRequireApply
+124020:_overridesEnabled
+124029:_overrideNativeResolution
+124032:_overrideDefaultResolution
+124033:_overrideDefaultResolutionHiDPI
+124037:_overrideDisplayName
+124039:_overrideDisplayIsTV
+124041:_intelEDIDOverride
+124042:_intelEDIDOverrideData
+124043:overridesRequireApply
+124044:overridesEnabled
+124052:overrideNativeResolution
+124055:overrideDefaultResolution
+124056:overrideDefaultResolutionHiDPI
+124060:overrideDisplayName
+124061:overrideDisplayIsTV
+124062:intelEDIDOverride
+124063:intelEDIDOverrideData
+124064: could not be reinitialized
+124068:/Library/Displays/Contents/Resources/Overrides/DisplayVendorID-
+124077:override configuration
+124137:_overrideSettingsLastChangedBootID
+124138:_overrideSettingsLastAppliedDisplayTagIdList
+124284:_displayEDIDFormat
+124288:_reinitializeExternalDisplaysWithOverrideOnConnect
+124342:_updateChannelOverride
+124360:_showCustomizeEDIDSheet
+124361:_showCustomEDIDImporter
+124372:_silenceSettingsOverrideMessage
+124383:Virtual screens are not connected automatically, brightness and other adjustments are not restored and reverted to defaults, custom EDIDs are not automatically applied.
+124404:Not enough time elapsed since last EDID operation
+124449:overrideSettingsLastChangedBootID
+124450:overrideSettingsLastAppliedDisplayTagIdList
+124569:displayEDIDFormat
+124572:reinitializeExternalDisplaysWithOverrideOnConnect
+124618:updateChannelOverride
+124629:Setting custom EDID failed for
+124630:Applied custom EDID for
+124631:Unable to retrieve current EDID for comparison
+124632:Current EDID and custom EDID are the same, no need to apply custom EDID
+124633:Current EDID and custom EDID are the same, no need to apply custom EDID. Zeroed items:
+124634:Setting factory EDID failed for
+124635:Applied factory EDID for
+124637:Factory EDID applied
+124638:Custom EDID applied
+124639:Setting custom EDIDs
+124640:Custom EDID auto-applied for
+124738:_displayServicesBrightnessChangedTrigger
+125000:Reinitialize external displays
+125175:Reinitialize this display on wake
+125177:Reinitialize this display on unlock
+125181:All VMM7100 based USB-C to HDMI devices are affected - make sure you enable the appropriate reinitialize for all displays connected with such devices to avoid the need for manual power cycles.
+125190:The app menu will show this name instead of the system name for the display. If you want to change the system-wide name, you can do so by enabling the configuration override option and editing the system display name.
+125335:_overrideSettingsRequirePostApplyAction
+125641:Provided by EDID
+125664: An alternate EDID identity is in effect - system configuration changes will be tied to this identity!
+125677:Restore factory EDID for 
+125678:Restore Factory EDID
+125679:Apply configured custom EDID for 
+125680:Apply Custom EDID
+125681:Base64 Encoded EDID
+125682: as custom EDID for 
+125683:Configure Custom EDID
+125687:Reinitialize Display
+126287:reinitializeAllDisplays keyboard event registered
+126288:reinitializeAllDisplays
+126555:_minValueOverride
+126556:_maxValueOverride
+126557:_neutralValueOverride
+126558:_formatStringOverride
+126570:minValueOverride
+126571:maxValueOverride
+126572:neutralValueOverride
+126573:formatStringOverride
+126597:arm64IOAVService
+126610:IOMobileFramebuffer
+126623:I2C EDID write chunk
+126624:I2C EDID write retrying after wait for
+126625:I2C EDID write giving up for
+126655:Retrieve and override EDID
+126656:EDID, or Extended Display Identification Data, is a standard for displays to convey their capabilities to a connected computer, including resolution, supported video formats, timings, and manufacturer information.
+126657:You can retrieve, modify and load/apply EDID data to alter display capabilities perceived by your Mac.
+126658:Retrieve EDID
+126659:Load Custom EDID
+126660:EDID Retrieval Method
+126661:Retrieved EDID Data
+126662:EDID data not retrieved.
+126663: EDID data retrieval failed.
+126665:Retrieve EDID Data
+126666:Export EDID Data
+126667:EDID data file could not be exported!
+126668:EDID data file successfully exported.
+126670:Reads EDID data acquired by the operating system. This data might be altered by the system for various reasons.
+126672:Attempts to directly read the EDID data from the display.
+126673:Attempts to directly read the EDID data from the display. Might not yield valid results on some systems.
+126676:Loaded EDID Data
+126677:Write EDID to Device
+126678:EDID write communication settings
+126683:Unlock EDID write - I understand the risks involved
+126684: An EDID write operation modifies the EDID and DisplayID data on the device itself. Erroneous EDID data or a problem during EDID write might render the display permanently unusable!
+126685:Most displays do not allow EDID write for security reasons, some displays require EDID write to be activated in a service menu. Most EDID emulators or pass-thru dongles support EDID write. EDID write (if supported) usually works over HDMI.
+126686: EDID write is not available for the supplied EDID as its size exceeds 256 bytes.
+126689:Proceed With EDID Write
+126690:An error occured during writing the EDID data.
+126691:Device EDID may have been corrupted!
+126692:Custom EDID write failed with
+126693:EDID data binary data sent successfully.
+126695:EDID data not loaded.
+126696: Unable to present EDID data.
+126697:Preserve continuity in case of an EDID display identity change
+126698:If the updated EDID contains new display identity (serial number, model ID, vendor ID), macOS will treat the display as a separate display. With this option enabled, 
+126700:Restore factory EDID on quit
+126701:It is advised to leave this on, especially if the custom EDID alters display identity. Without this the app may detect the display as different upon next startup.
+126702:Automatically apply custom EDID upon detection of this display
+126703:The app will apply the loaded EDID when this display is connected. The operation causes the screen to flicker and switch modes if existing mode is not available with the updated EDID. If the new EDID has different id data (vendor, model, serial), the display will be redetected as a different one. Hold 
+126705:Apply Custom EDID Now
+126706:Reset Factory EDID (Unapply)
+126707:The operation might cause the screen to flicker and switch mode if the existing mode is not available with the factory EDID. The display will be redetected as a different display if the current EDID has different identifiers.
+126709:The operation might cause the screen to flicker and switch mode if the existing mode is not available with the updated EDID. The display will be redetected as a different display if the EDID has different identifiers.
+126711:Load an EDID binary image exported by 
+126712: (or other tools). You can also use an EDID binary created/modified by an EDID editor like AW EDID Editor. If you have a Base64 text representation of an EDID image, use the 'Paste Base64' button to load it.
+126713:Load EDID Data
+126714:_EDID_override.bin
+126716:EDID data successfully pasted.
+126717:EDID data file could not be imported!
+126718:EDID data binary successfully loaded.
+126719: EDID data cannot be interpreted (might be invalid).
+126723:EDID data is available - 
+126790:Reinitialize External Displays
+126885:Identify a device using its product name (as recorded in the display EDID).
+126886:Identify a device using a part of its name (as recorded in the display EDID, case insensitive).
+126970:Reinitialize display connection and reload custom configuration. Works with natively connected displays with EDID.
+126982:Custom EDID binary in Base64 format. Use `
+126984:Apply custom EDID. use `
+126985:` to set the EDID data to be applied. Works on Apple Silicon Macs only.
+126986:Restore the factory EDID. Works on Apple Silicon Macs only.
+126987:Configures custom EDID auto-apply.
+126988:Reads the display's EDID using I2C.
+126989:Shows the display EDID recorded by the OS. Might be malformed and have some identifiers removed on newer macOS versions.
+127191:rm -rf /Library/Displays/Contents/Resources/Overrides/*
+127215:Reinitialize external displays with flexible scaling if needed
+127216:This is a workaround of an issue present in some versions of macOS Sonoma which occasionally prevents a display's custom configuration to be loaded properly. With this setting the app attempts to reinitialize the display if flexible scaling resolutions seem to be missing.
+127481:You can override the default meaning of the on/off switch under Settings > Displays.
+127514: Certain displays are set to hide the menu bar icon, which may override this setting.
+127579:reinitializeIfNeededForFlexibleScalingPass1Time
+127627:edid
+127628:_customEdidApplied
+127629:customEdidAppliedConfigurationId
+127654:_storedIdentifiers
+127669:_overrideCapable
+127708:_audioDeviceNameOverride
+127727:_displayEDIDMethod
+127728:_displayEDIDLength
+127729:_displayEDIDOverrideFormat
+127730:_upscalePeakOverride
+127750:_EDIDOverrideData
+127751:_autoApplyEDIDOverride
+127753:_restoreFactoryEDIDOnQuit
+127758:_softwareBrightnessMinOverride
+127764:_reinitializeOnWake
+127765:_reinitializeOnUnlock
+127766:_reinitializeOnsTriggerVMM7100Reset
+127809:_showOverrideAdvancedSettings
+127812:_showEDIDOverrideDetails
+127827:storedIdentifiers
+127856:audioDeviceNameOverride
+127873:displayEDIDMethod
+127874:displayEDIDLength
+127875:displayEDIDOverrideFormat
+127876:upscalePeakOverride
+127894:EDIDOverrideData
+127895:autoApplyEDIDOverride
+127897:restoreFactoryEDIDOnQuit
+127902:softwareBrightnessMinOverride
+127907:reinitializeOnWake
+127908:reinitializeOnUnlock
+127909:reinitializeOnsTriggerVMM7100Reset
+127940:showOverrideAdvancedSettings
+127943:showEDIDOverrideDetails
+128090:as an earlier display. Custom EDID was applied to the display with the original display ID and the original display remained connected until now - treating new identity as an alternative for the original display with high confidence
+128463: Display group layout protection is in effect. This might alter or override the result of a move operation!
+128667:displayServicesRegisteredDisplayID
+128670:_displayServicesAmbientLightChangedTrigger
+128679:_TtC13BetterDisplay10EDIDParser
+128687:$__lazy_storage_$_edidVersion
+128688:$__lazy_storage_$_edidRevision
+129002:SimplyCoreAudio.streamIsActiveDidChange
+129005:SimplyCoreAudio.deviceHogModeDidChange
+129008:SimplyCoreAudio.deviceIsRunningSomewhereDidChange
+129010:SimplyCoreAudio.deviceIsAliveDidChange
+129011:SimplyCoreAudio.deviceMuteDidChange
+129012:SimplyCoreAudio.deviceVolumeDidChange
+129014:SimplyCoreAudio.deviceNameDidChange
+129015:SimplyCoreAudio.deviceClockSourceDidChange
+129017:SimplyCoreAudio.deviceNominalSampleRateDidChange
+129104:KeyboardShortcuts_shortcutByNameDidChange
+131375:paddleDidError:
+132461:currentLocaleDidChange
+133189:legacyHDMIEDID
+163721:_overridesRequireApply
+163722:_overridesEnabled
+163731:_overrideNativeResolution
+163734:_overrideDefaultResolution
+163735:_overrideDefaultResolutionHiDPI
+163739:_overrideDisplayName
+163741:_overrideDisplayIsTV
+163743:_intelEDIDOverride
+163744:_intelEDIDOverrideData
+163811:_overrideSettingsLastChangedBootID
+163812:_overrideSettingsLastAppliedDisplayTagIdList
+163958:_displayEDIDFormat
+163962:_reinitializeExternalDisplaysWithOverrideOnConnect
+164016:_updateChannelOverride
+164034:_showCustomizeEDIDSheet
+164035:_showCustomEDIDImporter
+164046:_silenceSettingsOverrideMessage
+164178:_displayServicesBrightnessChangedTrigger
+164576:_overridesRequireApply
+164577:_overrideSettingsRequirePostApplyAction
+164592:overrideBlock
+164603:_pressedIdentifier
+164740:_displayOverride
+164744:_showCustomizeEDIDSheet
+164784:_customEDID
+165152:RetrieveEDIDSheetView
+165153:CustomizeEDIDSheetView
+165286:_minValueOverride
+165287:_maxValueOverride
+165288:_neutralValueOverride
+165289:_formatStringOverride
+165311:arm64IOAVService
+165379:_showRetrieveEDIDSheet
+165381:_edid
+165385:asDisplayOverride
+165386:_showCustomEDIDExporter
+165387:_showApplyEDIDAlert
+165388:_showResetEDIDAlert
+165389:_showWriteEDIDAlert
+165391:_showCustomEDIDWriteSettings
+165396:_edidString
+165556:reinitialize
+165564:customEDID
+165565:applyCustomEDID
+165566:applyFactoryEDID
+165567:autoApplyCustomEDID
+165568:i2cEDID
+165569:osEDID
+165788:_neutralValueOverride
+165862:reinitializeIfNeededForFlexibleScalingPass1Time
+165911:edid
+165912:_customEdidApplied
+165913:customEdidAppliedConfigurationId
+165938:_storedIdentifiers
+165954:_overrideCapable
+165993:_audioDeviceNameOverride
+166012:_displayEDIDMethod
+166013:_displayEDIDLength
+166014:_displayEDIDOverrideFormat
+166015:_upscalePeakOverride
+166035:_EDIDOverrideData
+166036:_autoApplyEDIDOverride
+166038:_restoreFactoryEDIDOnQuit
+166043:_softwareBrightnessMinOverride
+166049:_reinitializeOnWake
+166050:_reinitializeOnUnlock
+166051:_reinitializeOnsTriggerVMM7100Reset
+166094:_showOverrideAdvancedSettings
+166097:_showEDIDOverrideDetails
+166181:edidProductName
+166182:edidData
+166201:edidVersionString
+166980:displayServicesRegisteredDisplayID
+166983:_displayServicesAmbientLightChangedTrigger
+166988:displayServices
+167063:$__lazy_storage_$_edidVersion
+167064:$__lazy_storage_$_edidRevision

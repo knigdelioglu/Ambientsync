@@ -1,0 +1,52 @@
+$ system_profiler SPDisplaysDataType -json
+
+{
+  "SPDisplaysDataType" : [
+    {
+      "_name" : "Apple M4",
+      "spdisplays_mtlgpufamilysupport" : "spdisplays_metal4",
+      "spdisplays_ndrvs" : [
+        {
+          "_name" : "Color LCD",
+          "_spdisplays_display-product-id" : "a063",
+          "_spdisplays_display-serial-number" : "fd626d62",
+          "_spdisplays_display-vendor-id" : "610",
+          "_spdisplays_display-week" : "0",
+          "_spdisplays_display-year" : "0",
+          "_spdisplays_displayID" : "1",
+          "_spdisplays_pixels" : "3420 x 2224",
+          "_spdisplays_resolution" : "1710 x 1112 @ 60.00Hz",
+          "spdisplays_ambient_brightness" : "spdisplays_yes",
+          "spdisplays_connection_type" : "spdisplays_internal",
+          "spdisplays_display_type" : "spdisplays_built-in-liquid-retina",
+          "spdisplays_main" : "spdisplays_yes",
+          "spdisplays_mirror" : "spdisplays_off",
+          "spdisplays_online" : "spdisplays_yes",
+          "spdisplays_pixelresolution" : "spdisplays_2560x1664Retina"
+        },
+        {
+          "_name" : "LS32D60xU",
+          "_spdisplays_display-product-id" : "76ab",
+          "_spdisplays_display-serial-number" : "30413332",
+          "_spdisplays_display-vendor-id" : "4c2d",
+          "_spdisplays_display-week" : "31",
+          "_spdisplays_display-year" : "2024",
+          "_spdisplays_displayID" : "3",
+          "_spdisplays_pixels" : "2560 x 1440",
+          "_spdisplays_resolution" : "2560 x 1440 @ 100.00Hz",
+          "spdisplays_mirror" : "spdisplays_off",
+          "spdisplays_online" : "spdisplays_yes",
+          "spdisplays_pixelresolution" : "spdisplays_qhd",
+          "spdisplays_resolution" : "2560 x 1440 @ 100.00Hz",
+          "spdisplays_rotation" : "spdisplays_supported"
+        }
+      ],
+      "spdisplays_vendor" : "sppci_vendor_Apple",
+      "sppci_bus" : "spdisplays_builtin",
+      "sppci_cores" : "8",
+      "sppci_device_type" : "spdisplays_gpu",
+      "sppci_model" : "Apple M4"
+    }
+  ]
+}
+[exit_status] 0

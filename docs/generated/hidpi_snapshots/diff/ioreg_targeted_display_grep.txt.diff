@@ -1,0 +1,20 @@
+--- /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/before_betterdisplay_apply/ioreg_targeted_display_grep.txt	2026-05-20 10:39:33
++++ /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/after_betterdisplay_apply/ioreg_targeted_display_grep.txt	2026-05-20 10:41:56
+@@ -288,7 +288,7 @@
+     | |   |       |           |   "IOProviderClass" = "DCPAVAudioInterfaceProxy"
+     | |   |       |           |   "clock domain" = 1835100526
+     | |   |       |           |   "output streams" = ({"stream ID"=2,"starting channel"=1,"current format"={"bytes per frame"=8,"sample rate"=189408057753600,"channels per frame"=2,"bits per channel"=24,"format flags"=4,"bytes per packet"=8,"frames per packet"=1,"format ID"=1819304813},"available formats"=({"bytes per frame"=4,"channels per frame"=2,"bits per channel"=16,"format flags"=12,"max sample rate"=206158430208000,"bytes per packet"=4,"frames per packet"=1,"format ID"=1819304813,"min sample rate"=206158430208000},{"bytes per frame"=8,"channels per frame"=2,"bits per channel"=24,"format flags"=4,"max sample rate"=206158430208000,"bytes per packet"=8,"frames per packet"=1,"format ID"=1819304813,"min sample rate"=206158430208000},{"bytes per frame"=4,"channels per frame"=2,"bits per channel"=16,"format flags"=12,"max sample rate"=189408057753600,"bytes per packet"=4,"frames per packet"=1,"format ID"=1819304813,"min sample rate"=189408057753600},{"bytes per frame"=8,"channels per frame"=2,"bits per channel"=24,"format flags"=4,"max sample rate"=189408057753600,"bytes per packet"=8,"frames per packet"=1,"format ID"=1819304813,"min sample rate"=189408057753600},{"bytes per frame"=4,"channels per frame"=2,"bits per channel"=16,"format flags"=12,"max sample rate"=137438953472000,"bytes per packet"=4,"frames per packet"=1,"format ID"=1819304813,"min sample rate"=137438953472000},{"bytes per frame"=8,"channels per frame"=2,"bits per channel"=24,"format flags"=4,"max sample rate"=137438953472000,"bytes per packet"=8,"frames per packet"=1,"format ID"=1819304813,"min sample rate"=137438953472000},{"bytes per frame"=8,"channels per frame"=2,"bits per channel"=20,"format flags"=4,"max sample rate"=206158430208000,"bytes per packet"=8,"frames per packet"=1,"format ID"=1819304813,"min sample rate"=206158430208000},{"bytes per frame"=8,"channels per frame"=2,"bits per channel"=20,"format flags"=4,"max sample rate"=189408057753600,"bytes per packet"=8,"frames per packet"=1,"format ID"=1819304813,"min sample rate"=189408057753600},{"bytes per frame"=8,"channels per frame"=2,"bits per channel"=20,"format flags"=4,"max sample rate"=137438953472000,"bytes per packet"=8,"frames per packet"=1,"format ID"=1819304813,"min sample rate"=137438953472000})})
+-    | |   |       |           |   "TransferCount" = 2057
++    | |   |       |           |   "TransferCount" = 2569
+     | |   |       |           |   "output channel layout" = (1,2)
+     | |   |       |           |   "IOProbeScore" = 0
+     | |   |       |           |   "IOReportLegendPublic" = Yes
+@@ -360,7 +360,7 @@
+     | |   |       |       |   "EPICLocation" = "External"
+     | |   |       |       |   "interface-id" = 3
+     | |   |       |       |   "MaxPixelWidth" = 6144
+-    | |   |       |       |   "IOPowerManagement" = {"CapabilityFlags"=256,"MaxPowerState"=1,"ActivityTickles"=2,"DevicePowerState"=0,"IdleTimerPeriod"=1000,"TimeSinceLastTickle"=573527,"DriverPowerState"=0,"ChildrenPowerState"=0,"CurrentPowerState"=0}
++    | |   |       |       |   "IOPowerManagement" = {"CapabilityFlags"=256,"MaxPowerState"=1,"ActivityTickles"=2,"DevicePowerState"=0,"IdleTimerPeriod"=1000,"TimeSinceLastTickle"=716347,"DriverPowerState"=0,"ChildrenPowerState"=0,"CurrentPowerState"=0}
+     | |   |       |       |   "EPICUnit" = 1
+     | |   |       |       |   "EPICName" = "dcpdptx-port-epic"
+     | |   |       |       |   "role" = "DCPEXT0"

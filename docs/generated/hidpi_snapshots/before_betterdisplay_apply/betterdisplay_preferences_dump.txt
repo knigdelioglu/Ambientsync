@@ -1,0 +1,350 @@
+
+## ls -lOe /Users/kadir/Library/Preferences/pro.betterdisplay.BetterDisplay.plist
+
+-rw-------@ 1 kadir  staff  - 7363 May 20 10:10 /Users/kadir/Library/Preferences/pro.betterdisplay.BetterDisplay.plist
+
+[exit_status] 0
+
+## plutil -p /Users/kadir/Library/Preferences/pro.betterdisplay.BetterDisplay.plist
+
+{
+  "activationPriority@DisplayGroup:-1001" => 0
+  "airPlay@Display:2" => false
+  "airPlay@Display:3" => false
+  "appAlreadyLaunched" => true
+  "appDisconnected@Display:2" => false
+  "appDisconnected@Display:3" => false
+  "appleCapable@Display:2" => true
+  "appleCapable@Display:3" => false
+  "appleMade@Display:2" => true
+  "appleMade@Display:3" => false
+  "appleVisionPro@Display:2" => false
+  "appleVisionPro@Display:3" => false
+  "buildNumber" => 45613
+  "builtIn@Display:2" => true
+  "builtIn@Display:3" => false
+  "canChangeOrientation@Display:2" => true
+  "canChangeOrientation@Display:3" => true
+  "colorProfilesSupported@Display:2" => true
+  "colorProfilesSupported@Display:3" => true
+  "colorTableCapable@Display:2" => true
+  "colorTableCapable@Display:3" => true
+  "configuredPotentialEDR@Display:2" => 2
+  "configuredPotentialEDR@Display:3" => 1
+  "configuredReferenceEDR@Display:2" => 1
+  "configuredReferenceEDR@Display:3" => 1
+  "connected@Display:2" => true
+  "connected@Display:3" => true
+  "currentColorProfileURL@Display:2" => "file:///Library/ColorSync/Profiles/Displays/Color%20LCD-37D8832A-2D66-02CA-B9F7-8F30A301B230.icc"
+  "currentColorProfileURL@Display:3" => "file:///Library/Application%20Support/Adobe/Color/Profiles/Recommended/AppleRGB.icc"
+  "ddcConfigurationNoticeDismissed@Display:2" => true
+  "defaultBitsPerSample@Display:2" => 10
+  "defaultBitsPerSample@Display:3" => 10
+  "defaultHeight@Display:2" => 956
+  "defaultHeight@Display:3" => 1440
+  "defaultIsHiDPI@Display:2" => true
+  "defaultIsHiDPI@Display:3" => false
+  "defaultModeNumber@Display:2" => 6
+  "defaultModeNumber@Display:3" => 56
+  "defaultRefreshRate@Display:2" => 60
+  "defaultRefreshRate@Display:3" => 100
+  "defaultRefreshString@Display:2" => "60Hz"
+  "defaultRefreshString@Display:3" => "100Hz"
+  "defaultWidth@Display:2" => 1470
+  "defaultWidth@Display:3" => 2560
+  "displayConfigurationId" => 12
+  "displayConfigurationId@Display:2" => 12
+  "displayConfigurationId@Display:3" => 12
+  "displayTagIDs" => "[2,3]"
+  "factoryColorProfileURL@Display:2" => "file:///Library/ColorSync/Profiles/Displays/Color%20LCD-37D8832A-2D66-02CA-B9F7-8F30A301B230.icc"
+  "factoryColorProfileURL@Display:3" => "file:///Library/ColorSync/Profiles/Displays/LS32D60xU-DAFD7C4E-5BC3-45B2-B601-42A2372D5261.icc"
+  "firstAdded@Display:2" => 800900879.212761
+  "firstAdded@Display:3" => 800900879.409893
+  "hasAutoBrightness@Display:2" => true
+  "hasAutoBrightness@Display:3" => false
+  "hasHDR@Display:2" => false
+  "hasHDR@Display:3" => true
+  "hasHiDPI@Display:2" => true
+  "hasHiDPI@Display:3" => true
+  "hasNotch@Display:2" => true
+  "hasNotch@Display:3" => false
+  "hasUnderscanSupport@Display:2" => false
+  "hasUnderscanSupport@Display:3" => false
+  "heightMillimeters@Display:2" => 188.9284252562252
+  "heightMillimeters@Display:3" => 399.7376989145748
+  "isUnavailable@hardwareAmbientLight-AmbientLightController" => true
+  "lastConnected@Display:2" => 800952243.87685
+  "lastConnected@Display:3" => 800952243.9513921
+  "lastUnseen@Display:3" => 800914744.713855
+  "menuLevelBlueLight" => "less"
+  "menuLevelBrightness" => "less"
+  "menuLevelCheckForUpdates" => "less"
+  "menuLevelColorDepth" => "more"
+  "menuLevelColorMode" => "more"
+  "menuLevelColorProfile" => "more"
+  "menuLevelConfigProtection" => "more"
+  "menuLevelContrast" => "hide"
+  "menuLevelDDCAdjustments" => "more"
+  "menuLevelDDCInput" => "more"
+  "menuLevelDisplayConnect" => "less"
+  "menuLevelDisplayDisconnect" => "more"
+  "menuLevelDisplayMode" => "more"
+  "menuLevelDisplaysAndVirtualScreens" => "less"
+  "menuLevelGroups" => "less"
+  "menuLevelImageAdjustments" => "more"
+  "menuLevelManageDisplay" => "more"
+  "menuLevelManageVirtualScreen" => "more"
+  "menuLevelMirror" => "more"
+  "menuLevelMove" => "more"
+  "menuLevelPIP" => "more"
+  "menuLevelQuit" => "less"
+  "menuLevelRefreshRate" => "more"
+  "menuLevelResolution" => "less"
+  "menuLevelRotation" => "more"
+  "menuLevelSettings" => "less"
+  "menuLevelStream" => "more"
+  "menuLevelToggles" => "more"
+  "menuLevelVideoFilterWindow" => "less"
+  "menuLevelVirtualScreenConnect" => "less"
+  "menuLevelVirtualScreenDisconnect" => "more"
+  "menuLevelVolume" => "more"
+  "menuLevelXDRPreset" => "more"
+  "moreOptions@Display:2" => false
+  "moreOptions@Display:3" => true
+  "name@Display:2" => "Color LCD"
+  "name@Display:3" => "LS32D60xU"
+  "nativeHeight@Display:2" => 1664
+  "nativeHeight@Display:3" => 1440
+  "nativeModeNumber@Display:2" => 13
+  "nativeModeNumber@Display:3" => 56
+  "nativeWidth@Display:2" => 2560
+  "nativeWidth@Display:3" => 2560
+  "nonAppleRealDisplay@Display:2" => false
+  "nonAppleRealDisplay@Display:3" => true
+  "onboardingMenuIcon" => false
+  "onboardingMoreIcon" => false
+  "overrideCapable@Display:2" => true
+  "overrideCapable@Display:3" => true
+  "Paddle-BetterDisplay-762421-SD" => "e51c6453ffc7e2d3cede027c18a970283b1ead4b994a2e26d65a19bd6bc80caf"
+  "persistedDisplayID@Display:2" => "1"
+  "persistedDisplayID@Display:3" => "2"
+  "showProLicenseExpiryError" => false
+  "sidecar@Display:2" => false
+  "sidecar@Display:3" => false
+  "singleMoreMenuTagID" => 3
+  "storedIdentifiers@Display:2" => "[{"infoDictionaryModelNumber":41059,"edidProductName":"Color LCD","ioDisplayLocation":"IOService:\/AppleARMPE\/arm-io@10F00000\/AppleH16GFamilyIO\/disp0@8000000\/IOMobileFramebufferShim","vendorNumber":1552,"modelNumber":41059,"infoDictionaryVendorNumber":1552,"infoDictionarySerial":4251086178,"productName":"Color LCD","systemUUID":"37D8832A-2D66-02CA-B9F7-8F30A301B230","serial":4251086178}]"
+  "storedIdentifiers@Display:3" => "[{"productName":"LS32D60xU","alphanumericSerialNumber":"HK7X700177","infoDictionaryVendorNumber":19501,"systemUUID":"DAFD7C4E-5BC3-45B2-B601-42A2372D5261","infoDictionaryModelNumber":30379,"portID":0,"yearOfManufacture":2024,"vendorNumber":19501,"edidData":"AP\/\/\/\/\/\/\/wBMLat2MjNBMB8iAQS1Rih4OlQ1qVVKqScKUFQlSwBxT4EAgcCBgJUAqcCzAAEBVl4AoKCgKVAwIDUAuoghAAAaAAAA\/QAyZB6XKgAKICAgICAgAAAA\/ABMUzMyRDYweFUKICAgAAAA\/wBISzdYNzAwMTc3CiAgAbgCAx\/xR5BAHwQTAxIjCQcHgwEAAOMFwADmBgUBWloAWqAAoKCgRlAwIDUAuoghAAAaAjqAGHE4LUBYLEUAuoghAAAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1w==","weekOfManufacture":31,"modelNumber":30379,"ioDisplayLocation":"IOService:\/AppleARMPE\/arm-io@10F00000\/AppleH16GFamilyIO\/dispext0@84000000\/IOMobileFramebufferShim","edidProductName":"LS32D60xU","serial":809579314,"infoDictionarySerial":809579314}]"
+  "SUAutomaticallyUpdate" => false
+  "SUEnableAutomaticChecks" => false
+  "SUHasLaunchedBefore" => true
+  "SUSendProfileInfo" => false
+  "systemVirtual@Display:2" => false
+  "systemVirtual@Display:3" => false
+  "tagIDCounter" => 3
+  "thirdPartyVirtual@Display:2" => false
+  "thirdPartyVirtual@Display:3" => false
+  "toolsMoreOptions" => false
+  "tv@Display:2" => false
+  "tv@Display:3" => false
+  "unknownDisplay@Display:2" => false
+  "unknownDisplay@Display:3" => false
+  "uuid@Display:0" => 0
+  "uuid@Display:2" => 2
+  "uuid@Display:3" => 3
+  "uuid@DisplayGroup:-1001" => -1001
+  "value@blueLight-BlueLightController" => 0.4963182210922241
+  "value@combinedBrightness-CombinedController@Display:2" => 0.5826411202098384
+  "value@hardwareBrightness-AppleController@Display:2" => 0.4444610774517059
+  "value@softwareBrightness-ColorController@Display:2" => 1
+  "value@softwareBrightness-ColorController@Display:3" => 1
+  "virtualScreenLinked@Display:2" => false
+  "virtualScreenLinked@Display:3" => false
+  "widthMillimeters@Display:2" => 290.5284237303463
+  "widthMillimeters@Display:3" => 699.1827851982526
+  "xdrPresetsSupported@Display:2" => false
+  "xdrPresetsSupported@Display:3" => false
+}
+
+[exit_status] 0
+
+## ls -lOe /Users/kadir/Library/Preferences/pro.betterdisplay.BetterDisplay.plist
+
+-rw-------@ 1 kadir  staff  - 7363 May 20 10:10 /Users/kadir/Library/Preferences/pro.betterdisplay.BetterDisplay.plist
+
+[exit_status] 0
+
+## plutil -p /Users/kadir/Library/Preferences/pro.betterdisplay.BetterDisplay.plist
+
+{
+  "activationPriority@DisplayGroup:-1001" => 0
+  "airPlay@Display:2" => false
+  "airPlay@Display:3" => false
+  "appAlreadyLaunched" => true
+  "appDisconnected@Display:2" => false
+  "appDisconnected@Display:3" => false
+  "appleCapable@Display:2" => true
+  "appleCapable@Display:3" => false
+  "appleMade@Display:2" => true
+  "appleMade@Display:3" => false
+  "appleVisionPro@Display:2" => false
+  "appleVisionPro@Display:3" => false
+  "buildNumber" => 45613
+  "builtIn@Display:2" => true
+  "builtIn@Display:3" => false
+  "canChangeOrientation@Display:2" => true
+  "canChangeOrientation@Display:3" => true
+  "colorProfilesSupported@Display:2" => true
+  "colorProfilesSupported@Display:3" => true
+  "colorTableCapable@Display:2" => true
+  "colorTableCapable@Display:3" => true
+  "configuredPotentialEDR@Display:2" => 2
+  "configuredPotentialEDR@Display:3" => 1
+  "configuredReferenceEDR@Display:2" => 1
+  "configuredReferenceEDR@Display:3" => 1
+  "connected@Display:2" => true
+  "connected@Display:3" => true
+  "currentColorProfileURL@Display:2" => "file:///Library/ColorSync/Profiles/Displays/Color%20LCD-37D8832A-2D66-02CA-B9F7-8F30A301B230.icc"
+  "currentColorProfileURL@Display:3" => "file:///Library/Application%20Support/Adobe/Color/Profiles/Recommended/AppleRGB.icc"
+  "ddcConfigurationNoticeDismissed@Display:2" => true
+  "defaultBitsPerSample@Display:2" => 10
+  "defaultBitsPerSample@Display:3" => 10
+  "defaultHeight@Display:2" => 956
+  "defaultHeight@Display:3" => 1440
+  "defaultIsHiDPI@Display:2" => true
+  "defaultIsHiDPI@Display:3" => false
+  "defaultModeNumber@Display:2" => 6
+  "defaultModeNumber@Display:3" => 56
+  "defaultRefreshRate@Display:2" => 60
+  "defaultRefreshRate@Display:3" => 100
+  "defaultRefreshString@Display:2" => "60Hz"
+  "defaultRefreshString@Display:3" => "100Hz"
+  "defaultWidth@Display:2" => 1470
+  "defaultWidth@Display:3" => 2560
+  "displayConfigurationId" => 12
+  "displayConfigurationId@Display:2" => 12
+  "displayConfigurationId@Display:3" => 12
+  "displayTagIDs" => "[2,3]"
+  "factoryColorProfileURL@Display:2" => "file:///Library/ColorSync/Profiles/Displays/Color%20LCD-37D8832A-2D66-02CA-B9F7-8F30A301B230.icc"
+  "factoryColorProfileURL@Display:3" => "file:///Library/ColorSync/Profiles/Displays/LS32D60xU-DAFD7C4E-5BC3-45B2-B601-42A2372D5261.icc"
+  "firstAdded@Display:2" => 800900879.212761
+  "firstAdded@Display:3" => 800900879.409893
+  "hasAutoBrightness@Display:2" => true
+  "hasAutoBrightness@Display:3" => false
+  "hasHDR@Display:2" => false
+  "hasHDR@Display:3" => true
+  "hasHiDPI@Display:2" => true
+  "hasHiDPI@Display:3" => true
+  "hasNotch@Display:2" => true
+  "hasNotch@Display:3" => false
+  "hasUnderscanSupport@Display:2" => false
+  "hasUnderscanSupport@Display:3" => false
+  "heightMillimeters@Display:2" => 188.9284252562252
+  "heightMillimeters@Display:3" => 399.7376989145748
+  "isUnavailable@hardwareAmbientLight-AmbientLightController" => true
+  "lastConnected@Display:2" => 800952243.87685
+  "lastConnected@Display:3" => 800952243.9513921
+  "lastUnseen@Display:3" => 800914744.713855
+  "menuLevelBlueLight" => "less"
+  "menuLevelBrightness" => "less"
+  "menuLevelCheckForUpdates" => "less"
+  "menuLevelColorDepth" => "more"
+  "menuLevelColorMode" => "more"
+  "menuLevelColorProfile" => "more"
+  "menuLevelConfigProtection" => "more"
+  "menuLevelContrast" => "hide"
+  "menuLevelDDCAdjustments" => "more"
+  "menuLevelDDCInput" => "more"
+  "menuLevelDisplayConnect" => "less"
+  "menuLevelDisplayDisconnect" => "more"
+  "menuLevelDisplayMode" => "more"
+  "menuLevelDisplaysAndVirtualScreens" => "less"
+  "menuLevelGroups" => "less"
+  "menuLevelImageAdjustments" => "more"
+  "menuLevelManageDisplay" => "more"
+  "menuLevelManageVirtualScreen" => "more"
+  "menuLevelMirror" => "more"
+  "menuLevelMove" => "more"
+  "menuLevelPIP" => "more"
+  "menuLevelQuit" => "less"
+  "menuLevelRefreshRate" => "more"
+  "menuLevelResolution" => "less"
+  "menuLevelRotation" => "more"
+  "menuLevelSettings" => "less"
+  "menuLevelStream" => "more"
+  "menuLevelToggles" => "more"
+  "menuLevelVideoFilterWindow" => "less"
+  "menuLevelVirtualScreenConnect" => "less"
+  "menuLevelVirtualScreenDisconnect" => "more"
+  "menuLevelVolume" => "more"
+  "menuLevelXDRPreset" => "more"
+  "moreOptions@Display:2" => false
+  "moreOptions@Display:3" => true
+  "name@Display:2" => "Color LCD"
+  "name@Display:3" => "LS32D60xU"
+  "nativeHeight@Display:2" => 1664
+  "nativeHeight@Display:3" => 1440
+  "nativeModeNumber@Display:2" => 13
+  "nativeModeNumber@Display:3" => 56
+  "nativeWidth@Display:2" => 2560
+  "nativeWidth@Display:3" => 2560
+  "nonAppleRealDisplay@Display:2" => false
+  "nonAppleRealDisplay@Display:3" => true
+  "onboardingMenuIcon" => false
+  "onboardingMoreIcon" => false
+  "overrideCapable@Display:2" => true
+  "overrideCapable@Display:3" => true
+  "Paddle-BetterDisplay-762421-SD" => "e51c6453ffc7e2d3cede027c18a970283b1ead4b994a2e26d65a19bd6bc80caf"
+  "persistedDisplayID@Display:2" => "1"
+  "persistedDisplayID@Display:3" => "2"
+  "showProLicenseExpiryError" => false
+  "sidecar@Display:2" => false
+  "sidecar@Display:3" => false
+  "singleMoreMenuTagID" => 3
+  "storedIdentifiers@Display:2" => "[{"infoDictionaryModelNumber":41059,"edidProductName":"Color LCD","ioDisplayLocation":"IOService:\/AppleARMPE\/arm-io@10F00000\/AppleH16GFamilyIO\/disp0@8000000\/IOMobileFramebufferShim","vendorNumber":1552,"modelNumber":41059,"infoDictionaryVendorNumber":1552,"infoDictionarySerial":4251086178,"productName":"Color LCD","systemUUID":"37D8832A-2D66-02CA-B9F7-8F30A301B230","serial":4251086178}]"
+  "storedIdentifiers@Display:3" => "[{"productName":"LS32D60xU","alphanumericSerialNumber":"HK7X700177","infoDictionaryVendorNumber":19501,"systemUUID":"DAFD7C4E-5BC3-45B2-B601-42A2372D5261","infoDictionaryModelNumber":30379,"portID":0,"yearOfManufacture":2024,"vendorNumber":19501,"edidData":"AP\/\/\/\/\/\/\/wBMLat2MjNBMB8iAQS1Rih4OlQ1qVVKqScKUFQlSwBxT4EAgcCBgJUAqcCzAAEBVl4AoKCgKVAwIDUAuoghAAAaAAAA\/QAyZB6XKgAKICAgICAgAAAA\/ABMUzMyRDYweFUKICAgAAAA\/wBISzdYNzAwMTc3CiAgAbgCAx\/xR5BAHwQTAxIjCQcHgwEAAOMFwADmBgUBWloAWqAAoKCgRlAwIDUAuoghAAAaAjqAGHE4LUBYLEUAuoghAAAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1w==","weekOfManufacture":31,"modelNumber":30379,"ioDisplayLocation":"IOService:\/AppleARMPE\/arm-io@10F00000\/AppleH16GFamilyIO\/dispext0@84000000\/IOMobileFramebufferShim","edidProductName":"LS32D60xU","serial":809579314,"infoDictionarySerial":809579314}]"
+  "SUAutomaticallyUpdate" => false
+  "SUEnableAutomaticChecks" => false
+  "SUHasLaunchedBefore" => true
+  "SUSendProfileInfo" => false
+  "systemVirtual@Display:2" => false
+  "systemVirtual@Display:3" => false
+  "tagIDCounter" => 3
+  "thirdPartyVirtual@Display:2" => false
+  "thirdPartyVirtual@Display:3" => false
+  "toolsMoreOptions" => false
+  "tv@Display:2" => false
+  "tv@Display:3" => false
+  "unknownDisplay@Display:2" => false
+  "unknownDisplay@Display:3" => false
+  "uuid@Display:0" => 0
+  "uuid@Display:2" => 2
+  "uuid@Display:3" => 3
+  "uuid@DisplayGroup:-1001" => -1001
+  "value@blueLight-BlueLightController" => 0.4963182210922241
+  "value@combinedBrightness-CombinedController@Display:2" => 0.5826411202098384
+  "value@hardwareBrightness-AppleController@Display:2" => 0.4444610774517059
+  "value@softwareBrightness-ColorController@Display:2" => 1
+  "value@softwareBrightness-ColorController@Display:3" => 1
+  "virtualScreenLinked@Display:2" => false
+  "virtualScreenLinked@Display:3" => false
+  "widthMillimeters@Display:2" => 290.5284237303463
+  "widthMillimeters@Display:3" => 699.1827851982526
+  "xdrPresetsSupported@Display:2" => false
+  "xdrPresetsSupported@Display:3" => false
+}
+
+[exit_status] 0
+
+## ls -ldOe /Users/kadir/Library/Application Support/BetterDisplay
+
+drwxr-xr-x@ 4 kadir  staff  - 128 May 20 08:49 /Users/kadir/Library/Application Support/BetterDisplay
+
+[exit_status] 0
+
+## find /Users/kadir/Library/Application Support/BetterDisplay -maxdepth 3 -print
+
+/Users/kadir/Library/Application Support/BetterDisplay
+/Users/kadir/Library/Application Support/BetterDisplay/762421.spadl
+/Users/kadir/Library/Application Support/BetterDisplay/762421.padl
+
+[exit_status] 0

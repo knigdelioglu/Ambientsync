@@ -1,0 +1,7 @@
+kadir            38932   0,6  0,0 435303760   2256 s048  S+    5:24ÖS   0:00.01 /bin/bash ./scripts/capture_runtime_display_state.sh /Users/kadir/Desktop/Developer/ekle/docs/generated/private_activation/runtime_trace/after_user_open
+kadir            36184   0,0  0,8 435688768 136960   ??  S     4:46ÖS   0:35.76 /Applications/BetterDisplay.app/Contents/MacOS/BetterDisplay
+kadir            34777   0,0  0,6 1909423168 100064   ??  S     4:35ÖS   0:15.31 /Applications/Visual Studio Code.app/Contents/MacOS/Code --goto /Users/kadir/Desktop/Developer/ekle/docs/generated/private_activation/betterdisplay_live_trace_report.md
+root              1421   0,0  0,0 435356640   7088   ??  Ss    1:39ÖS   0:00.17 /System/Library/PrivateFrameworks/AmbientDisplay.framework/Versions/A/XPCServices/com.apple.AmbientDisplayAgent.xpc/Contents/MacOS/com.apple.AmbientDisplayAgent
+kadir              774   0,0  0,1 435444816  12928   ??  Ss    1:39ÖS   0:00.20 /System/Library/CoreServices/ControlCenter.app/Contents/PlugIns/DisplayControls.appex/Contents/MacOS/DisplayControls -LaunchArguments eyJzZXJ2aWNlTmFtZSI6ImNvbS5hcHBsZS5jb250cm9scy5kaXNwbGF5IiwiZW5oYW5jZWRTZWN1cml0eSI6ZmFsc2UsInR5cGUiOjF9
+root               579   0,0  0,0 435320832   4208   ??  Ss    1:38ÖS   0:00.25 /usr/libexec/colorsync.displayservices
+kadir            38947   0,0  0,0 435299552   1376 s048  S+    5:24ÖS   0:00.00 grep -i display

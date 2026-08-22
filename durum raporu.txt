@@ -1,0 +1,249 @@
+AmbientSync HiDPI Çalışması — Durum ve Sınır Raporu
+1. Ana hedefimiz neydi?
+AmbientSync’e, BetterDisplay kullanmadan şu modu kazandırmaya çalıştık:
+Samsung QHD fiziksel ekran: 2560×1440
+macOS backing/render çözünürlüğü: 5120×2880
+UI Looks like: 2560×1440 @ 100Hz
+HiDPI: true
+Virtual/dummy/mirror ekran: yok
+Hedef ekran fingerprint’i:
+Vendor ID: 0x4C2D
+Product ID: 0x76AB
+Serial: 0x30413332
+Ekran: Samsung LS32D60xU
+
+2. Başta neyi yanlış yoldan ayırdık?
+İlk Codex denemelerinde kullanılan yöntem şuydu:
+virtual/dummy display oluştur
+→ bunu fiziksel ekrana mirror et
+→ 5K benzeri görüntü üret
+Bunu eledik. Çünkü bu yöntem:
+- fazladan ekran oluşturuyor
+- GPU/WindowServer yükü getiriyor
+- pencere düzenini bozabiliyor
+- gerçek native HiDPI değil
+- uygulamanın sade yapısına uygun değil
+Sonra şunu da ana çözüm olmaktan çıkardık:
+SkyLight/CGS ile olmayan HiDPI modu zorla dayatmak
+Çünkü mode pool’da olmayan bir mode, CGSConfigureDisplayMode veya benzeri çağrılarla güvenli şekilde uygulanamıyor. Daha sonra yaptığımız testler de bunu doğruladı.
+
+3. Başardığımız şeyler
+A. Virtual/dummy/mirror katmanı temizlendi
+AmbientSync’in HiDPI tarafı sanal ekran yaklaşımından arındırıldı.
+Artık hedef mimari şu hâle geldi:
+Fiziksel Samsung ekranı tanı
+→ mevcut mode pool’u oku
+→ Perfect QHD HiDPI mode varsa uygula
+→ yoksa zorlamadan kullanıcıya durum bildir
+
+B. BetterDisplay’in oluşturduğu override dosyası bulundu
+BetterDisplay’in Samsung ekran için şu dosyayı kullandığını tespit ettik:
+/Library/Displays/Contents/Resources/Overrides/DisplayVendorID-4c2d/DisplayProductID-76ab
+Bu dosyanın SHA256 değeri:
+127e69ab6970328c605de85b85f04769febe47077518a2befc4a2273f42000a6
+Override içinde 5120×2880 normal ve HiDPI/flexible kayıtlarının bulunduğunu doğruladık. BetterDisplay kaldırıldıktan sonra bile dosyanın durduğu, SHA256 değerinin değişmediği ve scale-resolutions kayıtlarının hâlâ mevcut olduğu raporlandı.
+
+C. Override dosyasını kendi uygulamamıza yedekledik
+Çalışan override dosyasını üç yere aldık:
+Sources/AmbientSync/Resources/HiDPIOverrides/Samsung_4C2D_76AB_reference.plist
+
+docs/generated/captured_betterdisplay_override.plist
+
+~/Library/Application Support/AmbientSync/HiDPIOverrides/DisplayVendorID-4c2d/DisplayProductID-76ab
+Bu iyi bir kazanım. Artık çalışan plist elimizde.
+Ama kritik sınır şu:
+Uygulama içindeki plist’i macOS doğrudan okumaz.
+macOS’un mode üretmesi için override sistem yolunda olmalı.
+Ve biz gördük ki sistem yolunda olsa bile tek başına yetmiyor.
+
+D. Native mode reader doğru hâle getirildi
+En önemli teknik düzeltmelerden biri şuydu:
+CGDisplayCopyAllDisplayModes(
+    displayID,
+    [kCGDisplayShowDuplicateLowResolutionModes as String: true] as CFDictionary
+)
+Çünkü Perfect QHD mode default listede görünmüyor; duplicateLowResolutionModes=true ile gelen listede görünüyor.
+BetterDisplay aktifken duplicateLowResolutionModes=true listesinde hedef mode açıkça görünmüştü:
+2560×1440 logical / 5120×2880 pixel @ 100Hz
+HiDPI: true
+strong HiDPI: true
+candidate: strict-perfect-qhd
+Bu, mode reader tarafındaki önemli bug’ı çözdü.
+
+E. AmbientSync mode varsa uygulayabiliyor
+Bugünkü net kazanım şu:
+Eğer Perfect QHD mode mode pool’da varsa:
+→ AmbientSync bunu bulabiliyor
+→ duplicateLowResolutionModes=true listesinden gerçek CGDisplayMode’u alıyor
+→ güvenli şekilde uygulayabiliyor
+Bu şu an çalışan parçadır.
+
+4. Yapamadığımız kritik şey
+Asıl çözemediğimiz yer şu:
+BetterDisplay yokken Perfect QHD mode’u mode pool’a ekletmek.
+BetterDisplay varken:
+duplicateLowResolutionModes=true count: 107
+HiDPI mode count: 49
+Perfect QHD: var
+BetterDisplay kaldırılınca:
+duplicateLowResolutionModes=true count: 106
+HiDPI mode count: 48
+Perfect QHD: yok
+Yani BetterDisplay’in yaptığı şey sadece mode seçmek değil. Mode pool’a fazladan bir mode ekleten bir runtime activation/reconfiguration adımı var.
+BetterDisplay kaldırıldıktan sonraki diagnostic bunu net sınıflandırdı:
+B) Override var ama mode pool’da Perfect QHD yok.
+Raporda override’ın doğru olduğu, WindowServer preference’larının hâlâ durduğu, fakat CoreGraphics mode pool’un Perfect QHD mode’u üretmediği açıkça yazıyor.
+
+5. Denedik ve işe yaramadığını gördüklerimiz
+1. Override plist’i tekrar yazmak / yedeklemek
+Override doğru yerdeydi. SHA256 değişmemişti. Bu yüzden problem “dosya eksik” değildi.
+Sonuç:
+Installer veya plist kopyalama tek başına çözüm değil.
+
+2. Public CoreGraphics activation denemeleri
+Şunlar denendi:
+soft refresh
+100Hz → 60Hz → 100Hz toggle
+refresh-rate nudge
+CGDisplayConfiguration transaction
+arrangement no-op transaction
+Hiçbiri mode pool’u 106 → 107 yapmadı.
+Sonuç:
+Public API ile mode pool activation başarılamadı.
+
+3. CGSConfigureDisplayMode tek başına
+Denendi.
+Sonuç:
+Result: 1001
+Perfect QHD oluşmadı.
+Bu beklenen bir sonuçtu. Çünkü mode pool’da olmayan mode’u seçemez.
+
+4. SLSDetectDisplays
+Denendi.
+Log:
+SLSMainConnectionID: başarılı
+SLSDetectDisplays result: 0
+Mode Count Change: 106 -> 106
+Perfect QHD oluşmadı
+Sonuç:
+SLSDetectDisplays tek başına yeterli değil.
+
+5. IOAVServiceSetVirtualEDIDMode
+BetterDisplay binary’sinde bu sembol vardı. Ama BetterDisplay’de HiDPI kapatılıp açılırken breakpoint hiç tetiklenmedi.
+Sonuç:
+Bu activation akışında IOAVServiceSetVirtualEDIDMode çağrılmadı.
+Dolayısıyla bu yol kapandı.
+
+6. SLS transaction zinciri
+BetterDisplay trace’inde şu zincir yakalandı:
+CGBeginDisplayConfiguration
+→ CGSConfigureDisplayMode
+→ CGCompleteDisplayConfiguration(option: 2)
+→ internal refresh
+Bunu AmbientSync’te taklit ettik.
+Sonuç:
+SLS transaction reproduced but did not create Perfect QHD.
+Yani bu zincir de tek başına BetterDisplay’in 106 → 107 mode pool artışını üretmiyor.
+
+7. BetterDisplay visible stack disassembly
+BetterDisplay stack’inde yakalanan fonksiyonlar incelendi:
+0x1004ff0c0
+0x100503130
+0x10002db48
+0x10020e65c
+Bu seviyede görülen şey sadece transaction zinciriydi:
+CGBeginDisplayConfiguration
+CGSConfigureDisplayMode
+CGCompleteDisplayConfiguration(option: 2)
+Fakat Perfect QHD mode’u pool’a ekleten upstream hazırlık kodu bu stack içinde çıkmadı.
+Sonuç:
+BetterDisplay’in mode pool üretim hazırlığı daha yukarıda / başka bir internal state/cache yolunda.
+
+6. Şu anki kesin sınırımız
+Bugün AmbientSync’in sınırı şu:
+Perfect QHD mode zaten mode pool’da varsa:
+→ AmbientSync çalışır.
+
+Perfect QHD mode mode pool’da yoksa:
+→ AmbientSync bunu BetterDisplay gibi üretemez.
+Bu çok net.
+Şu an eksik olan parça:
+Runtime activation / reconfiguration / BetterDisplay internal cache hazırlığı
+Yani:
+Override dosyası var
+WindowServer preference var
+Samsung fingerprint doğru
+Ama mode pool’da 5120×2880 backing mode yok
+Bu durumda AmbientSync güvenli şekilde hiçbir şey yapmamalı. Çünkü uygulanacak gerçek CGDisplayMode yok.
+
+7. Neyi yanlış anladık, sonra düzelttik?
+Başta şu varsayım vardı:
+BetterDisplay sadece /Library/Displays override dosyası yazıyor.
+Bu eksik çıktı.
+Doğrusu:
+BetterDisplay override dosyasını kullanıyor,
+ama ayrıca runtime’da mode pool’u refresh/prepare ediyor.
+Başka bir önemli düzeltme:
+Perfect QHD default mode listesinde aranmamalı.
+Doğru liste:
+duplicateLowResolutionModes=true
+Bu düzeltme AmbientSync tarafında yapıldı.
+
+8. Bundan sonra nereye yönelmeliyiz?
+Bence iki makul yol var.
+
+Yol A — Pratik ve güvenli yol
+Projeyi şu hâlde stabilize etmek:
+AmbientSync:
+- BetterDisplay’siz mode varsa uygular.
+- Mode yoksa açıkça “activation gerekli” der.
+- Override/reference durumunu gösterir.
+- Gereksiz private denemeleri kapatır.
+UI mesajı şu olmalı:
+HiDPI override mevcut; ancak macOS şu anda 5120×2880 backing mode’u mode listesine yüklememiş. Bu mod oluşmadan AmbientSync güvenli şekilde HiDPI uygulayamaz.
+Bu ürün olarak doğru ve dürüst davranış olur.
+Bu yolda BetterDisplay tamamen kaldırılmayabilir; sadece activation gerektiğinde kullanılabilir. AmbientSync yine ana kontrol uygulaman olur.
+
+Yol B — Daha derin tersine mühendislik
+BetterDisplay’siz tam bağımsızlık hâlâ isteniyorsa, artık yapılacak iş “Codex’e yeni API denetmek” değil.
+Bundan sonrası şu seviyeye geçer:
+BetterDisplay’in upstream closure/context hazırlığını çözmek
+BetterDisplay iç mode cache yapısını analiz etmek
+Swift closure capture ve internal state reverse engineering
+WindowServer/CoreDisplay runtime cache davranışını izlemek
+XPC mesajlarını ve parametrelerini yakalamak
+Özellikle odak şu olmalı:
+SLS transaction’dan önce BetterDisplay hangi internal mode/cache state’i hazırlıyor?
+Çünkü bizim taklit ettiğimiz SLS transaction tek başına çalışmadı.
+Bu yol zaman alır ve sonuç garantisi yok.
+
+9. Benim teknik önerim
+Benim önerim şu:
+1. Rastgele private API denemelerini durdur.
+2. AmbientSync’in mevcut çalışan kısmını temiz ve stabil hâle getir.
+3. UI’da doğru durum mesajları göster.
+4. Private experimental butonları gizle veya sadece debug altında tut.
+5. BetterDisplay’siz tam activation için ayrı bir branch açılacaksa, sadece BetterDisplay upstream/internal cache reverse engineering yapılmalı.
+Ana uygulamaya şunlar kalmalı:
+- Samsung fingerprint resolver
+- override/reference checker
+- duplicateLowResolutionModes=true mode reader
+- safe mode applier
+- state/reapply service
+- “mode pool’da Perfect QHD yok” teşhisi
+Ana uygulamadan şunlar çıkarılmalı veya disabled kalmalı:
+- CGSConfigureDisplayMode activation
+- SLSDetectDisplays activation
+- public no-op activation
+- SLS transaction activation
+- IOAVServiceSetVirtualEDIDMode denemesi
+Çünkü bunların çalışmadığını gördük.
+
+10. Nihai durum cümlesi
+Şu ana kadar vardığımız en dürüst sonuç şu:
+AmbientSync’in native HiDPI mode seçme katmanı başarıyla kuruldu.
+Ancak BetterDisplay olmadan Perfect QHD mode’u macOS mode pool’a ekleten activation mekanizması çözülemedi.
+Override dosyası doğru olmasına rağmen macOS bu mode’u kendiliğinden üretmiyor.
+Public API, SLSDetectDisplays, CGSConfigureDisplayMode, SLS transaction ve IOAVServiceSetVirtualEDIDMode yolları sonuç vermedi.
+Devam edilecekse araştırma BetterDisplay’in SLS transaction’dan önce yaptığı internal mode/cache hazırlığına yönelmeli.
+Benim tavsiyem: burada stabilizasyon yap, sonra ayrı bir deneysel branch’te devam et.

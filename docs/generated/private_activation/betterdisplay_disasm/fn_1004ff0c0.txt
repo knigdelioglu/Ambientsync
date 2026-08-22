@@ -1,0 +1,524 @@
+(lldb) target create /Applications/BetterDisplay.app/Contents/MacOS/BetterDisplay
+Current executable set to '/Applications/BetterDisplay.app/Contents/MacOS/BetterDisplay' (arm64).
+(lldb) disassemble -s 0x1004ff0c0 -c 520
+BetterDisplay`___lldb_unnamed_symbol_1004ff0c0:
+BetterDisplay[0x1004ff0c0] <+0>:    stp    x28, x27, [sp, #-0x60]!
+BetterDisplay[0x1004ff0c4] <+4>:    stp    x26, x25, [sp, #0x10]
+BetterDisplay[0x1004ff0c8] <+8>:    stp    x24, x23, [sp, #0x20]
+BetterDisplay[0x1004ff0cc] <+12>:   stp    x22, x21, [sp, #0x30]
+BetterDisplay[0x1004ff0d0] <+16>:   stp    x20, x19, [sp, #0x40]
+BetterDisplay[0x1004ff0d4] <+20>:   stp    x29, x30, [sp, #0x50]
+BetterDisplay[0x1004ff0d8] <+24>:   add    x29, sp, #0x50
+BetterDisplay[0x1004ff0dc] <+28>:   sub    sp, sp, #0x1d0
+BetterDisplay[0x1004ff0e0] <+32>:   mov    x22, x20
+BetterDisplay[0x1004ff0e4] <+36>:   mov    x27, x4
+BetterDisplay[0x1004ff0e8] <+40>:   mov    x19, x3
+BetterDisplay[0x1004ff0ec] <+44>:   mov    x24, x2
+BetterDisplay[0x1004ff0f0] <+48>:   str    w1, [sp, #0x4]
+BetterDisplay[0x1004ff0f4] <+52>:   mov    x28, x0
+BetterDisplay[0x1004ff0f8] <+56>:   adrp   x8, 1679
+BetterDisplay[0x1004ff0fc] <+60>:   ldr    x8, [x8, #0x788]
+BetterDisplay[0x1004ff100] <+64>:   ldr    x8, [x8]
+BetterDisplay[0x1004ff104] <+68>:   stur   x8, [x29, #-0x60]
+BetterDisplay[0x1004ff108] <+72>:   mov    x20, #0x19                ; =25 
+BetterDisplay[0x1004ff10c] <+76>:   movk   x20, #0xd000, lsl #48
+BetterDisplay[0x1004ff110] <+80>:   adrp   x0, 1944
+BetterDisplay[0x1004ff114] <+84>:   add    x0, x0, #0xbb8
+BetterDisplay[0x1004ff118] <+88>:   bl     0x1000098ac               ; ___lldb_unnamed_symbol_1000098ac
+BetterDisplay[0x1004ff11c] <+92>:   sub    x1, x29, #0x100
+BetterDisplay[0x1004ff120] <+96>:   str    x0, [sp, #0x50]
+BetterDisplay[0x1004ff124] <+100>:  bl     0x1009b1318               ; symbol stub for: swift_initStackObject
+BetterDisplay[0x1004ff128] <+104>:  mov    x23, x0
+BetterDisplay[0x1004ff12c] <+108>:  adrp   x8, 1226
+BetterDisplay[0x1004ff130] <+112>:  ldr    q0, [x8, #0x5c0]
+BetterDisplay[0x1004ff134] <+116>:  str    q0, [sp, #0x40]
+BetterDisplay[0x1004ff138] <+120>:  str    q0, [x0, #0x10]
+BetterDisplay[0x1004ff13c] <+124>:  mov    x21, x0
+BetterDisplay[0x1004ff140] <+128>:  str    x20, [x21, #0x20]!
+BetterDisplay[0x1004ff144] <+132>:  adrp   x8, 1305
+BetterDisplay[0x1004ff148] <+136>:  add    x8, x8, #0x520            ; "Changing display mode for"
+BetterDisplay[0x1004ff14c] <+140>:  sub    x8, x8, #0x20
+BetterDisplay[0x1004ff150] <+144>:  orr    x8, x8, #0x8000000000000000
+BetterDisplay[0x1004ff154] <+148>:  adrp   x26, 1682
+BetterDisplay[0x1004ff158] <+152>:  ldr    x26, [x26, #0x718]
+BetterDisplay[0x1004ff15c] <+156>:  str    x26, [x0, #0x38]
+BetterDisplay[0x1004ff160] <+160>:  str    x8, [x0, #0x28]
+BetterDisplay[0x1004ff164] <+164>:  ldr    x0, [x22]
+BetterDisplay[0x1004ff168] <+168>:  mov    w1, #0x0                  ; =0 
+BetterDisplay[0x1004ff16c] <+172>:  bl     0x1009afb3c               ; symbol stub for: Swift._typeName(_: Any.Type, qualified: Swift.Bool) -> Swift.String
+BetterDisplay[0x1004ff170] <+176>:  stp    x0, x1, [sp, #0x110]
+BetterDisplay[0x1004ff174] <+180>:  add    x20, sp, #0x110
+BetterDisplay[0x1004ff178] <+184>:  mov    w0, #0x20                 ; =32 
+BetterDisplay[0x1004ff17c] <+188>:  mov    x1, #-0x1f00000000000000  ; =-2233785415175766016 
+BetterDisplay[0x1004ff180] <+192>:  bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff184] <+196>:  ldr    x20, [x22, #0x30]
+BetterDisplay[0x1004ff188] <+200>:  mov    x0, x20
+BetterDisplay[0x1004ff18c] <+204>:  bl     0x1009b139c               ; symbol stub for: swift_retain
+BetterDisplay[0x1004ff190] <+208>:  adrp   x25, 1682
+BetterDisplay[0x1004ff194] <+212>:  ldr    x25, [x25, #0x8e0]
+BetterDisplay[0x1004ff198] <+216>:  add    x8, sp, #0x60
+BetterDisplay[0x1004ff19c] <+220>:  mov    x1, x25
+BetterDisplay[0x1004ff1a0] <+224>:  bl     0x1009ad160               ; symbol stub for: SwiftUI.AppStorage.wrappedValue.getter : τ_0_0
+BetterDisplay[0x1004ff1a4] <+228>:  mov    x0, x20
+BetterDisplay[0x1004ff1a8] <+232>:  bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff1ac] <+236>:  ldr    x8, [sp, #0x60]
+BetterDisplay[0x1004ff1b0] <+240>:  str    x8, [sp, #0x60]
+BetterDisplay[0x1004ff1b4] <+244>:  adrp   x1, 1682
+BetterDisplay[0x1004ff1b8] <+248>:  ldr    x1, [x1, #0x920]
+BetterDisplay[0x1004ff1bc] <+252>:  add    x20, sp, #0x60
+BetterDisplay[0x1004ff1c0] <+256>:  mov    x0, x25
+BetterDisplay[0x1004ff1c4] <+260>:  bl     0x1009af95c               ; symbol stub for: dispatch thunk of Swift.CustomStringConvertible.description.getter : Swift.String
+BetterDisplay[0x1004ff1c8] <+264>:  mov    x25, x1
+BetterDisplay[0x1004ff1cc] <+268>:  add    x20, sp, #0x110
+BetterDisplay[0x1004ff1d0] <+272>:  bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff1d4] <+276>:  mov    x0, x25
+BetterDisplay[0x1004ff1d8] <+280>:  bl     0x1009b10fc               ; symbol stub for: swift_bridgeObjectRelease
+BetterDisplay[0x1004ff1dc] <+284>:  add    x20, sp, #0x110
+BetterDisplay[0x1004ff1e0] <+288>:  mov    w0, #0x2820               ; =10272 
+BetterDisplay[0x1004ff1e4] <+292>:  mov    x1, #-0x1e00000000000000  ; =-2161727821137838080 
+BetterDisplay[0x1004ff1e8] <+296>:  bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff1ec] <+300>:  ldr    x20, [x22, #0x58]
+BetterDisplay[0x1004ff1f0] <+304>:  mov    x0, x20
+BetterDisplay[0x1004ff1f4] <+308>:  bl     0x1009b139c               ; symbol stub for: swift_retain
+BetterDisplay[0x1004ff1f8] <+312>:  add    x8, sp, #0x60
+BetterDisplay[0x1004ff1fc] <+316>:  mov    x1, x26
+BetterDisplay[0x1004ff200] <+320>:  bl     0x1009ad160               ; symbol stub for: SwiftUI.AppStorage.wrappedValue.getter : τ_0_0
+BetterDisplay[0x1004ff204] <+324>:  mov    x0, x20
+BetterDisplay[0x1004ff208] <+328>:  bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff20c] <+332>:  ldp    x0, x20, [sp, #0x60]
+BetterDisplay[0x1004ff210] <+336>:  cbnz   x0, 0x1004ff22c           ; <+364>
+BetterDisplay[0x1004ff214] <+340>:  mov    x8, #-0x2000000000000000  ; =-2305843009213693952 
+BetterDisplay[0x1004ff218] <+344>:  cmp    x20, x8
+BetterDisplay[0x1004ff21c] <+348>:  b.ne   0x1004ff22c               ; <+364>
+BetterDisplay[0x1004ff220] <+352>:  mov    x0, x20
+BetterDisplay[0x1004ff224] <+356>:  bl     0x1009b10fc               ; symbol stub for: swift_bridgeObjectRelease
+BetterDisplay[0x1004ff228] <+360>:  b      0x1004ff250               ; <+400>
+BetterDisplay[0x1004ff22c] <+364>:  mov    x1, x20
+BetterDisplay[0x1004ff230] <+368>:  mov    x2, #0x0                  ; =0 
+BetterDisplay[0x1004ff234] <+372>:  mov    x3, #-0x2000000000000000  ; =-2305843009213693952 
+BetterDisplay[0x1004ff238] <+376>:  mov    w4, #0x0                  ; =0 
+BetterDisplay[0x1004ff23c] <+380>:  bl     0x1009af998               ; symbol stub for: Swift._stringCompareWithSmolCheck(_: Swift._StringGuts, _: Swift._StringGuts, expecting: Swift._StringComparisonResult) -> Swift.Bool
+BetterDisplay[0x1004ff240] <+384>:  mov    x25, x0
+BetterDisplay[0x1004ff244] <+388>:  mov    x0, x20
+BetterDisplay[0x1004ff248] <+392>:  bl     0x1009b10fc               ; symbol stub for: swift_bridgeObjectRelease
+BetterDisplay[0x1004ff24c] <+396>:  tbz    w25, #0x0, 0x1004ff264    ; <+420>
+BetterDisplay[0x1004ff250] <+400>:  mov    w0, #0x0                  ; =0 
+BetterDisplay[0x1004ff254] <+404>:  mov    x20, x22
+BetterDisplay[0x1004ff258] <+408>:  bl     0x100664670               ; ___lldb_unnamed_symbol_100664670
+BetterDisplay[0x1004ff25c] <+412>:  mov    x25, x1
+BetterDisplay[0x1004ff260] <+416>:  b      0x1004ff28c               ; <+460>
+BetterDisplay[0x1004ff264] <+420>:  ldr    x20, [x22, #0x58]
+BetterDisplay[0x1004ff268] <+424>:  mov    x0, x20
+BetterDisplay[0x1004ff26c] <+428>:  bl     0x1009b139c               ; symbol stub for: swift_retain
+BetterDisplay[0x1004ff270] <+432>:  adrp   x1, 1682
+BetterDisplay[0x1004ff274] <+436>:  ldr    x1, [x1, #0x718]
+BetterDisplay[0x1004ff278] <+440>:  add    x8, sp, #0x60
+BetterDisplay[0x1004ff27c] <+444>:  bl     0x1009ad160               ; symbol stub for: SwiftUI.AppStorage.wrappedValue.getter : τ_0_0
+BetterDisplay[0x1004ff280] <+448>:  mov    x0, x20
+BetterDisplay[0x1004ff284] <+452>:  bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff288] <+456>:  ldp    x0, x25, [sp, #0x60]
+BetterDisplay[0x1004ff28c] <+460>:  add    x20, sp, #0x110
+BetterDisplay[0x1004ff290] <+464>:  mov    x1, x25
+BetterDisplay[0x1004ff294] <+468>:  bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff298] <+472>:  mov    x0, x25
+BetterDisplay[0x1004ff29c] <+476>:  bl     0x1009b10fc               ; symbol stub for: swift_bridgeObjectRelease
+BetterDisplay[0x1004ff2a0] <+480>:  add    x20, sp, #0x110
+BetterDisplay[0x1004ff2a4] <+484>:  mov    w0, #0x29                 ; =41 
+BetterDisplay[0x1004ff2a8] <+488>:  mov    x1, #-0x1f00000000000000  ; =-2233785415175766016 
+BetterDisplay[0x1004ff2ac] <+492>:  bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff2b0] <+496>:  ldp    x8, x9, [sp, #0x110]
+BetterDisplay[0x1004ff2b4] <+500>:  stp    x8, x9, [x23, #0x40]
+BetterDisplay[0x1004ff2b8] <+504>:  mov    w8, #0x6f74               ; =28532 
+BetterDisplay[0x1004ff2bc] <+508>:  adrp   x9, 1682
+BetterDisplay[0x1004ff2c0] <+512>:  ldr    x9, [x9, #0x718]
+BetterDisplay[0x1004ff2c4] <+516>:  stp    x9, x8, [x23, #0x58]
+BetterDisplay[0x1004ff2c8] <+520>:  mov    x8, #-0x1e00000000000000  ; =-2161727821137838080 
+BetterDisplay[0x1004ff2cc] <+524>:  str    x8, [x23, #0x68]
+BetterDisplay[0x1004ff2d0] <+528>:  adrp   x8, 1682
+BetterDisplay[0x1004ff2d4] <+532>:  ldr    x8, [x8, #0x8e0]
+BetterDisplay[0x1004ff2d8] <+536>:  str    x8, [x23, #0x98]
+BetterDisplay[0x1004ff2dc] <+540>:  stp    x9, x28, [x23, #0x78]
+BetterDisplay[0x1004ff2e0] <+544>:  mov    x0, x23
+BetterDisplay[0x1004ff2e4] <+548>:  bl     0x10002dbcc               ; ___lldb_unnamed_symbol_10002dbcc
+BetterDisplay[0x1004ff2e8] <+552>:  mov    x0, x23
+BetterDisplay[0x1004ff2ec] <+556>:  bl     0x1009b13b4               ; symbol stub for: swift_setDeallocating
+BetterDisplay[0x1004ff2f0] <+560>:  adrp   x0, 1944
+BetterDisplay[0x1004ff2f4] <+564>:  add    x0, x0, #0xbc0
+BetterDisplay[0x1004ff2f8] <+568>:  bl     0x1000098ac               ; ___lldb_unnamed_symbol_1000098ac
+BetterDisplay[0x1004ff2fc] <+572>:  mov    x2, x0
+BetterDisplay[0x1004ff300] <+576>:  mov    x0, x21
+BetterDisplay[0x1004ff304] <+580>:  mov    w1, #0x4                  ; =4 
+BetterDisplay[0x1004ff308] <+584>:  str    x2, [sp, #0x38]
+BetterDisplay[0x1004ff30c] <+588>:  bl     0x1009b10c0               ; symbol stub for: swift_arrayDestroy
+BetterDisplay[0x1004ff310] <+592>:  adrp   x0, 1250
+BetterDisplay[0x1004ff314] <+596>:  add    x0, x0, #0xd28
+BetterDisplay[0x1004ff318] <+600>:  bl     0x1009b1270               ; symbol stub for: swift_getKeyPath
+BetterDisplay[0x1004ff31c] <+604>:  mov    x20, x0
+BetterDisplay[0x1004ff320] <+608>:  adrp   x0, 1250
+BetterDisplay[0x1004ff324] <+612>:  add    x0, x0, #0xd50
+BetterDisplay[0x1004ff328] <+616>:  bl     0x1009b1270               ; symbol stub for: swift_getKeyPath
+BetterDisplay[0x1004ff32c] <+620>:  mov    x21, x0
+BetterDisplay[0x1004ff330] <+624>:  add    x8, sp, #0x110
+BetterDisplay[0x1004ff334] <+628>:  mov    x0, x22
+BetterDisplay[0x1004ff338] <+632>:  mov    x1, x20
+BetterDisplay[0x1004ff33c] <+636>:  mov    x2, x21
+BetterDisplay[0x1004ff340] <+640>:  bl     0x1009ad0a0               ; symbol stub for: static Combine.Published.subscript.getter : <τ_0_0 where τ_1_0: AnyObject>(_enclosingInstance: τ_1_0, wrapped: Swift.ReferenceWritableKeyPath<τ_1_0, τ_0_0>, storage: Swift.ReferenceWritableKeyPath<τ_1_0, Combine.Published<τ_0_0>>) -> τ_0_0
+BetterDisplay[0x1004ff344] <+644>:  mov    x0, x20
+BetterDisplay[0x1004ff348] <+648>:  bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff34c] <+652>:  mov    x0, x21
+BetterDisplay[0x1004ff350] <+656>:  bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff354] <+660>:  ldr    x8, [sp, #0x110]
+BetterDisplay[0x1004ff358] <+664>:  cmp    x8, x28
+BetterDisplay[0x1004ff35c] <+668>:  b.ne   0x1004ff3b4               ; <+756>
+BetterDisplay[0x1004ff360] <+672>:  adrp   x0, 1250
+BetterDisplay[0x1004ff364] <+676>:  add    x0, x0, #0xd70
+BetterDisplay[0x1004ff368] <+680>:  bl     0x1009b1270               ; symbol stub for: swift_getKeyPath
+BetterDisplay[0x1004ff36c] <+684>:  mov    x20, x0
+BetterDisplay[0x1004ff370] <+688>:  adrp   x0, 1250
+BetterDisplay[0x1004ff374] <+692>:  add    x0, x0, #0xd98
+BetterDisplay[0x1004ff378] <+696>:  bl     0x1009b1270               ; symbol stub for: swift_getKeyPath
+BetterDisplay[0x1004ff37c] <+700>:  mov    x21, x0
+BetterDisplay[0x1004ff380] <+704>:  add    x8, sp, #0x110
+BetterDisplay[0x1004ff384] <+708>:  mov    x0, x22
+BetterDisplay[0x1004ff388] <+712>:  mov    x1, x20
+BetterDisplay[0x1004ff38c] <+716>:  mov    x2, x21
+BetterDisplay[0x1004ff390] <+720>:  bl     0x1009ad0a0               ; symbol stub for: static Combine.Published.subscript.getter : <τ_0_0 where τ_1_0: AnyObject>(_enclosingInstance: τ_1_0, wrapped: Swift.ReferenceWritableKeyPath<τ_1_0, τ_0_0>, storage: Swift.ReferenceWritableKeyPath<τ_1_0, Combine.Published<τ_0_0>>) -> τ_0_0
+BetterDisplay[0x1004ff394] <+724>:  mov    x0, x20
+BetterDisplay[0x1004ff398] <+728>:  bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff39c] <+732>:  mov    x0, x21
+BetterDisplay[0x1004ff3a0] <+736>:  bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff3a4] <+740>:  mov    x25, x22
+BetterDisplay[0x1004ff3a8] <+744>:  ldr    x22, [sp, #0x110]
+BetterDisplay[0x1004ff3ac] <+748>:  ldrb   w23, [sp, #0x118]
+BetterDisplay[0x1004ff3b0] <+752>:  b      0x1004ff404               ; <+836>
+BetterDisplay[0x1004ff3b4] <+756>:  adrp   x0, 1250
+BetterDisplay[0x1004ff3b8] <+760>:  add    x0, x0, #0xd28
+BetterDisplay[0x1004ff3bc] <+764>:  bl     0x1009b1270               ; symbol stub for: swift_getKeyPath
+BetterDisplay[0x1004ff3c0] <+768>:  mov    x20, x0
+BetterDisplay[0x1004ff3c4] <+772>:  adrp   x0, 1250
+BetterDisplay[0x1004ff3c8] <+776>:  add    x0, x0, #0xd50
+BetterDisplay[0x1004ff3cc] <+780>:  bl     0x1009b1270               ; symbol stub for: swift_getKeyPath
+BetterDisplay[0x1004ff3d0] <+784>:  mov    x21, x0
+BetterDisplay[0x1004ff3d4] <+788>:  add    x8, sp, #0x110
+BetterDisplay[0x1004ff3d8] <+792>:  mov    x0, x22
+BetterDisplay[0x1004ff3dc] <+796>:  mov    x1, x20
+BetterDisplay[0x1004ff3e0] <+800>:  mov    x2, x21
+BetterDisplay[0x1004ff3e4] <+804>:  bl     0x1009ad0a0               ; symbol stub for: static Combine.Published.subscript.getter : <τ_0_0 where τ_1_0: AnyObject>(_enclosingInstance: τ_1_0, wrapped: Swift.ReferenceWritableKeyPath<τ_1_0, τ_0_0>, storage: Swift.ReferenceWritableKeyPath<τ_1_0, Combine.Published<τ_0_0>>) -> τ_0_0
+BetterDisplay[0x1004ff3e8] <+808>:  mov    x0, x20
+BetterDisplay[0x1004ff3ec] <+812>:  bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff3f0] <+816>:  mov    x0, x21
+BetterDisplay[0x1004ff3f4] <+820>:  bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff3f8] <+824>:  mov    w23, #0x0                 ; =0 
+BetterDisplay[0x1004ff3fc] <+828>:  mov    x25, x22
+BetterDisplay[0x1004ff400] <+832>:  ldr    x22, [sp, #0x110]
+BetterDisplay[0x1004ff404] <+836>:  adrp   x0, 1250
+BetterDisplay[0x1004ff408] <+840>:  add    x0, x0, #0xd70
+BetterDisplay[0x1004ff40c] <+844>:  bl     0x1009b1270               ; symbol stub for: swift_getKeyPath
+BetterDisplay[0x1004ff410] <+848>:  mov    x20, x0
+BetterDisplay[0x1004ff414] <+852>:  adrp   x0, 1250
+BetterDisplay[0x1004ff418] <+856>:  add    x0, x0, #0xd98
+BetterDisplay[0x1004ff41c] <+860>:  bl     0x1009b1270               ; symbol stub for: swift_getKeyPath
+BetterDisplay[0x1004ff420] <+864>:  mov    x21, x0
+BetterDisplay[0x1004ff424] <+868>:  str    x22, [sp, #0x110]
+BetterDisplay[0x1004ff428] <+872>:  strb   w23, [sp, #0x118]
+BetterDisplay[0x1004ff42c] <+876>:  mov    x0, x25
+BetterDisplay[0x1004ff430] <+880>:  bl     0x1009b139c               ; symbol stub for: swift_retain
+BetterDisplay[0x1004ff434] <+884>:  add    x0, sp, #0x110
+BetterDisplay[0x1004ff438] <+888>:  mov    x1, x25
+BetterDisplay[0x1004ff43c] <+892>:  mov    x2, x20
+BetterDisplay[0x1004ff440] <+896>:  mov    x3, x21
+BetterDisplay[0x1004ff444] <+900>:  bl     0x1009ad0ac               ; symbol stub for: static Combine.Published.subscript.setter : <τ_0_0 where τ_1_0: AnyObject>(_enclosingInstance: τ_1_0, wrapped: Swift.ReferenceWritableKeyPath<τ_1_0, τ_0_0>, storage: Swift.ReferenceWritableKeyPath<τ_1_0, Combine.Published<τ_0_0>>) -> τ_0_0
+BetterDisplay[0x1004ff448] <+904>:  mov    x21, x25
+BetterDisplay[0x1004ff44c] <+908>:  tbz    w27, #0x0, 0x1004ff470    ; <+944>
+BetterDisplay[0x1004ff450] <+912>:  adrp   x0, 1683
+BetterDisplay[0x1004ff454] <+916>:  ldr    x0, [x0, #0x68]
+BetterDisplay[0x1004ff458] <+920>:  bl     0x100007ab8               ; ___lldb_unnamed_symbol_100007ab8
+BetterDisplay[0x1004ff45c] <+924>:  mov    x25, x0
+BetterDisplay[0x1004ff460] <+928>:  tbnz   w19, #0x0, 0x1004ff490    ; <+976>
+BetterDisplay[0x1004ff464] <+932>:  adrp   x19, 1683
+BetterDisplay[0x1004ff468] <+936>:  ldr    x19, [x19, #0x68]
+BetterDisplay[0x1004ff46c] <+940>:  b      0x1004ff4a0               ; <+992>
+BetterDisplay[0x1004ff470] <+944>:  mov    x0, x21
+BetterDisplay[0x1004ff474] <+948>:  mov    x1, x28
+BetterDisplay[0x1004ff478] <+952>:  mov    w2, #0x0                  ; =0 
+BetterDisplay[0x1004ff47c] <+956>:  mov    w3, #0x0                  ; =0 
+BetterDisplay[0x1004ff480] <+960>:  mov    w4, #0x0                  ; =0 
+BetterDisplay[0x1004ff484] <+964>:  bl     0x1001a4a04               ; ___lldb_unnamed_symbol_1001a4a04
+BetterDisplay[0x1004ff488] <+968>:  mov    x25, x0
+BetterDisplay[0x1004ff48c] <+972>:  tbz    w19, #0x0, 0x1004ff464    ; <+932>
+BetterDisplay[0x1004ff490] <+976>:  mov    x0, #0x0                  ; =0 
+BetterDisplay[0x1004ff494] <+980>:  mov    w1, #0x0                  ; =0 
+BetterDisplay[0x1004ff498] <+984>:  bl     0x1005dc634               ; ___lldb_unnamed_symbol_1005dc634
+BetterDisplay[0x1004ff49c] <+988>:  mov    x19, x0
+BetterDisplay[0x1004ff4a0] <+992>:  mov    x0, #0x0                  ; =0 
+BetterDisplay[0x1004ff4a4] <+996>:  bl     0x100527ccc               ; ___lldb_unnamed_symbol_100527ccc
+BetterDisplay[0x1004ff4a8] <+1000>: fmov   d0, #10.00000000
+BetterDisplay[0x1004ff4ac] <+1004>: mov    x20, x0
+BetterDisplay[0x1004ff4b0] <+1008>: bl     0x1005275e4               ; ___lldb_unnamed_symbol_1005275e4
+BetterDisplay[0x1004ff4b4] <+1012>: str    xzr, [sp, #0x110]
+BetterDisplay[0x1004ff4b8] <+1016>: add    x0, sp, #0x110
+BetterDisplay[0x1004ff4bc] <+1020>: bl     0x1009afde8               ; symbol stub for: CGBeginDisplayConfiguration
+BetterDisplay[0x1004ff4c0] <+1024>: ldr    x8, [sp, #0x110]
+BetterDisplay[0x1004ff4c4] <+1028>: str    x8, [sp, #0x58]
+BetterDisplay[0x1004ff4c8] <+1032>: mov    x20, x21
+BetterDisplay[0x1004ff4cc] <+1036>: bl     0x10067587c               ; ___lldb_unnamed_symbol_10067587c
+BetterDisplay[0x1004ff4d0] <+1040>: mov    x8, #-0x80000000          ; =-2147483648 
+BetterDisplay[0x1004ff4d4] <+1044>: cmp    x28, x8
+BetterDisplay[0x1004ff4d8] <+1048>: b.lt   0x1004ffae4               ; <+2596>
+BetterDisplay[0x1004ff4dc] <+1052>: mov    w8, #0x7fffffff           ; =2147483647 
+BetterDisplay[0x1004ff4e0] <+1056>: cmp    x28, x8
+BetterDisplay[0x1004ff4e4] <+1060>: b.gt   0x1004ffae8               ; <+2600>
+BetterDisplay[0x1004ff4e8] <+1064>: mov    x1, x0
+BetterDisplay[0x1004ff4ec] <+1068>: stp    x19, x21, [sp, #0x8]
+BetterDisplay[0x1004ff4f0] <+1072>: str    w24, [sp, #0x1c]
+BetterDisplay[0x1004ff4f4] <+1076>: ldr    x0, [sp, #0x58]
+BetterDisplay[0x1004ff4f8] <+1080>: mov    x2, x28
+BetterDisplay[0x1004ff4fc] <+1084>: bl     0x1009b0070               ; symbol stub for: CGSConfigureDisplayMode
+BetterDisplay[0x1004ff500] <+1088>: mov    x27, x25
+BetterDisplay[0x1004ff504] <+1092>: ldr    x8, [x27, #0x40]!
+BetterDisplay[0x1004ff508] <+1096>: ldrb   w9, [x25, #0x20]
+BetterDisplay[0x1004ff50c] <+1100>: mov    w10, #0x1                 ; =1 
+BetterDisplay[0x1004ff510] <+1104>: lsl    x9, x10, x9
+BetterDisplay[0x1004ff514] <+1108>: mov    x10, #-0x1                ; =-1 
+BetterDisplay[0x1004ff518] <+1112>: lsl    x11, x10, x9
+BetterDisplay[0x1004ff51c] <+1116>: cmp    x9, #0x40
+BetterDisplay[0x1004ff520] <+1120>: csinv  x10, x10, x11, ge
+BetterDisplay[0x1004ff524] <+1124>: and    x21, x10, x8
+BetterDisplay[0x1004ff528] <+1128>: add    x8, x9, #0x3f
+BetterDisplay[0x1004ff52c] <+1132>: lsr    x22, x8, #6
+BetterDisplay[0x1004ff530] <+1136>: adrp   x8, 1293
+BetterDisplay[0x1004ff534] <+1140>: add    x8, x8, #0x430            ; "UI scale matching changing display mode of"
+BetterDisplay[0x1004ff538] <+1144>: sub    x8, x8, #0x20
+BetterDisplay[0x1004ff53c] <+1148>: orr    x8, x8, #0x8000000000000000
+BetterDisplay[0x1004ff540] <+1152>: str    x8, [sp, #0x30]
+BetterDisplay[0x1004ff544] <+1156>: mov    x0, x25
+BetterDisplay[0x1004ff548] <+1160>: bl     0x1009b1114               ; symbol stub for: swift_bridgeObjectRetain
+BetterDisplay[0x1004ff54c] <+1164>: mov    x8, #0x0                  ; =0 
+BetterDisplay[0x1004ff550] <+1168>: mov    x9, #0x19                 ; =25 
+BetterDisplay[0x1004ff554] <+1172>: movk   x9, #0xd000, lsl #48
+BetterDisplay[0x1004ff558] <+1176>: add    x9, x9, #0x11
+BetterDisplay[0x1004ff55c] <+1180>: stp    x25, x9, [sp, #0x20]
+BetterDisplay[0x1004ff560] <+1184>: cbz    x21, 0x1004ff56c          ; <+1196>
+BetterDisplay[0x1004ff564] <+1188>: mov    x24, x8
+BetterDisplay[0x1004ff568] <+1192>: b      0x1004ff588               ; <+1224>
+BetterDisplay[0x1004ff56c] <+1196>: adds   x24, x8, #0x1
+BetterDisplay[0x1004ff570] <+1200>: b.vs   0x1004ffac8               ; <+2568>
+BetterDisplay[0x1004ff574] <+1204>: cmp    x24, x22
+BetterDisplay[0x1004ff578] <+1208>: b.ge   0x1004ff7f8               ; <+1848>
+BetterDisplay[0x1004ff57c] <+1212>: ldr    x21, [x27, x24, lsl #3]
+BetterDisplay[0x1004ff580] <+1216>: add    x8, x8, #0x1
+BetterDisplay[0x1004ff584] <+1220>: cbz    x21, 0x1004ff56c          ; <+1196>
+BetterDisplay[0x1004ff588] <+1224>: rbit   x8, x21
+BetterDisplay[0x1004ff58c] <+1228>: clz    x8, x8
+BetterDisplay[0x1004ff590] <+1232>: lsl    x9, x24, #9
+BetterDisplay[0x1004ff594] <+1236>: orr    x8, x9, x8, lsl #3
+BetterDisplay[0x1004ff598] <+1240>: ldp    x9, x10, [x25, #0x30]
+BetterDisplay[0x1004ff59c] <+1244>: ldr    x23, [x9, x8]
+BetterDisplay[0x1004ff5a0] <+1248>: ldr    x28, [x10, x8]
+BetterDisplay[0x1004ff5a4] <+1252>: add    x1, sp, #0x70
+BetterDisplay[0x1004ff5a8] <+1256>: ldr    x0, [sp, #0x50]
+BetterDisplay[0x1004ff5ac] <+1260>: bl     0x1009b1318               ; symbol stub for: swift_initStackObject
+BetterDisplay[0x1004ff5b0] <+1264>: mov    x19, x0
+BetterDisplay[0x1004ff5b4] <+1268>: ldr    q0, [sp, #0x40]
+BetterDisplay[0x1004ff5b8] <+1272>: str    q0, [x0, #0x10]
+BetterDisplay[0x1004ff5bc] <+1276>: mov    x26, x0
+BetterDisplay[0x1004ff5c0] <+1280>: ldr    x8, [sp, #0x28]
+BetterDisplay[0x1004ff5c4] <+1284>: str    x8, [x26, #0x20]!
+BetterDisplay[0x1004ff5c8] <+1288>: adrp   x8, 1682
+BetterDisplay[0x1004ff5cc] <+1292>: ldr    x8, [x8, #0x718]
+BetterDisplay[0x1004ff5d0] <+1296>: str    x8, [x0, #0x38]
+BetterDisplay[0x1004ff5d4] <+1300>: ldr    x8, [sp, #0x30]
+BetterDisplay[0x1004ff5d8] <+1304>: str    x8, [x0, #0x28]
+BetterDisplay[0x1004ff5dc] <+1308>: ldr    x20, [x23]
+BetterDisplay[0x1004ff5e0] <+1312>: mov    x0, x23
+BetterDisplay[0x1004ff5e4] <+1316>: mov    w1, #0x2                  ; =2 
+BetterDisplay[0x1004ff5e8] <+1320>: bl     0x1009b13a8               ; symbol stub for: swift_retain_n
+BetterDisplay[0x1004ff5ec] <+1324>: mov    x0, x20
+BetterDisplay[0x1004ff5f0] <+1328>: mov    w1, #0x0                  ; =0 
+BetterDisplay[0x1004ff5f4] <+1332>: bl     0x1009afb3c               ; symbol stub for: Swift._typeName(_: Any.Type, qualified: Swift.Bool) -> Swift.String
+BetterDisplay[0x1004ff5f8] <+1336>: stp    x0, x1, [sp, #0x110]
+BetterDisplay[0x1004ff5fc] <+1340>: add    x20, sp, #0x110
+BetterDisplay[0x1004ff600] <+1344>: mov    w0, #0x20                 ; =32 
+BetterDisplay[0x1004ff604] <+1348>: mov    x1, #-0x1f00000000000000  ; =-2233785415175766016 
+BetterDisplay[0x1004ff608] <+1352>: bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff60c] <+1356>: ldr    x20, [x23, #0x30]
+BetterDisplay[0x1004ff610] <+1360>: mov    x0, x20
+BetterDisplay[0x1004ff614] <+1364>: bl     0x1009b139c               ; symbol stub for: swift_retain
+BetterDisplay[0x1004ff618] <+1368>: add    x8, sp, #0x60
+BetterDisplay[0x1004ff61c] <+1372>: adrp   x25, 1682
+BetterDisplay[0x1004ff620] <+1376>: ldr    x25, [x25, #0x8e0]
+BetterDisplay[0x1004ff624] <+1380>: mov    x1, x25
+BetterDisplay[0x1004ff628] <+1384>: bl     0x1009ad160               ; symbol stub for: SwiftUI.AppStorage.wrappedValue.getter : τ_0_0
+BetterDisplay[0x1004ff62c] <+1388>: mov    x0, x20
+BetterDisplay[0x1004ff630] <+1392>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff634] <+1396>: ldr    x8, [sp, #0x60]
+BetterDisplay[0x1004ff638] <+1400>: str    x8, [sp, #0x60]
+BetterDisplay[0x1004ff63c] <+1404>: add    x20, sp, #0x60
+BetterDisplay[0x1004ff640] <+1408>: mov    x0, x25
+BetterDisplay[0x1004ff644] <+1412>: adrp   x1, 1682
+BetterDisplay[0x1004ff648] <+1416>: ldr    x1, [x1, #0x920]
+BetterDisplay[0x1004ff64c] <+1420>: bl     0x1009af95c               ; symbol stub for: dispatch thunk of Swift.CustomStringConvertible.description.getter : Swift.String
+BetterDisplay[0x1004ff650] <+1424>: mov    x25, x1
+BetterDisplay[0x1004ff654] <+1428>: add    x20, sp, #0x110
+BetterDisplay[0x1004ff658] <+1432>: bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff65c] <+1436>: mov    x0, x25
+BetterDisplay[0x1004ff660] <+1440>: bl     0x1009b10fc               ; symbol stub for: swift_bridgeObjectRelease
+BetterDisplay[0x1004ff664] <+1444>: add    x20, sp, #0x110
+BetterDisplay[0x1004ff668] <+1448>: mov    w0, #0x2820               ; =10272 
+BetterDisplay[0x1004ff66c] <+1452>: mov    x1, #-0x1e00000000000000  ; =-2161727821137838080 
+BetterDisplay[0x1004ff670] <+1456>: bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff674] <+1460>: ldr    x20, [x23, #0x58]
+BetterDisplay[0x1004ff678] <+1464>: mov    x0, x20
+BetterDisplay[0x1004ff67c] <+1468>: bl     0x1009b139c               ; symbol stub for: swift_retain
+BetterDisplay[0x1004ff680] <+1472>: add    x8, sp, #0x60
+BetterDisplay[0x1004ff684] <+1476>: adrp   x1, 1682
+BetterDisplay[0x1004ff688] <+1480>: ldr    x1, [x1, #0x718]
+BetterDisplay[0x1004ff68c] <+1484>: bl     0x1009ad160               ; symbol stub for: SwiftUI.AppStorage.wrappedValue.getter : τ_0_0
+BetterDisplay[0x1004ff690] <+1488>: mov    x0, x20
+BetterDisplay[0x1004ff694] <+1492>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff698] <+1496>: ldp    x0, x20, [sp, #0x60]
+BetterDisplay[0x1004ff69c] <+1500>: cbnz   x0, 0x1004ff6b8           ; <+1528>
+BetterDisplay[0x1004ff6a0] <+1504>: mov    x8, #-0x2000000000000000  ; =-2305843009213693952 
+BetterDisplay[0x1004ff6a4] <+1508>: cmp    x20, x8
+BetterDisplay[0x1004ff6a8] <+1512>: b.ne   0x1004ff6b8               ; <+1528>
+BetterDisplay[0x1004ff6ac] <+1516>: mov    x0, x20
+BetterDisplay[0x1004ff6b0] <+1520>: bl     0x1009b10fc               ; symbol stub for: swift_bridgeObjectRelease
+BetterDisplay[0x1004ff6b4] <+1524>: b      0x1004ff6dc               ; <+1564>
+BetterDisplay[0x1004ff6b8] <+1528>: mov    x1, x20
+BetterDisplay[0x1004ff6bc] <+1532>: mov    x2, #0x0                  ; =0 
+BetterDisplay[0x1004ff6c0] <+1536>: mov    x3, #-0x2000000000000000  ; =-2305843009213693952 
+BetterDisplay[0x1004ff6c4] <+1540>: mov    w4, #0x0                  ; =0 
+BetterDisplay[0x1004ff6c8] <+1544>: bl     0x1009af998               ; symbol stub for: Swift._stringCompareWithSmolCheck(_: Swift._StringGuts, _: Swift._StringGuts, expecting: Swift._StringComparisonResult) -> Swift.Bool
+BetterDisplay[0x1004ff6cc] <+1548>: mov    x25, x0
+BetterDisplay[0x1004ff6d0] <+1552>: mov    x0, x20
+BetterDisplay[0x1004ff6d4] <+1556>: bl     0x1009b10fc               ; symbol stub for: swift_bridgeObjectRelease
+BetterDisplay[0x1004ff6d8] <+1560>: tbz    w25, #0x0, 0x1004ff6f0    ; <+1584>
+BetterDisplay[0x1004ff6dc] <+1564>: mov    w0, #0x0                  ; =0 
+BetterDisplay[0x1004ff6e0] <+1568>: mov    x20, x23
+BetterDisplay[0x1004ff6e4] <+1572>: bl     0x100664670               ; ___lldb_unnamed_symbol_100664670
+BetterDisplay[0x1004ff6e8] <+1576>: mov    x25, x1
+BetterDisplay[0x1004ff6ec] <+1580>: b      0x1004ff718               ; <+1624>
+BetterDisplay[0x1004ff6f0] <+1584>: ldr    x20, [x23, #0x58]
+BetterDisplay[0x1004ff6f4] <+1588>: mov    x0, x20
+BetterDisplay[0x1004ff6f8] <+1592>: bl     0x1009b139c               ; symbol stub for: swift_retain
+BetterDisplay[0x1004ff6fc] <+1596>: add    x8, sp, #0x60
+BetterDisplay[0x1004ff700] <+1600>: adrp   x1, 1682
+BetterDisplay[0x1004ff704] <+1604>: ldr    x1, [x1, #0x718]
+BetterDisplay[0x1004ff708] <+1608>: bl     0x1009ad160               ; symbol stub for: SwiftUI.AppStorage.wrappedValue.getter : τ_0_0
+BetterDisplay[0x1004ff70c] <+1612>: mov    x0, x20
+BetterDisplay[0x1004ff710] <+1616>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff714] <+1620>: ldp    x0, x25, [sp, #0x60]
+BetterDisplay[0x1004ff718] <+1624>: add    x20, sp, #0x110
+BetterDisplay[0x1004ff71c] <+1628>: mov    x1, x25
+BetterDisplay[0x1004ff720] <+1632>: bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff724] <+1636>: mov    x0, x25
+BetterDisplay[0x1004ff728] <+1640>: bl     0x1009b10fc               ; symbol stub for: swift_bridgeObjectRelease
+BetterDisplay[0x1004ff72c] <+1644>: add    x20, sp, #0x110
+BetterDisplay[0x1004ff730] <+1648>: mov    w0, #0x29                 ; =41 
+BetterDisplay[0x1004ff734] <+1652>: mov    x1, #-0x1f00000000000000  ; =-2233785415175766016 
+BetterDisplay[0x1004ff738] <+1656>: bl     0x1009aebb8               ; symbol stub for: Swift.String.append(Swift.String) -> ()
+BetterDisplay[0x1004ff73c] <+1660>: mov    x0, x23
+BetterDisplay[0x1004ff740] <+1664>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff744] <+1668>: ldp    x8, x9, [sp, #0x110]
+BetterDisplay[0x1004ff748] <+1672>: stp    x8, x9, [x19, #0x40]
+BetterDisplay[0x1004ff74c] <+1676>: adrp   x8, 1682
+BetterDisplay[0x1004ff750] <+1680>: ldr    x8, [x8, #0x718]
+BetterDisplay[0x1004ff754] <+1684>: mov    w9, #0x6f74               ; =28532 
+BetterDisplay[0x1004ff758] <+1688>: stp    x8, x9, [x19, #0x58]
+BetterDisplay[0x1004ff75c] <+1692>: mov    x9, #-0x1e00000000000000  ; =-2161727821137838080 
+BetterDisplay[0x1004ff760] <+1696>: str    x9, [x19, #0x68]
+BetterDisplay[0x1004ff764] <+1700>: adrp   x9, 1682
+BetterDisplay[0x1004ff768] <+1704>: ldr    x9, [x9, #0x8e0]
+BetterDisplay[0x1004ff76c] <+1708>: str    x9, [x19, #0x98]
+BetterDisplay[0x1004ff770] <+1712>: stp    x8, x28, [x19, #0x78]
+BetterDisplay[0x1004ff774] <+1716>: mov    x0, x19
+BetterDisplay[0x1004ff778] <+1720>: bl     0x10002dbcc               ; ___lldb_unnamed_symbol_10002dbcc
+BetterDisplay[0x1004ff77c] <+1724>: mov    x0, x19
+BetterDisplay[0x1004ff780] <+1728>: bl     0x1009b13b4               ; symbol stub for: swift_setDeallocating
+BetterDisplay[0x1004ff784] <+1732>: mov    x0, x26
+BetterDisplay[0x1004ff788] <+1736>: mov    w1, #0x4                  ; =4 
+BetterDisplay[0x1004ff78c] <+1740>: ldr    x2, [sp, #0x38]
+BetterDisplay[0x1004ff790] <+1744>: bl     0x1009b10c0               ; symbol stub for: swift_arrayDestroy
+BetterDisplay[0x1004ff794] <+1748>: mov    x0, x23
+BetterDisplay[0x1004ff798] <+1752>: bl     0x1009b139c               ; symbol stub for: swift_retain
+BetterDisplay[0x1004ff79c] <+1756>: mov    x20, x23
+BetterDisplay[0x1004ff7a0] <+1760>: bl     0x10067587c               ; ___lldb_unnamed_symbol_10067587c
+BetterDisplay[0x1004ff7a4] <+1764>: mov    x19, x0
+BetterDisplay[0x1004ff7a8] <+1768>: mov    x0, x23
+BetterDisplay[0x1004ff7ac] <+1772>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff7b0] <+1776>: mov    x8, #-0x80000000          ; =-2147483648 
+BetterDisplay[0x1004ff7b4] <+1780>: cmp    x28, x8
+BetterDisplay[0x1004ff7b8] <+1784>: b.lt   0x1004ffad8               ; <+2584>
+BetterDisplay[0x1004ff7bc] <+1788>: mov    w8, #0x7fffffff           ; =2147483647 
+BetterDisplay[0x1004ff7c0] <+1792>: cmp    x28, x8
+BetterDisplay[0x1004ff7c4] <+1796>: b.gt   0x1004ffadc               ; <+2588>
+BetterDisplay[0x1004ff7c8] <+1800>: sub    x8, x21, #0x1
+BetterDisplay[0x1004ff7cc] <+1804>: and    x21, x8, x21
+BetterDisplay[0x1004ff7d0] <+1808>: ldr    x0, [sp, #0x58]
+BetterDisplay[0x1004ff7d4] <+1812>: mov    x1, x19
+BetterDisplay[0x1004ff7d8] <+1816>: mov    x2, x28
+BetterDisplay[0x1004ff7dc] <+1820>: bl     0x1009b0070               ; symbol stub for: CGSConfigureDisplayMode
+BetterDisplay[0x1004ff7e0] <+1824>: mov    x0, x23
+BetterDisplay[0x1004ff7e4] <+1828>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff7e8] <+1832>: mov    x8, x24
+BetterDisplay[0x1004ff7ec] <+1836>: ldr    x25, [sp, #0x20]
+BetterDisplay[0x1004ff7f0] <+1840>: cbnz   x21, 0x1004ff564          ; <+1188>
+BetterDisplay[0x1004ff7f4] <+1844>: b      0x1004ff56c               ; <+1196>
+BetterDisplay[0x1004ff7f8] <+1848>: mov    x0, x25
+BetterDisplay[0x1004ff7fc] <+1852>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff800] <+1856>: ldr    x0, [sp, #0x58]
+BetterDisplay[0x1004ff804] <+1860>: mov    w1, #0x2                  ; =2 
+BetterDisplay[0x1004ff808] <+1864>: bl     0x1009afe30               ; symbol stub for: CGCompleteDisplayConfiguration
+BetterDisplay[0x1004ff80c] <+1868>: adrp   x8, 1989
+BetterDisplay[0x1004ff810] <+1872>: add    x8, x8, #0x0
+BetterDisplay[0x1004ff814] <+1876>: ldr    x8, [x8]
+BetterDisplay[0x1004ff818] <+1880>: ldp    x21, x19, [sp, #0x8]
+BetterDisplay[0x1004ff81c] <+1884>: str    xzr, [x19, x8]
+BetterDisplay[0x1004ff820] <+1888>: ldr    x8, [x21, #0x10]
+BetterDisplay[0x1004ff824] <+1892>: cbz    x8, 0x1004ff83c           ; <+1916>
+BetterDisplay[0x1004ff828] <+1896>: mov    x0, #0x0                  ; =0 
+BetterDisplay[0x1004ff82c] <+1900>: bl     0x1000d3390               ; ___lldb_unnamed_symbol_1000d3390
+BetterDisplay[0x1004ff830] <+1904>: mov    x20, x0
+BetterDisplay[0x1004ff834] <+1908>: mov    x0, x21
+BetterDisplay[0x1004ff838] <+1912>: bl     0x1005d6644               ; ___lldb_unnamed_symbol_1005d6644
+BetterDisplay[0x1004ff83c] <+1916>: mov    x0, x21
+BetterDisplay[0x1004ff840] <+1920>: bl     0x1009b10fc               ; symbol stub for: swift_bridgeObjectRelease
+BetterDisplay[0x1004ff844] <+1924>: mov    w0, #0x1                  ; =1 
+BetterDisplay[0x1004ff848] <+1928>: mov    x20, x19
+BetterDisplay[0x1004ff84c] <+1932>: bl     0x1004fd460               ; ___lldb_unnamed_symbol_1004fd460
+BetterDisplay[0x1004ff850] <+1936>: ldr    w23, [sp, #0x1c]
+BetterDisplay[0x1004ff854] <+1940>: tbnz   w23, #0x0, 0x1004ff87c    ; <+1980>
+BetterDisplay[0x1004ff858] <+1944>: mov    w0, #0x0                  ; =0 
+BetterDisplay[0x1004ff85c] <+1948>: mov    w1, #0x2                  ; =2 
+BetterDisplay[0x1004ff860] <+1952>: mov    x2, #-0x1                 ; =-1 
+BetterDisplay[0x1004ff864] <+1956>: mov    x20, x19
+BetterDisplay[0x1004ff868] <+1960>: bl     0x10015b570               ; ___lldb_unnamed_symbol_10015b570
+BetterDisplay[0x1004ff86c] <+1964>: mov    w0, #0x2                  ; =2 
+BetterDisplay[0x1004ff870] <+1968>: mov    w1, #0x2                  ; =2 
+BetterDisplay[0x1004ff874] <+1972>: mov    x2, #-0x1                 ; =-1 
+BetterDisplay[0x1004ff878] <+1976>: bl     0x10015b570               ; ___lldb_unnamed_symbol_10015b570
+BetterDisplay[0x1004ff87c] <+1980>: mov    x19, #0x0                 ; =0 
+BetterDisplay[0x1004ff880] <+1984>: ldrb   w8, [x25, #0x20]
+BetterDisplay[0x1004ff884] <+1988>: mov    w9, #0x1                  ; =1 
+BetterDisplay[0x1004ff888] <+1992>: lsl    x8, x9, x8
+BetterDisplay[0x1004ff88c] <+1996>: ldr    x9, [x25, #0x40]
+BetterDisplay[0x1004ff890] <+2000>: mov    x10, #-0x1                ; =-1 
+BetterDisplay[0x1004ff894] <+2004>: lsl    x11, x10, x8
+BetterDisplay[0x1004ff898] <+2008>: cmp    x8, #0x40
+BetterDisplay[0x1004ff89c] <+2012>: csinv  x10, x10, x11, ge
+BetterDisplay[0x1004ff8a0] <+2016>: and    x22, x10, x9
+BetterDisplay[0x1004ff8a4] <+2020>: add    x8, x8, #0x3f
+BetterDisplay[0x1004ff8a8] <+2024>: lsr    x21, x8, #6
+BetterDisplay[0x1004ff8ac] <+2028>: b      0x1004ff8c0               ; <+2048>
+BetterDisplay[0x1004ff8b0] <+2032>: sub    x8, x22, #0x1
+BetterDisplay[0x1004ff8b4] <+2036>: and    x22, x8, x22
+BetterDisplay[0x1004ff8b8] <+2040>: mov    x0, x20
+BetterDisplay[0x1004ff8bc] <+2044>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x1004ff8c0] <+2048>: cbnz   x22, 0x1004ff8e4          ; <+2084>
+BetterDisplay[0x1004ff8c4] <+2052>: adds   x8, x19, #0x1
+BetterDisplay[0x1004ff8c8] <+2056>: b.vs   0x1004ffacc               ; <+2572>
+BetterDisplay[0x1004ff8cc] <+2060>: cmp    x8, x21
+BetterDisplay[0x1004ff8d0] <+2064>: b.ge   0x1004ff934               ; <+2164>
+BetterDisplay[0x1004ff8d4] <+2068>: ldr    x22, [x27, x8, lsl #3]
+BetterDisplay[0x1004ff8d8] <+2072>: add    x19, x19, #0x1
+BetterDisplay[0x1004ff8dc] <+2076>: cbz    x22, 0x1004ff8c4          ; <+2052>

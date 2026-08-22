@@ -1,0 +1,107 @@
+--- /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/before_betterdisplay_apply/cg_mode_pool_summary.json	2026-05-20 10:39:34
++++ /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/after_betterdisplay_apply/cg_mode_pool_summary.json	2026-05-20 10:41:56
+@@ -31,26 +31,26 @@
+     },
+     {
+       "currentMode" : {
+-        "candidateReason" : "logical-2560x1440",
+-        "ioFlags" : 33554439,
+-        "isHiDPI" : false,
+-        "isPerfectQHDHiDPI" : false,
+-        "isStrongHiDPI" : false,
++        "candidateReason" : "logical-2560x1440,pixel-5120x2880,strong-hidpi-16:9,100hz-hidpi,strict-perfect-qhd",
++        "ioFlags" : 2097155,
++        "isHiDPI" : true,
++        "isPerfectQHDHiDPI" : true,
++        "isStrongHiDPI" : true,
+         "logicalHeight" : 1440,
+         "logicalWidth" : 2560,
+         "pixelEncoding" : "--------RRRRRRRRGGGGGGGGBBBBBBBB",
+-        "pixelHeight" : 1440,
+-        "pixelWidth" : 2560,
++        "pixelHeight" : 2880,
++        "pixelWidth" : 5120,
+         "refreshRate" : 100
+       },
+       "defaultModeCount" : 58,
+       "displayID" : 3,
+       "displayName" : "Unknown Display",
+-      "duplicateLowResolutionModeCount" : 106,
++      "duplicateLowResolutionModeCount" : 107,
+       "has100HzHiDPICandidate" : true,
+-      "has2560x1440Logical5120x2880PixelMode" : false,
+-      "has5120x2880BackingMode" : false,
+-      "hiDPIModeCount" : 48,
++      "has2560x1440Logical5120x2880PixelMode" : true,
++      "has5120x2880BackingMode" : true,
++      "hiDPIModeCount" : 49,
+       "isActive" : true,
+       "isBuiltIn" : false,
+       "isOnline" : true,
+@@ -59,7 +59,7 @@
+       "vendorID" : 19501
+     }
+   ],
+-  "capturedAt" : "2026-05-20T07:39:34.217Z",
++  "capturedAt" : "2026-05-20T07:41:56.583Z",
+   "defaultModes" : [
+     {
+       "candidateReason" : "logical-2560x1440",
+@@ -818,6 +818,19 @@
+   ],
+   "duplicateLowResolutionModes" : [
+     {
++      "candidateReason" : "logical-2560x1440,pixel-5120x2880,strong-hidpi-16:9,100hz-hidpi,strict-perfect-qhd",
++      "ioFlags" : 2097155,
++      "isHiDPI" : true,
++      "isPerfectQHDHiDPI" : true,
++      "isStrongHiDPI" : true,
++      "logicalHeight" : 1440,
++      "logicalWidth" : 2560,
++      "pixelEncoding" : "--------RRRRRRRRGGGGGGGGBBBBBBBB",
++      "pixelHeight" : 2880,
++      "pixelWidth" : 5120,
++      "refreshRate" : 100
++    },
++    {
+       "candidateReason" : "logical-2560x1440",
+       "ioFlags" : 33554439,
+       "isHiDPI" : false,
+@@ -2198,26 +2211,26 @@
+   ],
+   "targetDisplay" : {
+     "currentMode" : {
+-      "candidateReason" : "logical-2560x1440",
+-      "ioFlags" : 33554439,
+-      "isHiDPI" : false,
+-      "isPerfectQHDHiDPI" : false,
+-      "isStrongHiDPI" : false,
++      "candidateReason" : "logical-2560x1440,pixel-5120x2880,strong-hidpi-16:9,100hz-hidpi,strict-perfect-qhd",
++      "ioFlags" : 2097155,
++      "isHiDPI" : true,
++      "isPerfectQHDHiDPI" : true,
++      "isStrongHiDPI" : true,
+       "logicalHeight" : 1440,
+       "logicalWidth" : 2560,
+       "pixelEncoding" : "--------RRRRRRRRGGGGGGGGBBBBBBBB",
+-      "pixelHeight" : 1440,
+-      "pixelWidth" : 2560,
++      "pixelHeight" : 2880,
++      "pixelWidth" : 5120,
+       "refreshRate" : 100
+     },
+     "defaultModeCount" : 58,
+     "displayID" : 3,
+     "displayName" : "Samsung S60UD QHD",
+-    "duplicateLowResolutionModeCount" : 106,
++    "duplicateLowResolutionModeCount" : 107,
+     "has100HzHiDPICandidate" : true,
+-    "has2560x1440Logical5120x2880PixelMode" : false,
+-    "has5120x2880BackingMode" : false,
+-    "hiDPIModeCount" : 48,
++    "has2560x1440Logical5120x2880PixelMode" : true,
++    "has5120x2880BackingMode" : true,
++    "hiDPIModeCount" : 49,
+     "isActive" : true,
+     "isBuiltIn" : false,
+     "isOnline" : true,

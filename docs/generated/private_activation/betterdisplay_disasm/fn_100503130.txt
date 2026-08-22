@@ -1,0 +1,266 @@
+(lldb) target create /Applications/BetterDisplay.app/Contents/MacOS/BetterDisplay
+Current executable set to '/Applications/BetterDisplay.app/Contents/MacOS/BetterDisplay' (arm64).
+(lldb) disassemble -s 0x100503130 -c 260
+BetterDisplay`___lldb_unnamed_symbol_100503130:
+BetterDisplay[0x100503130] <+0>:   stp    x28, x27, [sp, #-0x60]!
+BetterDisplay[0x100503134] <+4>:   stp    x26, x25, [sp, #0x10]
+BetterDisplay[0x100503138] <+8>:   stp    x24, x23, [sp, #0x20]
+BetterDisplay[0x10050313c] <+12>:  stp    x22, x21, [sp, #0x30]
+BetterDisplay[0x100503140] <+16>:  stp    x20, x19, [sp, #0x40]
+BetterDisplay[0x100503144] <+20>:  stp    x29, x30, [sp, #0x50]
+BetterDisplay[0x100503148] <+24>:  add    x29, sp, #0x50
+BetterDisplay[0x10050314c] <+28>:  sub    sp, sp, #0x10
+BetterDisplay[0x100503150] <+32>:  stur   x7, [x29, #-0x58]
+BetterDisplay[0x100503154] <+36>:  mov    x22, x6
+BetterDisplay[0x100503158] <+40>:  mov    x20, x5
+BetterDisplay[0x10050315c] <+44>:  mov    x23, x4
+BetterDisplay[0x100503160] <+48>:  mov    x26, x3
+BetterDisplay[0x100503164] <+52>:  mov    x27, x2
+BetterDisplay[0x100503168] <+56>:  mov    x25, x1
+BetterDisplay[0x10050316c] <+60>:  mov    x24, x0
+BetterDisplay[0x100503170] <+64>:  adrp   x0, 1941
+BetterDisplay[0x100503174] <+68>:  add    x0, x0, #0x1f0
+BetterDisplay[0x100503178] <+72>:  bl     0x1000098ac               ; ___lldb_unnamed_symbol_1000098ac
+BetterDisplay[0x10050317c] <+76>:  ldur   x8, [x0, #-0x8]
+BetterDisplay[0x100503180] <+80>:  ldr    x8, [x8, #0x40]
+BetterDisplay[0x100503184] <+84>:  mov    x9, x8
+BetterDisplay[0x100503188] <+88>:  adrp   x16, 1675
+BetterDisplay[0x10050318c] <+92>:  ldr    x16, [x16, #0x760]
+BetterDisplay[0x100503190] <+96>:  blr    x16
+BetterDisplay[0x100503194] <+100>: mov    x9, sp
+BetterDisplay[0x100503198] <+104>: add    x8, x8, #0xf
+BetterDisplay[0x10050319c] <+108>: and    x8, x8, #0xfffffffffffffff0
+BetterDisplay[0x1005031a0] <+112>: sub    x21, x9, x8
+BetterDisplay[0x1005031a4] <+116>: mov    sp, x21
+BetterDisplay[0x1005031a8] <+120>: adrp   x8, 1795
+BetterDisplay[0x1005031ac] <+124>: ldr    x8, [x8, #0xb70]
+BetterDisplay[0x1005031b0] <+128>: cmn    x8, #0x1
+BetterDisplay[0x1005031b4] <+132>: b.ne   0x1005032b0               ; <+384>
+BetterDisplay[0x1005031b8] <+136>: adrp   x8, 1983
+BetterDisplay[0x1005031bc] <+140>: ldr    x28, [x8, #0x2f0]
+BetterDisplay[0x1005031c0] <+144>: adrp   x8, 1983
+BetterDisplay[0x1005031c4] <+148>: add    x8, x8, #0x390
+BetterDisplay[0x1005031c8] <+152>: ldr    x19, [x8]
+BetterDisplay[0x1005031cc] <+156>: mov    w8, #0x1                  ; =1 
+BetterDisplay[0x1005031d0] <+160>: strb   w8, [x28, x19]
+BetterDisplay[0x1005031d4] <+164>: and    w1, w27, #0x1
+BetterDisplay[0x1005031d8] <+168>: and    w2, w26, #0x1
+BetterDisplay[0x1005031dc] <+172>: and    w3, w23, #0x1
+BetterDisplay[0x1005031e0] <+176>: and    w4, w20, #0x1
+BetterDisplay[0x1005031e4] <+180>: mov    x0, x25
+BetterDisplay[0x1005031e8] <+184>: mov    x20, x24
+BetterDisplay[0x1005031ec] <+188>: bl     0x1004ff0c0               ; ___lldb_unnamed_symbol_1004ff0c0
+BetterDisplay[0x1005031f0] <+192>: adrp   x8, 1983
+BetterDisplay[0x1005031f4] <+196>: add    x8, x8, #0x398
+BetterDisplay[0x1005031f8] <+200>: ldr    x8, [x8]
+BetterDisplay[0x1005031fc] <+204>: add    x8, x28, x8
+BetterDisplay[0x100503200] <+208>: ldr    x20, [x8, #0x8]
+BetterDisplay[0x100503204] <+212>: adrp   x9, 4
+BetterDisplay[0x100503208] <+216>: add    x9, x9, #0x5f8            ; ___lldb_unnamed_symbol_1005075f8
+BetterDisplay[0x10050320c] <+220>: stp    x9, x22, [x8]
+BetterDisplay[0x100503210] <+224>: mov    x0, x22
+BetterDisplay[0x100503214] <+228>: bl     0x1009b139c               ; symbol stub for: swift_retain
+BetterDisplay[0x100503218] <+232>: mov    x0, x20
+BetterDisplay[0x10050321c] <+236>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x100503220] <+240>: strb   wzr, [x28, x19]
+BetterDisplay[0x100503224] <+244>: mov    x0, #0x0                  ; =0 
+BetterDisplay[0x100503228] <+248>: bl     0x1009ace6c               ; symbol stub for: type metadata accessor for Foundation.UUID
+BetterDisplay[0x10050322c] <+252>: mov    x3, x0
+BetterDisplay[0x100503230] <+256>: ldur   x8, [x0, #-0x8]
+BetterDisplay[0x100503234] <+260>: ldr    x8, [x8, #0x38]
+BetterDisplay[0x100503238] <+264>: mov    x0, x21
+BetterDisplay[0x10050323c] <+268>: mov    w1, #0x1                  ; =1 
+BetterDisplay[0x100503240] <+272>: mov    w2, #0x1                  ; =1 
+BetterDisplay[0x100503244] <+276>: blr    x8
+BetterDisplay[0x100503248] <+280>: mov    x0, x21
+BetterDisplay[0x10050324c] <+284>: mov    w1, #0x0                  ; =0 
+BetterDisplay[0x100503250] <+288>: mov    w2, #0x0                  ; =0 
+BetterDisplay[0x100503254] <+292>: mov    w3, #0x0                  ; =0 
+BetterDisplay[0x100503258] <+296>: mov    w4, #0x0                  ; =0 
+BetterDisplay[0x10050325c] <+300>: mov    w5, #0x0                  ; =0 
+BetterDisplay[0x100503260] <+304>: mov    x6, #0x0                  ; =0 
+BetterDisplay[0x100503264] <+308>: mov    x7, #0x0                  ; =0 
+BetterDisplay[0x100503268] <+312>: mov    x20, x28
+BetterDisplay[0x10050326c] <+316>: bl     0x1000572dc               ; ___lldb_unnamed_symbol_1000572dc
+BetterDisplay[0x100503270] <+320>: adrp   x1, 1941
+BetterDisplay[0x100503274] <+324>: add    x1, x1, #0x1f0
+BetterDisplay[0x100503278] <+328>: mov    x0, x21
+BetterDisplay[0x10050327c] <+332>: bl     0x100024a70               ; ___lldb_unnamed_symbol_100024a70
+BetterDisplay[0x100503280] <+336>: ldur   x8, [x29, #-0x58]
+BetterDisplay[0x100503284] <+340>: cbz    x8, 0x100503290           ; <+352>
+BetterDisplay[0x100503288] <+344>: ldr    x20, [x29, #0x10]
+BetterDisplay[0x10050328c] <+348>: blr    x8
+BetterDisplay[0x100503290] <+352>: sub    sp, x29, #0x50
+BetterDisplay[0x100503294] <+356>: ldp    x29, x30, [sp, #0x50]
+BetterDisplay[0x100503298] <+360>: ldp    x20, x19, [sp, #0x40]
+BetterDisplay[0x10050329c] <+364>: ldp    x22, x21, [sp, #0x30]
+BetterDisplay[0x1005032a0] <+368>: ldp    x24, x23, [sp, #0x20]
+BetterDisplay[0x1005032a4] <+372>: ldp    x26, x25, [sp, #0x10]
+BetterDisplay[0x1005032a8] <+376>: ldp    x28, x27, [sp], #0x60
+BetterDisplay[0x1005032ac] <+380>: ret    
+BetterDisplay[0x1005032b0] <+384>: adrp   x0, 1795
+BetterDisplay[0x1005032b4] <+388>: add    x0, x0, #0xb70
+BetterDisplay[0x1005032b8] <+392>: adrp   x1, -1206
+BetterDisplay[0x1005032bc] <+396>: add    x1, x1, #0x9c8            ; ___lldb_unnamed_symbol_10004d9c8
+BetterDisplay[0x1005032c0] <+400>: bl     0x1009b1378               ; symbol stub for: swift_once
+BetterDisplay[0x1005032c4] <+404>: b      0x1005031b8               ; <+136>
+
+BetterDisplay`___lldb_unnamed_symbol_1005032c8:
+BetterDisplay[0x1005032c8] <+0>:   stp    x28, x27, [sp, #-0x60]!
+BetterDisplay[0x1005032cc] <+4>:   stp    x26, x25, [sp, #0x10]
+BetterDisplay[0x1005032d0] <+8>:   stp    x24, x23, [sp, #0x20]
+BetterDisplay[0x1005032d4] <+12>:  stp    x22, x21, [sp, #0x30]
+BetterDisplay[0x1005032d8] <+16>:  stp    x20, x19, [sp, #0x40]
+BetterDisplay[0x1005032dc] <+20>:  stp    x29, x30, [sp, #0x50]
+BetterDisplay[0x1005032e0] <+24>:  add    x29, sp, #0x50
+BetterDisplay[0x1005032e4] <+28>:  sub    sp, sp, #0x70
+BetterDisplay[0x1005032e8] <+32>:  mov    x20, x0
+BetterDisplay[0x1005032ec] <+36>:  mov    x0, #0x0                  ; =0 
+BetterDisplay[0x1005032f0] <+40>:  bl     0x1009ae7ec               ; symbol stub for: type metadata accessor for Dispatch.DispatchWorkItemFlags
+BetterDisplay[0x1005032f4] <+44>:  mov    x19, x0
+BetterDisplay[0x1005032f8] <+48>:  ldur   x28, [x0, #-0x8]
+BetterDisplay[0x1005032fc] <+52>:  ldr    x8, [x28, #0x40]
+BetterDisplay[0x100503300] <+56>:  mov    x9, x8
+BetterDisplay[0x100503304] <+60>:  adrp   x16, 1675
+BetterDisplay[0x100503308] <+64>:  ldr    x16, [x16, #0x760]
+BetterDisplay[0x10050330c] <+68>:  blr    x16
+BetterDisplay[0x100503310] <+72>:  mov    x9, sp
+BetterDisplay[0x100503314] <+76>:  add    x8, x8, #0xf
+BetterDisplay[0x100503318] <+80>:  and    x8, x8, #0xfffffffffffffff0
+BetterDisplay[0x10050331c] <+84>:  sub    x21, x9, x8
+BetterDisplay[0x100503320] <+88>:  mov    sp, x21
+BetterDisplay[0x100503324] <+92>:  mov    x0, #0x0                  ; =0 
+BetterDisplay[0x100503328] <+96>:  bl     0x1009ae834               ; symbol stub for: type metadata accessor for Dispatch.DispatchQoS
+BetterDisplay[0x10050332c] <+100>: mov    x22, x0
+BetterDisplay[0x100503330] <+104>: ldur   x8, [x0, #-0x8]
+BetterDisplay[0x100503334] <+108>: stur   x8, [x29, #-0xa0]
+BetterDisplay[0x100503338] <+112>: ldr    x8, [x8, #0x40]
+BetterDisplay[0x10050333c] <+116>: mov    x9, x8
+BetterDisplay[0x100503340] <+120>: adrp   x16, 1675
+BetterDisplay[0x100503344] <+124>: ldr    x16, [x16, #0x760]
+BetterDisplay[0x100503348] <+128>: blr    x16
+BetterDisplay[0x10050334c] <+132>: mov    x9, sp
+BetterDisplay[0x100503350] <+136>: add    x8, x8, #0xf
+BetterDisplay[0x100503354] <+140>: and    x8, x8, #0xfffffffffffffff0
+BetterDisplay[0x100503358] <+144>: sub    x23, x9, x8
+BetterDisplay[0x10050335c] <+148>: mov    sp, x23
+BetterDisplay[0x100503360] <+152>: mov    x0, #0x0                  ; =0 
+BetterDisplay[0x100503364] <+156>: bl     0x1009ae870               ; symbol stub for: type metadata accessor for Dispatch.DispatchTime
+BetterDisplay[0x100503368] <+160>: mov    x24, x0
+BetterDisplay[0x10050336c] <+164>: ldur   x26, [x0, #-0x8]
+BetterDisplay[0x100503370] <+168>: ldr    x8, [x26, #0x40]
+BetterDisplay[0x100503374] <+172>: mov    x9, x8
+BetterDisplay[0x100503378] <+176>: adrp   x16, 1675
+BetterDisplay[0x10050337c] <+180>: ldr    x16, [x16, #0x760]
+BetterDisplay[0x100503380] <+184>: blr    x16
+BetterDisplay[0x100503384] <+188>: mov    x9, sp
+BetterDisplay[0x100503388] <+192>: add    x10, x8, #0xf
+BetterDisplay[0x10050338c] <+196>: and    x12, x10, #0xfffffffffffffff0
+BetterDisplay[0x100503390] <+200>: sub    x27, x9, x12
+BetterDisplay[0x100503394] <+204>: mov    sp, x27
+BetterDisplay[0x100503398] <+208>: mov    x9, x8
+BetterDisplay[0x10050339c] <+212>: adrp   x16, 1675
+BetterDisplay[0x1005033a0] <+216>: ldr    x16, [x16, #0x760]
+BetterDisplay[0x1005033a4] <+220>: blr    x16
+BetterDisplay[0x1005033a8] <+224>: mov    x8, sp
+BetterDisplay[0x1005033ac] <+228>: sub    x25, x8, x12
+BetterDisplay[0x1005033b0] <+232>: mov    sp, x25
+BetterDisplay[0x1005033b4] <+236>: add    x0, x20, #0x10
+BetterDisplay[0x1005033b8] <+240>: sub    x1, x29, #0x68
+BetterDisplay[0x1005033bc] <+244>: mov    x2, #0x0                  ; =0 
+BetterDisplay[0x1005033c0] <+248>: mov    x3, #0x0                  ; =0 
+BetterDisplay[0x1005033c4] <+252>: bl     0x1009b10f0               ; symbol stub for: swift_beginAccess
+BetterDisplay[0x1005033c8] <+256>: ldrb   w8, [x20, #0x10]
+BetterDisplay[0x1005033cc] <+260>: cmp    w8, #0x1
+BetterDisplay[0x1005033d0] <+264>: b.ne   0x100503544               ; <+636>
+BetterDisplay[0x1005033d4] <+268>: mov    x0, #0x0                  ; =0 
+BetterDisplay[0x1005033d8] <+272>: bl     0x100024938               ; ___lldb_unnamed_symbol_100024938
+BetterDisplay[0x1005033dc] <+276>: mov    x20, x0
+BetterDisplay[0x1005033e0] <+280>: bl     0x1009af068               ; symbol stub for: static __C.OS_dispatch_queue.main.getter : __C.OS_dispatch_queue
+BetterDisplay[0x1005033e4] <+284>: stur   x0, [x29, #-0xb0]
+BetterDisplay[0x1005033e8] <+288>: mov    x8, x27
+BetterDisplay[0x1005033ec] <+292>: bl     0x1009ae858               ; symbol stub for: static Dispatch.DispatchTime.now() -> Dispatch.DispatchTime
+BetterDisplay[0x1005033f0] <+296>: mov    x8, #0x3333333333333333   ; =3689348814741910323 
+BetterDisplay[0x1005033f4] <+300>: movk   x8, #0x3fd3, lsl #48
+BetterDisplay[0x1005033f8] <+304>: fmov   d0, x8
+BetterDisplay[0x1005033fc] <+308>: mov    x8, x25
+BetterDisplay[0x100503400] <+312>: mov    x0, x27
+BetterDisplay[0x100503404] <+316>: bl     0x1009ae8a0               ; symbol stub for: Dispatch.+ infix(Dispatch.DispatchTime, Swift.Double) -> Dispatch.DispatchTime
+BetterDisplay[0x100503408] <+320>: ldr    x8, [x26, #0x8]
+BetterDisplay[0x10050340c] <+324>: stur   x8, [x29, #-0xa8]
+BetterDisplay[0x100503410] <+328>: mov    x0, x27
+BetterDisplay[0x100503414] <+332>: mov    x1, x24
+BetterDisplay[0x100503418] <+336>: blr    x8
+BetterDisplay[0x10050341c] <+340>: adrp   x8, 0
+BetterDisplay[0x100503420] <+344>: add    x8, x8, #0x564            ; ___lldb_unnamed_symbol_100503564
+BetterDisplay[0x100503424] <+348>: stp    x8, xzr, [x29, #-0x78]
+BetterDisplay[0x100503428] <+352>: adrp   x8, 1675
+BetterDisplay[0x10050342c] <+356>: ldr    x8, [x8, #0x740]
+BetterDisplay[0x100503430] <+360>: stur   x8, [x29, #-0x98]
+BetterDisplay[0x100503434] <+364>: adrp   x8, 1222
+BetterDisplay[0x100503438] <+368>: ldr    d0, [x8, #0x5f0]
+BetterDisplay[0x10050343c] <+372>: stur   d0, [x29, #-0x90]
+BetterDisplay[0x100503440] <+376>: adrp   x8, -757
+BetterDisplay[0x100503444] <+380>: add    x8, x8, #0x65c            ; ___lldb_unnamed_symbol_10020e65c
+BetterDisplay[0x100503448] <+384>: adrp   x9, 1699
+BetterDisplay[0x10050344c] <+388>: add    x9, x9, #0xc60
+BetterDisplay[0x100503450] <+392>: stp    x8, x9, [x29, #-0x88]
+BetterDisplay[0x100503454] <+396>: sub    x0, x29, #0x98
+BetterDisplay[0x100503458] <+400>: bl     0x1009b05ec               ; symbol stub for: _Block_copy
+BetterDisplay[0x10050345c] <+404>: mov    x27, x0
+BetterDisplay[0x100503460] <+408>: ldur   x0, [x29, #-0x70]
+BetterDisplay[0x100503464] <+412>: bl     0x1009b1384               ; symbol stub for: swift_release
+BetterDisplay[0x100503468] <+416>: mov    x8, x23
+BetterDisplay[0x10050346c] <+420>: bl     0x1009ae804               ; symbol stub for: static Dispatch.DispatchQoS.unspecified.getter : Dispatch.DispatchQoS
+BetterDisplay[0x100503470] <+424>: adrp   x8, 1679
+BetterDisplay[0x100503474] <+428>: ldr    x8, [x8, #0x68]
+BetterDisplay[0x100503478] <+432>: stur   x8, [x29, #-0x98]
+BetterDisplay[0x10050347c] <+436>: adrp   x0, 1940
+BetterDisplay[0x100503480] <+440>: add    x0, x0, #0x9f8
+BetterDisplay[0x100503484] <+444>: adrp   x1, 1679
+BetterDisplay[0x100503488] <+448>: ldr    x1, [x1, #0x3f0]
+BetterDisplay[0x10050348c] <+452>: adrp   x2, 1679
+BetterDisplay[0x100503490] <+456>: ldr    x2, [x2, #0x400]
+BetterDisplay[0x100503494] <+460>: bl     0x100009c2c               ; ___lldb_unnamed_symbol_100009c2c
+BetterDisplay[0x100503498] <+464>: stur   x22, [x29, #-0xb8]
+BetterDisplay[0x10050349c] <+468>: mov    x22, x28
+BetterDisplay[0x1005034a0] <+472>: mov    x28, x0
+BetterDisplay[0x1005034a4] <+476>: adrp   x20, 1940
+BetterDisplay[0x1005034a8] <+480>: add    x20, x20, #0xa00
+BetterDisplay[0x1005034ac] <+484>: mov    x0, x20
+BetterDisplay[0x1005034b0] <+488>: bl     0x1000098ac               ; ___lldb_unnamed_symbol_1000098ac
+BetterDisplay[0x1005034b4] <+492>: mov    x26, x0
+BetterDisplay[0x1005034b8] <+496>: adrp   x0, 1940
+BetterDisplay[0x1005034bc] <+500>: add    x0, x0, #0xa08
+BetterDisplay[0x1005034c0] <+504>: mov    x1, x20
+BetterDisplay[0x1005034c4] <+508>: bl     0x100009e18               ; ___lldb_unnamed_symbol_100009e18
+BetterDisplay[0x1005034c8] <+512>: mov    x2, x0
+BetterDisplay[0x1005034cc] <+516>: sub    x0, x29, #0x98
+BetterDisplay[0x1005034d0] <+520>: mov    x8, x21
+BetterDisplay[0x1005034d4] <+524>: mov    x1, x26
+BetterDisplay[0x1005034d8] <+528>: mov    x20, x19
+BetterDisplay[0x1005034dc] <+532>: mov    x3, x19
+BetterDisplay[0x1005034e0] <+536>: mov    x4, x28
+BetterDisplay[0x1005034e4] <+540>: bl     0x1009af530               ; symbol stub for: dispatch thunk of Swift.SetAlgebra.init<τ_0_0 where τ_1_0: Swift.Sequence, τ_0_0.Element == τ_1_0.Element>(__owned τ_1_0) -> τ_0_0
+BetterDisplay[0x1005034e8] <+544>: mov    x0, x25
+BetterDisplay[0x1005034ec] <+548>: mov    x1, x23
+BetterDisplay[0x1005034f0] <+552>: mov    x2, x21
+BetterDisplay[0x1005034f4] <+556>: mov    x3, x27
+BetterDisplay[0x1005034f8] <+560>: ldur   x20, [x29, #-0xb0]
+BetterDisplay[0x1005034fc] <+564>: bl     0x1009af020               ; symbol stub for: __C.OS_dispatch_queue.asyncAfter(deadline: Dispatch.DispatchTime, qos: Dispatch.DispatchQoS, flags: Dispatch.DispatchWorkItemFlags, execute: @convention(block) () -> ()) -> ()
+BetterDisplay[0x100503500] <+568>: mov    x0, x27
+BetterDisplay[0x100503504] <+572>: bl     0x1009b0610               ; symbol stub for: _Block_release
+BetterDisplay[0x100503508] <+576>: mov    x0, x20
+BetterDisplay[0x10050350c] <+580>: bl     0x1009b0d00               ; symbol stub for: objc_release
+BetterDisplay[0x100503510] <+584>: ldr    x8, [x22, #0x8]
+BetterDisplay[0x100503514] <+588>: mov    x0, x21
+BetterDisplay[0x100503518] <+592>: mov    x1, x19
+BetterDisplay[0x10050351c] <+596>: blr    x8
+BetterDisplay[0x100503520] <+600>: ldur   x8, [x29, #-0xa0]
+BetterDisplay[0x100503524] <+604>: ldr    x8, [x8, #0x8]
+BetterDisplay[0x100503528] <+608>: mov    x0, x23
+BetterDisplay[0x10050352c] <+612>: ldur   x1, [x29, #-0xb8]
+BetterDisplay[0x100503530] <+616>: blr    x8
+BetterDisplay[0x100503534] <+620>: mov    x0, x25
+BetterDisplay[0x100503538] <+624>: mov    x1, x24
+BetterDisplay[0x10050353c] <+628>: ldur   x8, [x29, #-0xa8]

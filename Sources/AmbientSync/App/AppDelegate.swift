@@ -1,0 +1,1824 @@
+import AppKit
+import Foundation
+import IOKit
+import IOKit.hid
+import IOKit.ps
+import IOKit.pwr_mgt
+import Darwin
+import SwiftUI
+
+@MainActor
+final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
+    let store = AmbientSyncStore()
+    private let reader = AmbientLightReader()
+    private let writer = M1DDCWriter()
+    private let internalBrightnessController = InternalDisplayBrightnessController()
+    private var statusItem: NSStatusItem?
+    private var statusMenu: NSMenu?
+    private var statusMenuItem: NSMenuItem?
+    private var powerStatusMenuItem: NSMenuItem?
+    private var powerStatusView: PowerStatusMenuView?
+    private var soundMenuItem: NSMenuItem?
+    private var volumeStatusMenuItem: NSMenuItem?
+    private var topVolumeStatusMenuItem: NSMenuItem?
+    private var keepAwakeItem: NSMenuItem?
+    private var launchAtLoginItem: NSMenuItem?
+    private var settingsMenuItem: NSMenuItem?
+    private var muteItem: NSMenuItem?
+    private var pollTimer: Timer?
+    private var volumeKeyRouter: MonitorVolumeKeyRouter?
+    private var routeBannerController: RouteBannerController?
+    private var quickActionsPopoverController: QuickActionsPopoverController?
+    private var isQuickActionsPopoverVisible = false
+    private lazy var keepAwakeCoordinator = KeepAwakeCoordinator(app: self)
+    private let volumeFeatureController = VolumeFeatureController()
+    private let hiDPIFeatureController = HiDPIFeatureController()
+    private let hiDPIRefreshService: HiDPIRefreshService
+    let powerSourceController = PowerSourceController()
+    private let luxFilter = LuxFilter()
+    private let brightnessAutoController = BrightnessAutoController()
+    private let brightnessAutoLoopPlanner = BrightnessAutoLoopPlanner()
+    private let brightnessAutoWriteOutcomePlanner = BrightnessAutoWriteOutcomePlanner()
+    private var isTickRunning = false
+    private var lastSmoothedLux: Double?
+    private var lastSentBrightness: Int?
+    private var lastWriteDate = Date.distantPast
+    private var lastBrightnessReadDate = Date.distantPast
+    private var lastDisplaySearchDate = Date.distantPast
+    private let brightnessReadInterval: TimeInterval = 8.0
+    private let displaySearchInterval: TimeInterval = 3.0
+    private var manualBrightnessOverrideUntil = Date.distantPast
+    private var autoBrightnessSuppressedUntil = Date.distantPast
+    private var manualBrightnessOverrideStartLux: Double?
+    private var pendingTargetCandidate: Int?
+    private var pendingTargetCandidateSince: Date = .distantPast
+    private var mismatchIntervalsCount: Int = 0
+    private var brightnessLimiterCooldownUntil = Date.distantPast
+    private var brightnessLimiterCooldownDisplayKey: String?
+    private let brightnessLimiterCooldownDuration: TimeInterval = 120.0
+    private var lastNonZeroVolume: Int = VolumeFeatureController.loadLastVolume()
+    private let statusBarDetailModeDefaultsKey = "AmbientSync.StatusBarDetailMode"
+    private let volumeReadInterval: TimeInterval = 5.0
+    private var lastVolumeReadDate = Date.distantPast
+    private var statusBarResolvedLength: CGFloat = 0
+
+    @Published var keepAwakeState: KeepAwakeState = KeepAwakeFeatureController.loadInitialState()
+
+    @Published var currentIdleTimeString: String = "00:00"
+    @Published var remainingIdleTimeString: String = "--:--"
+    var isAwakeAssertionActive: Bool { keepAwakeCoordinator.isActive }
+    
+    @Published var statusText: String = "Başlatılıyor..."
+    @Published var currentLux: Double?
+    @Published var currentBrightness: Int?
+    @Published var currentInternalBrightness: Int?
+    @Published var currentVolume: Int? = nil
+    @Published var currentDisplayInfo: ExternalDisplayInfo?
+    @Published var hiDPIStatusText: String = "Mevcut Mod: bilinmiyor"
+    @Published var hiDPIActivationStatusText: String = "HiDPI disabled"
+    @Published var cgsModeEnumerationStatusText: String = "CGS mode enumeration henüz çalıştırılmadı."
+    @Published var cgsModeEnumerationSummary: CGSModeEnumerationSummary?
+    @Published var cgsModeApplyExperimentStatusText: String = "CGS apply experiment henüz çalıştırılmadı."
+    @Published var cgsModeApplyExperimentSummary: CGSModeApplyExperimentSummary?
+    @Published var cgsManualModeSwitcherStatusText: String = "Current CGS Mode: unavailable"
+    @Published var cgsManualModeSwitcherSummary: CGSModeSwitcherStatus?
+    @Published var cgsDynamicSelectionState: CGSDynamicModeSelectionState?
+    @Published var cgsSamsungFallbackUsed: Bool = false
+    @Published var cgsSelectedHiDPICandidate: CGSDisplayModeCandidate?
+    @Published var cgsSelectedNormalCandidate: CGSDisplayModeCandidate?
+    @Published var availableModes: [PhysicalDisplayMode] = []
+    @Published var isHiDPIActive: Bool = false
+    @Published var statusBarDetailMode: StatusBarDetailMode = {
+        let rawValue = UserDefaults.standard.string(forKey: "AmbientSync.StatusBarDetailMode") ?? StatusBarDetailMode.smart.rawValue
+        return StatusBarDetailMode(rawValue: rawValue) ?? .smart
+    }()
+    @Published var calibrationSession: CalibrationSession?
+    @Published var currentEDIDSummary: EDIDDiagnosticSummary?
+    @Published var hdrBrightnessDiagnosticSummary: HDRBrightnessDiagnosticSummary?
+    @Published var ddcBrightnessMaxDiagnosticSummary: DDCBrightnessMaxDiagnosticSummary?
+    @Published var ddcRawBrightnessProbeSummary: DDCRawBrightnessProbeSummary?
+    @Published var brightnessMappingDiagnosticSummary: BrightnessMappingDiagnosticSummary?
+    @Published var brightnessState = BrightnessState()
+    private let launchAgentService: LaunchAgentService
+    private let cgsModeSwitcher = CGSModeSwitcher()
+    private let hdrBrightnessDiagnostic = HDRBrightnessDiagnostic()
+    private let ddcBrightnessMaxDiagnostic = DDCBrightnessMaxDiagnostic()
+    private let ddcRawBrightnessProbeDiagnostic = DDCRawBrightnessProbeDiagnostic()
+    private var settingsWindowController: PreferencesWindowController?
+
+    override init() {
+        self.launchAgentService = LaunchAgentService(launchAgentLabel: "fyi.kadir.AmbientSync")
+        self.hiDPIRefreshService = HiDPIRefreshService(modeSwitcher: cgsModeSwitcher, featureController: hiDPIFeatureController)
+        super.init()
+    }
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
+        setupStatusItem()
+        HiDPIReapplyService.shared.startService()
+        
+        Task {
+            await reloadDisplayModes()
+            refreshCGSModeSwitcherState()
+            
+            // System / Screen Wake Observers
+            let nc = NSWorkspace.shared.notificationCenter
+            nc.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: .main) { [weak self] _ in
+                Task { @MainActor [weak self] in
+                    self?.handleWakeEvent()
+                }
+            }
+            nc.addObserver(forName: NSWorkspace.screensDidWakeNotification, object: nil, queue: .main) { [weak self] _ in
+                Task { @MainActor [weak self] in
+                    self?.handleWakeEvent()
+                }
+            }
+            
+            // Launch session trigger
+            if self.keepAwakeState.featureEnabled {
+                self.startDefaultAfterWakeSession()
+            }
+            
+            await reloadDisplayInfo()
+            refreshInternalBrightness()
+            
+            volumeKeyRouter = MonitorVolumeKeyRouter(app: self)
+            volumeKeyRouter?.setEnabled(currentDisplayInfo != nil)
+            volumeKeyRouter?.start()
+            startPolling()
+            refreshCGSModeSwitcherState()
+            await tick()
+        }
+    }
+
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        false
+    }
+
+    private func setupStatusItem() {
+        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        
+        let menu = MenuBarRightMenuBuilder.buildMenu(
+            target: self,
+            launchAtLoginAction: #selector(toggleLaunchAtLogin),
+            refreshAction: #selector(refreshDisplayAction),
+            settingsAction: #selector(openSettings),
+            quitAction: #selector(quitApp)
+        )
+
+        launchAtLoginItem = menu.items.first(where: { $0.action == #selector(toggleLaunchAtLogin) })
+        settingsMenuItem = menu.items.first(where: { $0.action == #selector(openSettings) })
+
+        if let button = item.button {
+            button.action = #selector(statusBarButtonClicked(_:))
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+            // We store the menu in a property, but do not set it to item.menu
+            // so left click doesn't trigger the menu natively.
+            self.statusMenu = menu
+        }
+
+        statusItem = item
+
+        updatePowerStatusTitle()
+        updateLaunchAtLoginTitle()
+        updateStatusBarImage(isActive: true)
+    }
+
+    @objc private func statusBarButtonClicked(_ sender: NSStatusBarButton) {
+        guard let event = NSApp.currentEvent else { return }
+        
+        if event.type == .rightMouseUp || event.modifierFlags.contains(.control) {
+            if let menu = statusMenu {
+                menu.popUp(positioning: Optional<NSMenuItem>.none, at: NSPoint(x: 0, y: sender.bounds.height + 4), in: sender)
+            }
+        } else {
+            toggleQuickActions()
+        }
+    }
+
+    func updateStatusBarImage(isActive: Bool) {
+        guard let button = statusItem?.button else { return }
+        let symbolName = isActive ? "sun.max.fill" : "pause.fill"
+        let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)
+        image?.isTemplate = true
+        button.image = image
+        button.imagePosition = .imageLeft
+        let detail = statusBarDetailText()
+        button.attributedTitle = detail.map(attributedStatusBarTitle) ?? NSAttributedString(string: "")
+        button.toolTip = statusBarToolTip(isActive: isActive)
+
+        if !isQuickActionsPopoverVisible {
+            let measuredLength = button.intrinsicContentSize.width
+            let nextLength: CGFloat
+            if detail == nil {
+                nextLength = measuredLength
+            } else {
+                nextLength = max(statusBarResolvedLength, measuredLength)
+            }
+            if abs(nextLength - statusBarResolvedLength) > 0.5 {
+                statusBarResolvedLength = nextLength
+                statusItem?.length = nextLength
+            }
+        }
+    }
+
+    func setStatusBarDetailMode(_ mode: StatusBarDetailMode) {
+        statusBarDetailMode = mode
+        UserDefaults.standard.set(mode.rawValue, forKey: statusBarDetailModeDefaultsKey)
+        updateStatusBarImage(isActive: calibrationSession == nil)
+    }
+
+    private func statusBarDetailText() -> String? {
+        switch statusBarDetailMode {
+        case .off:
+            return nil
+        case .brightness:
+            return "\(monitorBrightnessControlValue)%"
+        case .sleepCountdown:
+            return keepAwakeState.temporaryOverrideActive ? compactKeepAwakeCountdownText() : "\(monitorBrightnessControlValue)%"
+        case .smart:
+            if keepAwakeState.temporaryOverrideActive {
+                return compactKeepAwakeCountdownText()
+            }
+            return "\(monitorBrightnessControlValue)%"
+        }
+    }
+
+    private func compactKeepAwakeCountdownText() -> String {
+        if remainingIdleTimeString.hasPrefix("Uykuya izin verilmesine: ") {
+            return String(remainingIdleTimeString.dropFirst("Uykuya izin verilmesine: ".count))
+        }
+        if remainingIdleTimeString == "Uykuya izin verildi" {
+            return "Açık"
+        }
+        if remainingIdleTimeString == "Güç bekleniyor" {
+            return "Bekliyor"
+        }
+        return remainingIdleTimeString
+    }
+
+    private func attributedStatusBarTitle(_ text: String) -> NSAttributedString {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: NSFont.monospacedDigitSystemFont(ofSize: 10.5, weight: .medium),
+            .foregroundColor: NSColor.white
+        ]
+        return NSAttributedString(string: "  \(text)", attributes: attributes)
+    }
+
+    private func statusBarToolTip(isActive: Bool) -> String {
+        var pieces: [String] = [isActive ? "AmbientSync running" : "AmbientSync paused"]
+        if let detail = statusBarDetailText(), !detail.isEmpty {
+            switch statusBarDetailMode {
+            case .brightness:
+                pieces.append("Parlaklık \(detail)")
+            case .sleepCountdown, .smart:
+                pieces.append("Geri sayım \(detail)")
+            case .off:
+                break
+            }
+        }
+        return pieces.joined(separator: " · ")
+    }
+
+    private func startPolling() {
+        let timer = Timer(timeInterval: 0.8, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                await self?.tick()
+            }
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        pollTimer = timer
+    }
+
+    private func tick() async {
+        guard !isTickRunning else { return }
+        isTickRunning = true
+        defer { isTickRunning = false }
+
+        refreshSharedRuntimeFeatures()
+
+        guard let reader else {
+            updateStatus("Işık sensörü bulunamadı")
+            updateBrightnessState { state in
+                state.suppressionReason = "Işık sensörü bulunamadı"
+            }
+            return
+        }
+
+        guard let lux = reader.readLux() else {
+            updateStatus("Sensör bekleniyor")
+            updateBrightnessState { state in
+                state.suppressionReason = "Sensör bekleniyor"
+            }
+            return
+        }
+
+        if currentDisplayInfo == nil, Date().timeIntervalSince(lastDisplaySearchDate) >= displaySearchInterval {
+            lastDisplaySearchDate = Date()
+            await reloadDisplayInfo()
+            refreshSharedRuntimeFeatures()
+        }
+
+        guard let display = currentDisplayInfo else {
+            updateStatus("Samsung S60UD ekranı bulunamadı")
+            updateBrightnessState { state in
+                state.suppressionReason = "Samsung S60UD ekranı bulunamadı"
+            }
+            return
+        }
+
+        store.setSelectedDisplayKey(display.displayKey)
+
+        let settings = store.ensureSettings(for: display.displayKey)
+        let profile = store.profile(id: settings.selectedProfileID)
+
+        let smoothedLux = luxFilter.push(lux, baseSmoothing: profile.smoothing)
+        lastSmoothedLux = smoothedLux
+        currentLux = smoothedLux
+
+        let now = Date()
+        let ambientNormalizedValue = BrightnessCurve.ambientNormalizedValue(for: smoothedLux, calibration: settings.calibration)
+        let autoTargetBrightnessPercent = BrightnessCurve.targetBrightness(
+            for: smoothedLux,
+            calibration: settings.calibration,
+            profile: profile
+        )
+        let isManualOverrideActive = shouldHoldManualBrightnessOverride(currentLux: smoothedLux, now: now)
+        let actualBefore = brightnessState.actualDDCBrightnessPercent
+            ?? brightnessState.lastDDCReadbackPercent
+            ?? currentBrightness
+            ?? store.lastBrightness(for: display.displayKey)
+            ?? 50
+        let requestReferenceBrightness = actualBefore
+
+        let smoothedRequestedPercent = brightnessAutoController.smoothedRequestedPercent(
+            target: autoTargetBrightnessPercent,
+            reference: requestReferenceBrightness,
+            smoothing: profile.smoothing
+        )
+
+        updateBrightnessState { state in
+            state.ambientSensorRawValue = lux
+            state.ambientNormalizedValue = ambientNormalizedValue
+            state.autoTargetBrightnessPercent = autoTargetBrightnessPercent
+            state.smoothedRequestedBrightnessPercent = smoothedRequestedPercent
+            state.actualDDCBrightnessPercent = actualBefore
+            state.isManualOverrideActive = isManualOverrideActive
+            state.isAutoBrightnessEnabled = !isManualOverrideActive && calibrationSession == nil
+            state.manualOverridePausedUntil = manualBrightnessOverrideUntil != .distantPast ? manualBrightnessOverrideUntil : nil
+            state.lastAutoWriteAttempted = false
+        }
+
+        let autoManualStateText = isManualOverrideActive ? "Manual override active" : "Auto brightness active"
+
+        if isManualOverrideActive {
+            recordAutoSuppression(
+                reason: .manualOverrideActive,
+                source: .manualOverride,
+                target: autoTargetBrightnessPercent,
+                actual: actualBefore
+            )
+            updateBrightnessState { state in
+                state.suppressionReason = "Manual override active"
+            }
+            updateStatus("Parlaklık %\(currentBrightness ?? lastSentBrightness ?? 50) (manuel)")
+            writeDiagnosticReport(
+                lux: smoothedLux,
+                target: autoTargetBrightnessPercent,
+                smoothed: smoothedRequestedPercent,
+                actualBefore: actualBefore,
+                writeAttempted: false,
+                writePercent: nil,
+                writeRaw: nil,
+                readbackRaw: nil,
+                readbackCurrent: nil,
+                readbackMax: nil,
+                actualAfter: actualBefore,
+                suppressionReason: "Manual override active",
+                autoManualState: autoManualStateText,
+                diagnosis: "Auto brightness is paused due to manual user interaction."
+            )
+            return
+        }
+
+        if currentBrightness == nil {
+            let readback = await writer.readBrightness(preferredKey: display.displayKey)
+            applyBrightnessReadback(readback, requestedFallback: store.lastBrightness(for: display.displayKey))
+            lastBrightnessReadDate = now
+        }
+        await refreshCurrentVolume()
+        refreshSharedRuntimeFeatures()
+
+        let target = autoTargetBrightnessPercent
+        updateStatus(String(format: "%.0f lux -> %%%d", smoothedLux, target))
+
+        let currentActual = brightnessState.actualDDCBrightnessPercent ?? brightnessState.lastDDCReadbackPercent ?? actualBefore
+        let minInterval: TimeInterval = profile.minInterval
+
+        if abs(target - currentActual) > 10 {
+            mismatchIntervalsCount += 1
+        } else {
+            mismatchIntervalsCount = 0
+        }
+        
+        updateBrightnessState { state in
+            state.showMismatchWarning = mismatchIntervalsCount >= 2
+        }
+
+        let smoothedCandidate = smoothedRequestedPercent
+        let preflight = brightnessAutoLoopPlanner.preflight(
+            context: BrightnessAutoLoopPreflightContext(
+                ambientLux: smoothedLux,
+                target: target,
+                smoothedRequested: smoothedCandidate,
+                currentActual: currentActual,
+                now: now,
+                lastWriteDate: lastWriteDate,
+                minInterval: minInterval,
+                updateThreshold: profile.updateThreshold,
+                currentDisplayKey: display.displayKey,
+                calibrationActive: calibrationSession != nil,
+                appBrightnessSuppressedUntil: autoBrightnessSuppressedUntil,
+                ddcAvailable: await writer.isAvailable(),
+                brightnessLimiterCooldownDisplayKey: brightnessLimiterCooldownDisplayKey,
+                brightnessLimiterCooldownUntil: brightnessLimiterCooldownUntil
+            )
+        )
+
+        let writeCandidate: Int
+        switch preflight {
+        case .suppressed(let reason, let source, let statusText, let diagnosis, let reportSuppressionReason):
+            recordAutoSuppression(
+                reason: reason,
+                source: source,
+                target: target,
+                actual: currentActual
+            )
+            updateBrightnessState { state in
+                state.suppressionReason = statusText
+            }
+            if reason == .autoDisabled {
+                updateCalibrationStatus()
+            }
+            if reason == .monitorLimiterCooldown {
+                updateStatus("Monitör parlaklık komutunu sınırlıyor; otomatik yazma bekletiliyor")
+            }
+            writeDiagnosticReport(
+                lux: smoothedLux,
+                target: target,
+                smoothed: smoothedCandidate,
+                actualBefore: currentActual,
+                writeAttempted: false,
+                writePercent: nil,
+                writeRaw: nil,
+                readbackRaw: nil,
+                readbackCurrent: nil,
+                readbackMax: nil,
+                actualAfter: currentActual,
+                suppressionReason: reportSuppressionReason,
+                autoManualState: autoManualStateText,
+                diagnosis: diagnosis
+            )
+            return
+        case .proceed(let candidate, let statusText):
+            writeCandidate = candidate
+            updateStatus(statusText)
+            updateBrightnessState { state in
+                state.lastAutoWriteAttempted = true
+                state.lastWriteAttemptPercent = candidate
+                state.lastAutoWriteValue = candidate
+                state.lastAutoWriteActualBefore = currentActual
+                state.lastAutoWriteActualAfter = currentActual
+                state.lastSuppressionReason = nil
+                state.suppressionReason = "Writing..."
+                state.isBrightnessWriteSuppressed = false
+            }
+        }
+
+        if writeCandidate > requestReferenceBrightness && manualBrightnessOverrideUntil > now && manualBrightnessOverrideStartLux == nil {
+            manualBrightnessOverrideUntil = .distantPast
+        }
+
+        let result = await writer.setBrightness(writeCandidate, preferredKey: display.displayKey)
+
+        if result.status == .success || result.status == .writeAcceptedButReadbackLimited {
+            handleAutoBrightnessWriteSuccess(
+                result: result,
+                candidate: writeCandidate,
+                currentActual: currentActual,
+                smoothedLux: smoothedLux,
+                target: target,
+                displayKey: display.displayKey,
+                autoManualStateText: autoManualStateText
+            )
+        } else {
+            handleAutoBrightnessWriteFailure(
+                result: result,
+                candidate: writeCandidate,
+                currentActual: currentActual,
+                smoothedLux: smoothedLux,
+                target: target,
+                autoManualStateText: autoManualStateText
+            )
+        }
+    }
+
+    private func handleAutoBrightnessWriteSuccess(
+        result: M1DDCBrightnessWriteResult,
+        candidate: Int,
+        currentActual: Int,
+        smoothedLux: Double,
+        target: Int,
+        displayKey: String,
+        autoManualStateText: String
+    ) {
+        let outcome = brightnessAutoWriteOutcomePlanner.plan(result: result, candidate: candidate)
+        lastWriteDate = Date()
+
+        if let readback = outcome.persistedReadback {
+            lastBrightnessReadDate = lastWriteDate
+            store.setLastBrightness(readback, for: displayKey)
+        }
+
+        applyBrightnessWriteResult(requested: candidate, source: .autoDDCWrite, result: result)
+
+        updateBrightnessState { state in
+            state.lastWriteAttemptPercent = candidate
+            state.lastWriteReadbackPercent = outcome.actualAfter
+            state.actualDDCBrightnessPercent = outcome.actualAfter
+            state.lastDDCReadbackPercent = outcome.actualAfter
+            state.isAutoBrightnessEnabled = true
+            state.isManualOverrideActive = false
+            state.suppressionReason = nil
+        }
+
+        pendingTargetCandidate = nil
+        currentBrightness = outcome.actualAfter
+        lastSentBrightness = outcome.actualAfter
+        if outcome.shouldSetCooldown {
+            brightnessLimiterCooldownDisplayKey = displayKey
+            brightnessLimiterCooldownUntil = Date().addingTimeInterval(brightnessLimiterCooldownDuration)
+        } else {
+            brightnessLimiterCooldownDisplayKey = nil
+            brightnessLimiterCooldownUntil = .distantPast
+        }
+        updateStatus(outcome.statusText)
+
+        writeDiagnosticReport(
+            lux: smoothedLux,
+            target: target,
+            smoothed: candidate,
+            actualBefore: currentActual,
+            writeAttempted: true,
+            writePercent: candidate,
+            writeRaw: result.computedRawTarget,
+            readbackRaw: result.rawAfter,
+            readbackCurrent: outcome.actualAfter,
+            readbackMax: result.rawMax,
+            actualAfter: outcome.actualAfter,
+            suppressionReason: nil,
+            autoManualState: autoManualStateText,
+            diagnosis: outcome.writeDiagnosis
+        )
+    }
+
+    private func handleAutoBrightnessWriteFailure(
+        result: M1DDCBrightnessWriteResult,
+        candidate: Int,
+        currentActual: Int,
+        smoothedLux: Double,
+        target: Int,
+        autoManualStateText: String
+    ) {
+        let outcome = brightnessAutoWriteOutcomePlanner.planFailure(
+            result: result,
+            currentActual: currentActual
+        )
+        applyBrightnessWriteResult(
+            requested: candidate,
+            source: .autoDDCWrite,
+            result: result
+        )
+        updateBrightnessState { state in
+            state.lastWriteAttemptPercent = candidate
+            state.lastWriteReadbackPercent = nil
+            state.lastAutoWriteActualAfter = outcome.actualAfter
+            state.suppressionReason = "Write error: \(result.message)"
+        }
+        currentBrightness = outcome.actualAfter
+        lastSentBrightness = outcome.actualAfter
+
+        updateStatus(outcome.statusText)
+
+        writeDiagnosticReport(
+            lux: smoothedLux,
+            target: target,
+            smoothed: candidate,
+            actualBefore: currentActual,
+            writeAttempted: true,
+            writePercent: candidate,
+            writeRaw: result.computedRawTarget,
+            readbackRaw: nil,
+            readbackCurrent: nil,
+            readbackMax: result.rawMax,
+            actualAfter: currentActual,
+            suppressionReason: "Write failed: \(result.message)",
+            autoManualState: autoManualStateText,
+            diagnosis: outcome.writeDiagnosis
+        )
+    }
+
+    private func updateStatus(_ title: String) {
+        statusText = title
+        statusMenuItem?.title = title
+    }
+
+    private func refreshSharedRuntimeFeatures() {
+        keepAwakeCoordinator.refreshKeepAwakeLifecycleIfNeeded()
+        updatePowerStatusTitle()
+        updateStatusBarImage(isActive: calibrationSession == nil)
+    }
+
+    private func updateVolumeTitle() {
+        let titles = volumeFeatureController.menuTitles(
+            currentVolume: currentVolume,
+            lastNonZeroVolume: lastNonZeroVolume
+        )
+        soundMenuItem?.title = titles.soundTitle
+        volumeStatusMenuItem?.title = titles.volumeStatusTitle
+        topVolumeStatusMenuItem?.title = titles.topVolumeStatusTitle
+        muteItem?.title = titles.muteItemTitle
+    }
+
+    private func refreshCurrentVolume(force: Bool = false) async {
+        guard currentDisplayInfo != nil else {
+            currentVolume = nil
+            updateVolumeTitle()
+            return
+        }
+
+        let now = Date()
+        if !force, now.timeIntervalSince(lastVolumeReadDate) < volumeReadInterval {
+            return
+        }
+
+        lastVolumeReadDate = now
+        let readback = await writer.currentVolume()
+        if let readback {
+            currentVolume = readback
+            if readback > 0 {
+                lastNonZeroVolume = readback
+            }
+            volumeFeatureController.persistLastVolume(readback)
+        }
+        updateVolumeTitle()
+    }
+
+    func showVolumeRoutedBanner(message: String = "Ses monitöre yönlendirildi") {
+        if routeBannerController == nil {
+            routeBannerController = RouteBannerController()
+        }
+        routeBannerController?.show(message: message)
+    }
+
+    func toggleQuickActions() {
+        if quickActionsPopoverController == nil {
+            let controller = QuickActionsPopoverController(app: self)
+            controller.onVisibilityChanged = { [weak self] isVisible in
+                self?.setQuickActionsPopoverVisible(isVisible)
+            }
+            quickActionsPopoverController = controller
+        }
+        guard let button = statusItem?.button else { return }
+        quickActionsPopoverController?.toggle(relativeTo: button)
+    }
+
+    private func setQuickActionsPopoverVisible(_ isVisible: Bool) {
+        isQuickActionsPopoverVisible = isVisible
+        updateStatusBarImage(isActive: calibrationSession == nil)
+    }
+
+    func handleWakeEvent() {
+        keepAwakeCoordinator.handleWakeEvent()
+    }
+    
+    func startDefaultAfterWakeSession() {
+        keepAwakeCoordinator.startDefaultAfterWakeSession()
+    }
+
+    func setKeepAwakeFeatureEnabled(_ enabled: Bool) {
+        keepAwakeCoordinator.setKeepAwakeFeatureEnabled(enabled)
+    }
+
+    func toggleKeepAwake() {
+        keepAwakeCoordinator.toggleKeepAwake()
+    }
+
+    func setKeepAwakePluggedOnly(_ enabled: Bool) {
+        keepAwakeCoordinator.setKeepAwakePluggedOnly(enabled)
+    }
+
+    func setKeepAwakeDisplayAwake(_ enabled: Bool) {
+        keepAwakeCoordinator.setKeepAwakeDisplayAwake(enabled)
+    }
+
+    func setKeepDisplayAwakeOnWake(_ enabled: Bool) {
+        keepAwakeCoordinator.setKeepDisplayAwakeOnWake(enabled)
+    }
+
+    func setKeepAwakeDefaultDurationMode(_ mode: String) {
+        keepAwakeCoordinator.setKeepAwakeDefaultDurationMode(mode)
+    }
+
+    func setKeepAwakeDefaultCustomMinutes(_ minutes: Int) {
+        keepAwakeCoordinator.setKeepAwakeDefaultCustomMinutes(minutes)
+    }
+
+    func startSessionWithDefault() {
+        keepAwakeCoordinator.startSessionWithDefault()
+    }
+
+    func startSessionWithDurationMode(_ mode: String) {
+        keepAwakeCoordinator.startSessionWithDurationMode(mode)
+    }
+
+    func startSessionWithCustomMinutes(_ minutes: Int) {
+        keepAwakeCoordinator.startSessionWithCustomMinutes(minutes)
+    }
+
+    func disableKeepAwake() {
+        keepAwakeCoordinator.disableKeepAwake()
+    }
+
+    func setKeepAwakeDuration(_ duration: TimeInterval) {
+        keepAwakeCoordinator.setKeepAwakeDuration(duration)
+    }
+
+    private func updateAutoBrightnessTitle() {
+        updateStatusBarImage(isActive: calibrationSession == nil)
+    }
+
+    func setKeepAwakeMenuTitle(_ title: String) {
+        keepAwakeItem?.title = title
+    }
+
+    private func updatePowerStatusTitle() {
+        switch powerSourceController.currentState() {
+        case .ac:
+            powerStatusView?.update(.ac)
+        case .battery:
+            powerStatusView?.update(.battery)
+        case .unknown:
+            powerStatusView?.update(.unknown)
+        }
+    }
+
+    private func updateLaunchAtLoginTitle() {
+        launchAtLoginItem?.title = isLaunchAgentInstalled() ? "Girişte başlat: Açık" : "Girişte başlat: Kapalı"
+    }
+
+    private func persistHiDPIState(enabled: Bool) {
+        HiDPIStateStore.setHiDPIEnabled(enabled)
+        HiDPIStateStore.setStateText(enabled ? "HiDPI enabled" : "HiDPI disabled")
+        hiDPIActivationStatusText = enabled ? "HiDPI enabled" : "HiDPI disabled"
+    }
+
+    private func reloadDisplayModes() async {
+        let snapshot = hiDPIRefreshService.reloadDisplayModes(currentActivationStatusText: hiDPIActivationStatusText)
+        availableModes = snapshot.availableModes
+        cgsManualModeSwitcherSummary = snapshot.manualModeSwitcherSummary
+        cgsManualModeSwitcherStatusText = snapshot.manualModeSwitcherStatusText
+        cgsDynamicSelectionState = snapshot.dynamicSelectionState
+        cgsSelectedHiDPICandidate = snapshot.selectedHiDPICandidate
+        cgsSelectedNormalCandidate = snapshot.selectedNormalCandidate
+        cgsSamsungFallbackUsed = snapshot.samsungFallbackUsed
+        isHiDPIActive = snapshot.isHiDPIActive
+        hiDPIStatusText = snapshot.hiDPIStatusText
+        hiDPIActivationStatusText = snapshot.hiDPIActivationStatusText
+        if let statusMessage = snapshot.statusMessage {
+            updateStatus(statusMessage)
+        }
+        if snapshot.succeeded {
+            refreshEDIDDiagnosticSummary()
+        } else {
+            currentEDIDSummary = nil
+        }
+    }
+
+    private func refreshCGSModeSwitcherState() {
+        let summary = hiDPIRefreshService.refreshCGSModeSwitcherState()
+        cgsManualModeSwitcherSummary = summary
+        cgsManualModeSwitcherStatusText = summary?.currentModeText ?? "Current CGS Mode: unavailable"
+    }
+
+    var activeDisplayKey: String {
+        currentDisplayInfo?.displayKey ?? store.preferences.selectedDisplayKey ?? "default"
+    }
+
+    var currentDisplayKey: String? {
+        currentDisplayInfo?.displayKey
+    }
+
+    private func updateBrightnessState(_ mutate: (inout BrightnessState) -> Void) {
+        var next = brightnessState
+        mutate(&next)
+        brightnessState = next
+    }
+
+    private func recordAutoSuppression(
+        reason: BrightnessSuppressionReason,
+        source: BrightnessSource,
+        target: Int?,
+        actual: Int?
+    ) {
+        updateBrightnessState { state in
+            state.isBrightnessWriteSuppressed = true
+            state.lastSuppressionReason = reason
+            state.suppressionReason = reason.rawValue
+            state.lastBrightnessSource = source
+            if let target {
+                state.autoTargetBrightnessPercent = target
+            }
+            if let actual {
+                state.actualDDCBrightnessPercent = actual
+            }
+        }
+    }
+
+    private func applyBrightnessReadback(_ readback: Int?, requestedFallback: Int? = nil) {
+        updateBrightnessState { state in
+            if let requestedFallback {
+                state.requestedDDCBrightnessPercent = requestedFallback
+            }
+            state.actualDDCBrightnessPercent = readback
+            if let readback {
+                state.lastDDCReadbackPercent = readback
+                state.lastDDCActualPercentAfter = readback
+                if state.lastAutoWriteActualBefore == nil {
+                    state.lastAutoWriteActualBefore = readback
+                }
+                state.lastAutoWriteActualAfter = readback
+            }
+            state.isDDCReadbackAvailable = readback != nil
+            state.lastBrightnessSource = .ddcReadback
+            state.isAutoBrightnessEnabled = calibrationSession == nil && !state.isManualOverrideActive
+            state.isBrightnessWriteSuppressed = false
+            state.lastSuppressionReason = nil
+            state.suppressionReason = nil
+        }
+        currentBrightness = readback ?? requestedFallback ?? currentBrightness
+    }
+
+    private func applyBrightnessWriteResult(
+        requested: Int,
+        source: BrightnessSource,
+        result: M1DDCBrightnessWriteResult
+    ) {
+        updateBrightnessState { state in
+            state.requestedDDCBrightnessPercent = requested
+            state.actualDDCBrightnessPercent = result.actualUIPercentAfter ?? result.readbackBrightnessPercent
+            if let readback = result.actualUIPercentAfter ?? result.readbackBrightnessPercent {
+                state.lastDDCReadbackPercent = readback
+                state.lastDDCActualPercentAfter = readback
+            }
+            state.lastDDCRawCurrentBefore = result.rawBefore
+            state.lastDDCRawMax = result.rawMax
+            state.lastDDCRawTarget = result.computedRawTarget
+            state.lastDDCRawAfter = result.rawAfter
+            state.isDDCReadbackAvailable = result.readbackAvailable
+            state.lastBrightnessSource = result.success ? source : .writeFailed
+            state.lastDDCWriteSucceeded = result.success
+            state.lastDDCWriteMessage = result.message
+            state.lastDDCWriteStatus = result.status
+            state.lastDDCMatchedTarget = result.matchedTarget
+            state.isAutoBrightnessEnabled = calibrationSession == nil && !state.isManualOverrideActive
+            if source == .autoDDCWrite {
+                state.lastAutoWriteAttempted = true
+                state.lastAutoWriteValue = requested
+                state.lastAutoWriteSucceeded = result.success
+                state.lastAutoWriteMessage = result.message
+                state.lastAutoWriteActualAfter = result.actualUIPercentAfter ?? result.readbackBrightnessPercent ?? state.lastAutoWriteActualAfter
+            }
+            state.isBrightnessWriteSuppressed = false
+            state.lastSuppressionReason = nil
+            state.suppressionReason = nil
+        }
+        if let observedBrightness = result.actualUIPercentAfter ?? result.readbackBrightnessPercent {
+            currentBrightness = observedBrightness
+        }
+    }
+
+    private func writeDiagnosticReport(
+        lux: Double,
+        target: Int,
+        smoothed: Int,
+        actualBefore: Int,
+        writeAttempted: Bool,
+        writePercent: Int?,
+        writeRaw: Int?,
+        readbackRaw: Int?,
+        readbackCurrent: Int?,
+        readbackMax: Int?,
+        actualAfter: Int?,
+        suppressionReason: String?,
+        autoManualState: String,
+        diagnosis: String
+    ) {
+        let docsDir = URL(fileURLWithPath: "/Users/kadir/Desktop/Developer/ekle/docs/generated")
+        do {
+            try FileManager.default.createDirectory(at: docsDir, withIntermediateDirectories: true)
+            let fileURL = docsDir.appendingPathComponent("brightness_auto_loop_report.md")
+            
+            let report = """
+# Brightness Auto Loop Report
+
+- **ambient lux**: \(String(format: "%.1f", lux))
+- **auto target**: \(target)%
+- **smoothed request**: \(smoothed)%
+- **actual DDC before**: \(actualBefore)%
+- **difference**: \(abs(target - actualBefore))%
+- **threshold**: >= 3%
+- **write attempted**: \(writeAttempted ? "Yes" : "No")
+- **write percent**: \(writePercent.map { "\($0)%" } ?? "N/A")
+- **write raw value**: \(writeRaw.map { String($0) } ?? "N/A")
+- **readback raw/current/max**: \(readbackRaw.map { String($0) } ?? "N/A") / \(readbackCurrent.map { "\($0)%" } ?? "N/A") / \(readbackMax.map { String($0) } ?? "N/A")
+- **actual DDC after**: \(actualAfter.map { "\($0)%" } ?? "N/A")
+- **suppression reason**: \(suppressionReason ?? "None")
+- **auto/manual state**: \(autoManualState)
+- **diagnosis**: \(diagnosis)
+"""
+            try report.write(to: fileURL, atomically: true, encoding: .utf8)
+        } catch {
+            print("Failed to write diagnostic report: \(error)")
+        }
+    }
+
+    private func brightnessMappingDiagnosticSummarySnapshot() -> BrightnessMappingDiagnosticSummary {
+        BrightnessMappingDiagnosticSummary(
+            targetDisplayName: currentDisplayInfo?.displayLabel ?? "unavailable",
+            displayKey: currentDisplayKey,
+            ambientSensorRawValue: brightnessState.ambientSensorRawValue,
+            ambientNormalizedValue: brightnessState.ambientNormalizedValue,
+            computedAutoTargetBrightnessPercent: brightnessState.autoTargetBrightnessPercent,
+            requestedDDCBrightnessPercent: brightnessState.requestedDDCBrightnessPercent,
+            ddcWriteSucceeded: brightnessState.lastDDCWriteSucceeded,
+            ddcWriteMessage: brightnessState.lastDDCWriteMessage,
+            actualDDCBrightnessPercent: brightnessState.actualDDCBrightnessPercent,
+            lastDDCReadbackPercent: brightnessState.lastDDCReadbackPercent,
+            rawCurrentBefore: brightnessState.lastDDCRawCurrentBefore,
+            rawMax: brightnessState.lastDDCRawMax,
+            computedRawTarget: brightnessState.lastDDCRawTarget,
+            rawBefore: brightnessState.lastDDCRawCurrentBefore,
+            rawAfter: brightnessState.lastDDCRawAfter,
+            actualUIPercentAfter: brightnessState.lastDDCActualPercentAfter,
+            matchedTarget: brightnessState.lastDDCMatchedTarget,
+            writeStatus: brightnessState.lastDDCWriteStatus,
+            uiSliderValue: brightnessState.uiSliderBrightnessPercent,
+            lastBrightnessSource: brightnessState.lastBrightnessSource,
+            isAutoBrightnessEnabled: brightnessState.isAutoBrightnessEnabled,
+            isManualOverrideActive: brightnessState.isManualOverrideActive,
+            readbackAvailable: brightnessState.isDDCReadbackAvailable
+        )
+    }
+
+    var canApplyCGSMode74Transaction: Bool {
+        cgsManualModeSwitcherSummary?.canApplyMode74 == true
+    }
+
+    var canApplyCGSMode56NormalQHDTransaction: Bool {
+        cgsManualModeSwitcherSummary?.canApplyMode56 == true
+    }
+
+    var currentCGSModeStatusText: String {
+        cgsManualModeSwitcherStatusText
+    }
+
+    var currentDisplayLabel: String {
+        currentDisplayInfo?.displayLabel ?? "Ekran bekleniyor"
+    }
+
+    var monitorVolumeControlValue: Int {
+        currentVolume ?? lastNonZeroVolume
+    }
+
+    var monitorBrightnessControlValue: Int {
+        brightnessState.uiSliderBrightnessPercent
+    }
+
+    var brightnessSensorTargetText: String {
+        brightnessState.autoTargetBrightnessPercent.map { "\($0)%" } ?? "—"
+    }
+
+    var brightnessActualText: String {
+        if brightnessState.isDDCReadbackAvailable {
+            if let actual = brightnessState.actualDDCBrightnessPercent {
+                return "\(actual)%"
+            }
+            if let readback = brightnessState.lastDDCReadbackPercent {
+                return "\(readback)%"
+            }
+        }
+
+        if let requested = brightnessState.requestedDDCBrightnessPercent {
+            return "\(requested)% (requested)"
+        }
+
+        return "—"
+    }
+
+    var brightnessLastSourceText: String {
+        brightnessState.lastBrightnessSource.rawValue
+    }
+
+    var brightnessReadbackText: String {
+        brightnessState.readbackStatusText
+    }
+
+    var brightnessDiagnosticInlineText: String {
+        "Sensor target: \(brightnessSensorTargetText) · DDC actual: \(brightnessActualText) · Last source: \(brightnessLastSourceText) · Readback: \(brightnessReadbackText)"
+    }
+
+    var keepAwakeSummaryText: String {
+        keepAwakeCoordinator.keepAwakeSummaryText
+    }
+
+    var keepAwakePluggedOnlySummaryText: String {
+        keepAwakeCoordinator.keepAwakePluggedOnlySummaryText
+    }
+
+    var keepAwakeUntilText: String? {
+        keepAwakeCoordinator.keepAwakeUntilText
+    }
+
+    private func reloadDisplayInfo() async {
+        let previousDisplayKey = currentDisplayInfo?.displayKey
+        if let display = await writer.refreshDisplay(preferredKey: store.preferences.selectedDisplayKey) {
+            currentDisplayInfo = display
+            store.setSelectedDisplayKey(display.displayKey)
+            if display.displayKey != previousDisplayKey {
+                luxFilter.reset()
+                lastSentBrightness = store.lastBrightness(for: display.displayKey)
+                lastWriteDate = .distantPast
+                lastBrightnessReadDate = .distantPast
+                lastDisplaySearchDate = Date()
+                clearManualBrightnessOverride()
+                brightnessLimiterCooldownDisplayKey = nil
+                brightnessLimiterCooldownUntil = .distantPast
+                currentVolume = nil
+                lastVolumeReadDate = .distantPast
+                hdrBrightnessDiagnosticSummary = nil
+                ddcBrightnessMaxDiagnosticSummary = nil
+                ddcRawBrightnessProbeSummary = nil
+                brightnessMappingDiagnosticSummary = nil
+                brightnessState = BrightnessState()
+                currentBrightness = nil
+            }
+            if currentBrightness == nil || display.displayKey != previousDisplayKey {
+                let readback = await writer.readBrightness(preferredKey: display.displayKey)
+                let fallback = readback ?? store.lastBrightness(for: display.displayKey)
+                applyBrightnessReadback(readback, requestedFallback: fallback)
+                lastBrightnessReadDate = Date()
+            }
+            updateLaunchAtLoginTitle()
+            updateAutoBrightnessTitle()
+            await refreshCurrentVolume(force: true)
+            volumeKeyRouter?.setEnabled(true)
+            await reloadDisplayModes()
+        } else {
+            currentDisplayInfo = nil
+            currentBrightness = nil
+            clearManualBrightnessOverride()
+            updateStatusBarImage(isActive: calibrationSession == nil)
+            currentVolume = nil
+            updateVolumeTitle()
+            volumeKeyRouter?.setEnabled(false)
+            self.availableModes = []
+            self.isHiDPIActive = false
+            hiDPIStatusText = "Samsung S60UD ekranı bulunamadı"
+            hdrBrightnessDiagnosticSummary = nil
+            ddcBrightnessMaxDiagnosticSummary = nil
+            ddcRawBrightnessProbeSummary = nil
+            brightnessMappingDiagnosticSummary = nil
+            brightnessState = BrightnessState()
+        }
+    }
+
+    private func refreshInternalBrightness() {
+        currentInternalBrightness = internalBrightnessController?.currentBrightness()
+    }
+
+    @objc func openSettings() {
+        if settingsWindowController == nil {
+            settingsWindowController = PreferencesWindowController(app: self, store: store)
+        }
+        NSApp.activate(ignoringOtherApps: true)
+        settingsWindowController?.showWindow(nil)
+        settingsWindowController?.window?.makeKeyAndOrderFront(nil)
+        settingsWindowController?.window?.orderFrontRegardless()
+        refreshCGSModeSwitcherState()
+    }
+
+    func refreshDisplay() {
+        Task {
+            await reloadDisplayInfo()
+            refreshInternalBrightness()
+            refreshEDIDDiagnosticSummary()
+            await tick()
+            updatePowerStatusTitle()
+        }
+    }
+
+    func refreshRuntimeState() {
+        updateAutoBrightnessTitle()
+        refreshInternalBrightness()
+        Task {
+            await tick()
+        }
+    }
+
+    private func updateCalibrationStatus() {
+        guard let session = calibrationSession, let lux = lastSmoothedLux else { return }
+        updateStatus("\(session.step.rawValue.capitalized) step: \(String(format: "%.0f", lux)) lux")
+    }
+
+    private func refreshEDIDDiagnosticSummary() {
+        guard let target = try? HiDPITargetDisplayResolver.resolveSamsungS60UDForDiagnostics() else {
+            currentEDIDSummary = nil
+            return
+        }
+        currentEDIDSummary = DisplayEDIDReader.shared.readEDID(for: target.displayID)
+    }
+
+    func readEDIDDiagnostic() {
+        guard let target = try? HiDPITargetDisplayResolver.resolveSamsungS60UDForDiagnostics() else {
+            currentEDIDSummary = nil
+            updateStatus("EDID diagnostic: target display unavailable")
+            return
+        }
+
+        let summary = DisplayEDIDReader.shared.readEDID(for: target.displayID)
+        currentEDIDSummary = summary
+        if let url = DisplayEDIDReader.shared.writeDiagnosticReport(summary: summary) {
+            print("EDID diagnostic report written: \(url.path)")
+            updateStatus("EDID diagnostic written")
+        } else {
+            print("EDID diagnostic report write failed")
+            updateStatus("EDID diagnostic write failed")
+        }
+    }
+
+    func readHDRBrightnessDiagnostic() {
+        Task { @MainActor in
+            let summary = await hdrBrightnessDiagnostic.run(preferredDisplayKey: currentDisplayInfo?.displayKey)
+            hdrBrightnessDiagnosticSummary = summary
+            do {
+                let url = try await hdrBrightnessDiagnostic.writeDiagnosticReport(summary: summary)
+                print("HDR brightness diagnostic report written: \(url.path)")
+                updateStatus("HDR brightness diagnostic written")
+            } catch {
+                print("HDR brightness diagnostic report write failed: \(error.localizedDescription)")
+                updateStatus("HDR brightness diagnostic write failed")
+            }
+        }
+    }
+
+    func readDDCBrightnessMaxDiagnostic() {
+        Task { @MainActor in
+            let summary = await ddcBrightnessMaxDiagnostic.run(preferredDisplayKey: currentDisplayInfo?.displayKey)
+            ddcBrightnessMaxDiagnosticSummary = summary
+            do {
+                let url = try await ddcBrightnessMaxDiagnostic.writeDiagnosticReport(summary: summary)
+                print("DDC brightness max diagnostic report written: \(url.path)")
+                updateStatus("DDC brightness max diagnostic written")
+            } catch {
+                print("DDC brightness max diagnostic report write failed: \(error.localizedDescription)")
+                updateStatus("DDC brightness max diagnostic write failed")
+            }
+        }
+    }
+
+    func readDDCRawBrightnessProbeDiagnostic() {
+        Task { @MainActor in
+            let summary = await ddcRawBrightnessProbeDiagnostic.run(preferredDisplayKey: currentDisplayInfo?.displayKey)
+            ddcRawBrightnessProbeSummary = summary
+            do {
+                let url = try await ddcRawBrightnessProbeDiagnostic.writeDiagnosticReport(summary: summary)
+                print("DDC raw brightness probe report written: \(url.path)")
+                updateStatus("DDC raw brightness probe written")
+            } catch {
+                print("DDC raw brightness probe report write failed: \(error.localizedDescription)")
+                updateStatus("DDC raw brightness probe write failed")
+            }
+        }
+    }
+
+    func readBrightnessMappingDiagnostic() {
+        Task { @MainActor in
+            if let display = currentDisplayInfo {
+                let readback = await writer.readBrightness(preferredKey: display.displayKey)
+                let rawSample = await writer.readBrightnessRaw(preferredKey: display.displayKey)
+                if let rawSample {
+                    updateBrightnessState { state in
+                        state.lastDDCRawCurrentBefore = rawSample.rawCurrent
+                        state.lastDDCRawMax = rawSample.rawMax
+                        state.lastDDCRawAfter = rawSample.rawCurrent
+                        if let rawCurrent = rawSample.rawCurrent, let rawMax = rawSample.rawMax {
+                            state.lastDDCActualPercentAfter = DDCBrightnessScale.uiPercent(fromRawCurrent: rawCurrent, rawMax: rawMax)
+                        }
+                    }
+                }
+                applyBrightnessReadback(readback, requestedFallback: store.lastBrightness(for: display.displayKey))
+            }
+
+            let summary = brightnessMappingDiagnosticSummarySnapshot()
+            brightnessMappingDiagnosticSummary = summary
+            do {
+                let url = try BrightnessMappingDiagnosticReporter.writeMarkdownReport(summary: summary)
+                print("Brightness mapping diagnostic report written: \(url.path)")
+                updateStatus("Brightness mapping diagnostic written")
+            } catch {
+                print("Brightness mapping diagnostic report write failed: \(error.localizedDescription)")
+                updateStatus("Brightness mapping diagnostic write failed")
+            }
+        }
+    }
+
+    @objc private func quitApp() {
+        NSApp.terminate(nil)
+    }
+
+    @objc private func toggleKeepAwakeAction() {
+        toggleKeepAwake()
+    }
+
+    @objc private func refreshDisplayAction() {
+        refreshDisplay()
+    }
+
+    @objc private func readEDIDDiagnosticAction() {
+        readEDIDDiagnostic()
+    }
+
+    @objc private func readHDRBrightnessDiagnosticAction() {
+        readHDRBrightnessDiagnostic()
+    }
+
+    @objc private func readDDCBrightnessMaxDiagnosticAction() {
+        readDDCBrightnessMaxDiagnostic()
+    }
+
+    @objc private func readDDCRawBrightnessProbeDiagnosticAction() {
+        readDDCRawBrightnessProbeDiagnostic()
+    }
+
+    @objc private func decreaseVolumeAction() {
+        Task { await adjustMonitorVolume(by: -5) }
+    }
+
+    @objc private func increaseVolumeAction() {
+        Task { await adjustMonitorVolume(by: 5) }
+    }
+
+    @objc private func setVolumeFiftyAction() {
+        Task { await setMonitorVolume(50) }
+    }
+
+    @objc private func toggleMuteAction() {
+        Task { await toggleMuteForSettings() }
+    }
+
+    func performMonitorVolumeKeyAction(_ action: MonitorVolumeKeyAction) -> Bool {
+        Task {
+            switch action {
+            case .increase:
+                await adjustMonitorVolume(by: 5)
+            case .decrease:
+                await adjustMonitorVolume(by: -5)
+            case .mute:
+                await toggleMuteForSettings()
+            }
+        }
+        return true
+    }
+
+    func adjustMonitorVolumeForSettings(by delta: Int) {
+        Task { await adjustMonitorVolume(by: delta) }
+    }
+
+    func toggleMuteForSettingsSync() {
+        Task { await toggleMuteForSettings() }
+    }
+
+    @discardableResult
+    func adjustMonitorVolume(by delta: Int) async -> Bool {
+        let (success, _) = await writer.changeVolume(delta, preferredKey: activeDisplayKey)
+        if success {
+            let fallbackBase = monitorVolumeControlValue
+            currentVolume = min(100, max(0, fallbackBase + delta))
+            volumeFeatureController.persistLastVolume(currentVolume)
+            if let currentVolume, currentVolume > 0 {
+                lastNonZeroVolume = currentVolume
+            }
+            updateVolumeTitle()
+            if let currentVolume {
+                updateStatus("Volume \(currentVolume)%")
+            } else {
+                updateStatus("Volume changed")
+            }
+        } else {
+            updateStatus("Volume change failed")
+        }
+        return success
+    }
+
+    @discardableResult
+    func setMonitorVolume(_ percent: Int) async -> Bool {
+        let clamped = min(100, max(0, percent))
+        let (success, _) = await writer.setVolume(clamped, preferredKey: activeDisplayKey)
+        if success {
+            currentVolume = clamped
+            volumeFeatureController.persistLastVolume(clamped)
+            if clamped > 0 {
+                lastNonZeroVolume = clamped
+            }
+            updateVolumeTitle()
+            updateStatus("Volume \(clamped)%")
+        } else {
+            updateStatus("Volume set failed")
+        }
+        return success
+    }
+
+    @discardableResult
+    func toggleMuteForSettings() async -> Bool {
+        let volume = monitorVolumeControlValue
+        let isMuted = volume == 0
+        let targetVolume = isMuted ? max(1, lastNonZeroVolume) : 0
+        let (success, _) = await writer.setMute(!isMuted, preferredKey: activeDisplayKey)
+        if success {
+            currentVolume = targetVolume
+            volumeFeatureController.persistLastVolume(targetVolume)
+            if targetVolume > 0 {
+                lastNonZeroVolume = targetVolume
+            }
+            updateVolumeTitle()
+            updateStatus(!isMuted ? "Muted" : "Unmuted")
+        } else {
+            updateStatus("Mute failed")
+        }
+        return success
+    }
+
+    func setMonitorVolumeForSettings(_ percent: Int) {
+        Task { await setMonitorVolume(percent) }
+    }
+
+    func setMonitorBrightness(_ percent: Int) {
+        let clamped = min(100, max(0, percent))
+        pauseAutoBrightnessTemporarily()
+        Task {
+            let result = await writer.setBrightness(clamped, preferredKey: activeDisplayKey)
+            let actualAfter = result.actualUIPercentAfter ?? result.readbackBrightnessPercent ?? clamped
+            let matchedTarget = result.matchedTarget == true
+            print(
+                """
+                requestedUIPercent=\(clamped)
+                rawMax=\(result.rawMax.map(String.init) ?? "unavailable")
+                computedRawTarget=\(result.computedRawTarget.map(String.init) ?? "unavailable")
+                rawBefore=\(result.rawBefore.map(String.init) ?? "unavailable")
+                writeResult=\(result.status.rawValue)
+                rawAfter=\(result.rawAfter.map(String.init) ?? "unavailable")
+                actualUIPercentAfter=\(actualAfter)
+                matchedTarget=\(matchedTarget ? "YES" : "NO")
+                """
+            )
+            if result.status == .success || result.status == .writeAcceptedButReadbackLimited {
+                lastSentBrightness = clamped
+                lastWriteDate = Date()
+                beginManualBrightnessOverride()
+                if let readback = result.actualUIPercentAfter ?? result.readbackBrightnessPercent {
+                    lastBrightnessReadDate = lastWriteDate
+                    store.setLastBrightness(readback, for: activeDisplayKey)
+                } else {
+                    store.setLastBrightness(clamped, for: activeDisplayKey)
+                }
+                applyBrightnessWriteResult(requested: clamped, source: .quickPanelSlider, result: result)
+                if result.status == .writeAcceptedButReadbackLimited {
+                    updateStatus(result.message)
+                } else {
+                    updateStatus(result.actualUIPercentAfter.map { "Brightness \($0)%" } ?? "Brightness \(clamped)%")
+                }
+            } else {
+                applyBrightnessWriteResult(requested: clamped, source: .quickPanelSlider, result: result)
+                updateStatus(result.message.isEmpty ? "Parlaklık yazılamadı" : "Parlaklık yazılamadı: \(result.message)")
+            }
+        }
+    }
+
+    @discardableResult
+    func setInternalBrightness(_ percent: Int) -> Bool {
+        guard let controller = internalBrightnessController else {
+            updateStatus("Dahili parlaklık kontrolü kullanılamıyor")
+            return false
+        }
+
+        let (success, message) = controller.setBrightness(percent)
+        if success {
+            currentInternalBrightness = controller.currentBrightness() ?? min(100, max(0, percent))
+            updateStatus("Dahili parlaklık %\(currentInternalBrightness ?? percent)")
+        } else {
+            currentInternalBrightness = controller.currentBrightness()
+            updateStatus("Dahili parlaklık ayarlanamadı: \(message)")
+        }
+        return success
+    }
+
+    func pauseAutoBrightnessTemporarily(for duration: TimeInterval = 20) {
+        beginManualBrightnessOverride(fallbackDuration: duration)
+    }
+
+    private func beginManualBrightnessOverride(fallbackDuration: TimeInterval = 20) {
+        if manualBrightnessOverrideStartLux == nil {
+            manualBrightnessOverrideStartLux = lastSmoothedLux ?? currentLux
+        }
+        if manualBrightnessOverrideStartLux == nil {
+            manualBrightnessOverrideUntil = max(manualBrightnessOverrideUntil, Date().addingTimeInterval(fallbackDuration))
+        } else {
+            manualBrightnessOverrideUntil = .distantPast
+        }
+        pendingTargetCandidate = nil
+        updateBrightnessState { state in
+            state.isManualOverrideActive = true
+            state.isAutoBrightnessEnabled = false
+        }
+    }
+
+    private func clearManualBrightnessOverride() {
+        manualBrightnessOverrideStartLux = nil
+        manualBrightnessOverrideUntil = .distantPast
+        pendingTargetCandidate = nil
+        updateBrightnessState { state in
+            state.isManualOverrideActive = false
+            state.isAutoBrightnessEnabled = calibrationSession == nil
+        }
+    }
+
+    private func shouldHoldManualBrightnessOverride(currentLux: Double, now: Date) -> Bool {
+        let shouldContinue = brightnessAutoController.shouldContinueManualOverride(
+            currentLux: currentLux,
+            startLux: manualBrightnessOverrideStartLux,
+            overrideUntil: manualBrightnessOverrideUntil,
+            now: now
+        )
+
+        guard shouldContinue else {
+            clearManualBrightnessOverride()
+            return false
+        }
+
+        if manualBrightnessOverrideStartLux == nil && now < manualBrightnessOverrideUntil {
+            manualBrightnessOverrideStartLux = currentLux
+            manualBrightnessOverrideUntil = .distantPast
+        }
+
+        return true
+    }
+
+    @objc func toggleLaunchAtLogin() {
+        do {
+            if isLaunchAgentInstalled() {
+                try uninstallLaunchAgent()
+            } else {
+                try installLaunchAgent()
+            }
+            updateLaunchAtLoginTitle()
+        } catch {
+            updateLaunchAtLoginTitle()
+        }
+    }
+
+    @discardableResult
+    private func setHiDPIEnabled(_ enabled: Bool) async -> Bool {
+        do {
+            let target = try HiDPITargetDisplayResolver.resolveSamsungS60UD()
+            let _ = cgsModeSwitcher.scanCGSModes(displayID: target.displayID)
+            let status = cgsModeSwitcher.refreshCGSModes(displayID: target.displayID)
+            cgsManualModeSwitcherSummary = status
+            cgsManualModeSwitcherStatusText = status.currentModeText
+
+            guard status.isSamsungFingerprintMatched, !status.isBuiltin else {
+                hiDPIStatusText = "Mevcut Mod: bilinmiyor"
+                hiDPIActivationStatusText = "Samsung fingerprint doğrulanamadı."
+                return false
+            }
+
+            let dynamicHiDPI = cgsModeSwitcher.findBestHiDPIMode(
+                targetLogicalWidth: 2560,
+                targetLogicalHeight: 1440,
+                targetPixelWidth: 5120,
+                targetPixelHeight: 2880,
+                preferredRefreshRate: 100.0
+            )
+            let fallbackHiDPI = dynamicHiDPI == nil ? cgsModeSwitcher.verifiedSamsungFallbackCandidate(
+                modeID: 74,
+                targetLogicalWidth: 2560,
+                targetLogicalHeight: 1440,
+                targetPixelWidth: 5120,
+                targetPixelHeight: 2880,
+                preferredRefreshRate: 100.0,
+                expectedHiDPI: true
+            ) : nil
+
+            let dynamicNormal = cgsModeSwitcher.findBestNormalMode(
+                targetLogicalWidth: 2560,
+                targetLogicalHeight: 1440,
+                preferredRefreshRate: 100.0
+            )
+            let fallbackNormal = dynamicNormal == nil ? cgsModeSwitcher.verifiedSamsungFallbackCandidate(
+                modeID: 56,
+                targetLogicalWidth: 2560,
+                targetLogicalHeight: 1440,
+                targetPixelWidth: 2560,
+                targetPixelHeight: 1440,
+                preferredRefreshRate: 100.0,
+                expectedHiDPI: false
+            ) : nil
+
+            let selection = hiDPIFeatureController.chooseActivationCandidate(
+                enabled: enabled,
+                dynamicHiDPI: dynamicHiDPI,
+                fallbackHiDPI: fallbackHiDPI,
+                dynamicNormal: dynamicNormal,
+                fallbackNormal: fallbackNormal
+            )
+
+            guard let selectedCandidate = selection.selectedCandidate else {
+                hiDPIActivationStatusText = selection.statusMessage
+                updateStatus(selection.updateMessage)
+                return false
+            }
+
+            let report = cgsModeSwitcher.applyCGSMode(modeID: Int(selectedCandidate.modeID))
+            if report.success {
+                persistHiDPIState(enabled: enabled)
+                hiDPIStatusText = "Mevcut Mod: \(selectedCandidate.logicalWidth)x\(selectedCandidate.logicalHeight) / \(selectedCandidate.pixelWidth)x\(selectedCandidate.pixelHeight) @\(Int(selectedCandidate.refreshRate.rounded()))Hz"
+                isHiDPIActive = enabled
+                updateStatus(selection.updateMessage)
+                await reloadDisplayModes()
+                return true
+            }
+
+            hiDPIActivationStatusText = report.failureReason ?? selection.statusMessage
+            updateStatus(enabled ? "HiDPI açma başarısız" : "HiDPI kapatma başarısız")
+            return false
+        } catch {
+            hiDPIStatusText = "Mevcut Mod: bilinmiyor"
+            hiDPIActivationStatusText = "Samsung ekran bulunamadı."
+            updateStatus("HiDPI işlemi başarısız")
+            return false
+        }
+    }
+
+    @objc func applyRetinaMode() {
+        Task {
+            await setHiDPIEnabled(true)
+        }
+    }
+
+    @objc func disableRetinaModeAction() {
+        disableRetinaMode()
+    }
+
+    func disableRetinaMode() {
+        Task {
+            await setHiDPIEnabled(false)
+        }
+    }
+
+    @objc func emergencyResetRetinaModeAction() {
+        emergencyResetRetinaMode()
+    }
+
+    func emergencyResetRetinaMode() {
+        disableRetinaMode()
+    }
+
+    @objc func runHiDPIModePoolDiagnosticAction() {
+        Task {
+            HiDPIDiagnostic.runModePoolDiagnostic()
+            updateStatus("HiDPI mode pool diagnostic completed")
+        }
+    }
+
+    @objc func runExperimentalHiDPIActivationAction() {
+        Task {
+            hiDPIActivationStatusText = "Private SLS transaction activation çalışıyor..."
+            updateStatus("Private SLS transaction running")
+            let result = PrivateHiDPIActivationEngine.shared.runSLSTransactionActivationExperiment()
+            hiDPIActivationStatusText = "\(result). Report: docs/generated/private_activation/sls_transaction_activation_experiment.md"
+            await reloadDisplayModes()
+        }
+    }
+
+    @objc func runCGSModeEnumerationAction() {
+        Task {
+            do {
+                let summary = try CGSModeEnumerationDiagnostic.runEnumeration()
+                cgsModeEnumerationSummary = summary
+                let reportPath = summary.reportURL.path
+                let current = summary.currentModeID.map(String.init) ?? "unavailable"
+                cgsModeEnumerationStatusText = "CGS current mode: \(current) | CGS count: \(summary.cgsModeCount) | public dup: \(summary.publicDuplicateModeCount) | Report: \(reportPath)"
+                updateStatus("CGS mode enumeration completed")
+            } catch {
+                cgsModeEnumerationStatusText = "CGS mode enumeration failed: \(error.localizedDescription)"
+                updateStatus("CGS mode enumeration failed")
+            }
+        }
+    }
+
+    @objc func runCGSMode74WithoutBetterDisplayCheckAction() {
+        Task {
+            do {
+                let summary = try CGSModeEnumerationDiagnostic.runWithoutBetterDisplayVerification()
+                cgsModeEnumerationSummary = summary
+                let reportPath = summary.reportURL.path
+                let current = summary.currentModeID.map(String.init) ?? "unavailable"
+                cgsModeEnumerationStatusText = "CGS current mode: \(current) | CGS count: \(summary.cgsModeCount) | public dup: \(summary.publicDuplicateModeCount) | mode74: \(summary.mode74 != nil ? "present" : "missing") | Report: \(reportPath)"
+                updateStatus("CGS mode 74 check completed")
+            } catch {
+                cgsModeEnumerationStatusText = "CGS mode 74 check failed: \(error.localizedDescription)"
+                updateStatus("CGS mode 74 check failed")
+            }
+        }
+    }
+
+    @objc func applyCGSMode56Action() {
+        Task {
+            guard let summary = cgsManualModeSwitcherSummary, summary.canApplyMode56 else {
+                cgsManualModeSwitcherStatusText = "Current CGS Mode: unavailable"
+                updateStatus("CGS mode 56 apply blocked")
+                return
+            }
+
+            let report = cgsModeSwitcher.applyCGSMode(modeID: 56)
+            refreshCGSModeSwitcherState()
+            if report.success {
+                updateStatus("CGS mode 56 applied")
+            } else {
+                updateStatus("CGS mode 56 apply failed")
+            }
+        }
+    }
+
+    @objc func applyCGSMode74Action() {
+        Task {
+            guard let summary = cgsManualModeSwitcherSummary, summary.canApplyMode74 else {
+                cgsManualModeSwitcherStatusText = "Current CGS Mode: unavailable"
+                updateStatus("CGS mode 74 apply blocked")
+                return
+            }
+
+            let report = cgsModeSwitcher.applyCGSMode(modeID: 74)
+            refreshCGSModeSwitcherState()
+            if report.success {
+                updateStatus("CGS mode 74 applied")
+            } else {
+                updateStatus("CGS mode 74 apply failed")
+            }
+        }
+    }
+
+    @objc func applyCGSMode56NormalQHDTransactionAction() {
+        Task {
+            guard let summary = cgsModeEnumerationSummary else {
+                cgsModeApplyExperimentStatusText = "CGS enumeration önce çalıştırılmalı."
+                updateStatus("CGS mode 56 apply blocked")
+                return
+            }
+
+            guard summary.mode56IsNormalQHD else {
+                cgsModeApplyExperimentStatusText = "Mode 56 doğrulanmadı; apply pasif."
+                updateStatus("CGS mode 56 apply blocked")
+                return
+            }
+
+            do {
+                let experiment = try CGSModeEnumerationDiagnostic.runMode56NormalQHDApplyExperiment(using: cgsModeApplyExperimentSummary)
+                cgsModeApplyExperimentSummary = experiment
+                cgsModeEnumerationSummary = experiment.finalSummary
+                let reportPath = experiment.reportURL.path
+                cgsModeApplyExperimentStatusText = "Mode 56: \(experiment.mode56Outcome?.applyResultDescription ?? "not attempted") | Final: \(experiment.finalSummary.activeModeDescription) | Report: \(reportPath)"
+                updateStatus("CGS mode 56 apply completed")
+                await reloadDisplayModes()
+            } catch {
+                cgsModeApplyExperimentStatusText = "CGS mode 56 apply failed: \(error.localizedDescription)"
+                updateStatus("CGS mode 56 apply failed")
+            }
+        }
+    }
+
+    @objc func applyCGSMode74TransactionAction() {
+        Task {
+            guard let summary = cgsModeEnumerationSummary else {
+                cgsModeApplyExperimentStatusText = "CGS enumeration önce çalıştırılmalı."
+                updateStatus("CGS mode 74 apply blocked")
+                return
+            }
+
+            guard summary.canApplyMode74Transaction else {
+                cgsModeApplyExperimentStatusText = "Mode 74 doğrulanmadı; apply pasif."
+                updateStatus("CGS mode 74 apply blocked")
+                return
+            }
+
+            do {
+                let experiment = try CGSModeEnumerationDiagnostic.runMode74ApplyExperiment(using: cgsModeApplyExperimentSummary)
+                cgsModeApplyExperimentSummary = experiment
+                cgsModeEnumerationSummary = experiment.finalSummary
+                let reportPath = experiment.reportURL.path
+                cgsModeApplyExperimentStatusText = "Mode 74: \(experiment.mode74Outcome?.applyResultDescription ?? "not attempted") | Final: \(experiment.finalSummary.activeModeDescription) | Report: \(reportPath)"
+                updateStatus("CGS mode 74 apply completed")
+                await reloadDisplayModes()
+            } catch {
+                cgsModeApplyExperimentStatusText = "CGS mode 74 apply failed: \(error.localizedDescription)"
+                updateStatus("CGS mode 74 apply failed")
+            }
+        }
+    }
+
+    func startCalibration() {
+        let key = activeDisplayKey
+        let settings = store.ensureSettings(for: key)
+        calibrationSession = CalibrationSession(
+            displayKey: key,
+            profileID: settings.selectedProfileID,
+            step: .low,
+            lowLux: nil,
+            midLux: nil,
+            highLux: nil
+        )
+        updateAutoBrightnessTitle()
+        updateCalibrationStatus()
+    }
+
+    func captureCalibrationStep() {
+        guard var session = calibrationSession, let lux = lastSmoothedLux else { return }
+        switch session.step {
+        case .low:
+            session.lowLux = lux
+            session.step = .mid
+        case .mid:
+            session.midLux = lux
+            session.step = .high
+        case .high:
+            session.highLux = lux
+            finalizeCalibration(session)
+            return
+        }
+        calibrationSession = session
+        updateCalibrationStatus()
+    }
+
+    func cancelCalibration() {
+        guard calibrationSession != nil else { return }
+        calibrationSession = nil
+        updateAutoBrightnessTitle()
+        updateStatus("Calibration cancelled")
+    }
+
+    private func finalizeCalibration(_ session: CalibrationSession) {
+        guard
+            let lowLux = session.lowLux,
+            let midLux = session.midLux,
+            let highLux = session.highLux
+        else {
+            cancelCalibration()
+            return
+        }
+
+        let calibration = DisplayCalibration(lowLux: lowLux, midLux: midLux, highLux: highLux)
+        store.setCalibration(calibration, for: session.displayKey)
+        calibrationSession = nil
+        updateAutoBrightnessTitle()
+        updateStatus("Calibration saved")
+        Task {
+            await tick()
+        }
+    }
+
+    func isLaunchAgentInstalled() -> Bool {
+        launchAgentService.isInstalled()
+    }
+
+    private func installLaunchAgent() throws {
+        try launchAgentService.install()
+    }
+
+    private func uninstallLaunchAgent() throws {
+        try launchAgentService.uninstall()
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        keepAwakeCoordinator.stop()
+    }
+}

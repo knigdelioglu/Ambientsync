@@ -1,0 +1,2 @@
+-	0	com.apple.preference.displays.MirrorDisplays
+-	0	com.apple.sidecar-display-agent

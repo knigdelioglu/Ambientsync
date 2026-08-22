@@ -1,0 +1,6 @@
+displayID=3 vendor=0x4c2d product=0x76ab serial=0x30413332
+active logical=2560x1440 backing=2560x1440 refresh=100.0 ioMode=56 hidpi=false
+defaultModeCount=58
+duplicateLowResolutionModesCount=106
+hiDPICount=48
+perfectQHDCount=0

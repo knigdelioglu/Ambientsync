@@ -1,0 +1,855 @@
+
+## ls -lOe /Users/kadir/Library/Preferences/ByHost/com.apple.windowserver.displays.ACCB63E0-BEF6-51F9-83A7-504CDB40B6CA.plist
+
+-rw-------@ 1 kadir  staff  - 5920 20 May 10:41 /Users/kadir/Library/Preferences/ByHost/com.apple.windowserver.displays.ACCB63E0-BEF6-51F9-83A7-504CDB40B6CA.plist
+
+[exit_status] 0
+
+## plutil -p /Users/kadir/Library/Preferences/ByHost/com.apple.windowserver.displays.ACCB63E0-BEF6-51F9-83A7-504CDB40B6CA.plist
+
+{
+  "account" => 811
+  "DisplaySets" => {
+    "Configs" => [
+      0 => {
+        "ConfigVersion" => 1
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "UUID" => "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+          }
+          1 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => -2560
+              "OriginY" => -268
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "UUID" => "DAFD7C4E-5BC3-45B2-B601-42A2372D5261"
+          }
+          2 => {
+            "CurrentInfo" => {
+              "Depth" => 4
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "IndependentOutput" => true
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 4
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "UUID" => "C50DC49C-B5BF-4D0A-9774-D574F734B400"
+          }
+        ]
+      }
+      1 => {
+        "ConfigVersion" => 1
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "UUID" => "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+          }
+          1 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => -2560
+              "OriginY" => -268
+              "Scale" => 1
+              "Wide" => 2560
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 2560
+            }
+            "UUID" => "DAFD7C4E-5BC3-45B2-B601-42A2372D5261"
+          }
+        ]
+      }
+      2 => {
+        "ConfigVersion" => 1
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 956
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1470
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 956
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1470
+            }
+            "UUID" => "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+          }
+        ]
+      }
+      3 => {
+        "ConfigVersion" => 0
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "UUID" => "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+          }
+          1 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "MasterUUID" => "EC96CDA7-658D-4717-94A4-569C8886FB1D"
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => -2560
+              "OriginY" => -268
+              "Scale" => 1
+              "Wide" => 2560
+            }
+            "UUID" => "DAFD7C4E-5BC3-45B2-B601-42A2372D5261"
+          }
+          2 => {
+            "CurrentInfo" => {
+              "Depth" => 4
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 4
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "UUID" => "EC96CDA7-658D-4717-94A4-569C8886FB1D"
+          }
+        ]
+      }
+      4 => {
+        "ConfigVersion" => 0
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "UUID" => "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+          }
+          1 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "MasterUUID" => "F1FE57D0-EFF5-4E45-9F2B-63E3BA896673"
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => -2560
+              "OriginY" => -268
+              "Scale" => 1
+              "Wide" => 2560
+            }
+            "UUID" => "DAFD7C4E-5BC3-45B2-B601-42A2372D5261"
+          }
+          2 => {
+            "CurrentInfo" => {
+              "Depth" => 4
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 4
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "UUID" => "F1FE57D0-EFF5-4E45-9F2B-63E3BA896673"
+          }
+        ]
+      }
+      5 => {
+        "ConfigVersion" => 0
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "UUID" => "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+          }
+          1 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => -2560
+              "OriginY" => -268
+              "Scale" => 1
+              "Wide" => 2560
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 2560
+            }
+            "UUID" => "DAFD7C4E-5BC3-45B2-B601-42A2372D5261"
+          }
+          2 => {
+            "CurrentInfo" => {
+              "Depth" => 4
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 4
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "UUID" => "C33C82CC-86D6-416C-B5FA-4696511CD65B"
+          }
+        ]
+      }
+      6 => {
+        "ConfigVersion" => 0
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1112
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1710
+            }
+            "UUID" => "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+          }
+          1 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1080
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "MasterUUID" => "EC71E538-CC33-4BB8-B256-97F71B12BB12"
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => -2560
+              "OriginY" => -268
+              "Scale" => 1
+              "Wide" => 2560
+            }
+            "UUID" => "DAFD7C4E-5BC3-45B2-B601-42A2372D5261"
+          }
+          2 => {
+            "CurrentInfo" => {
+              "Depth" => 4
+              "High" => 1080
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 4
+              "High" => 1080
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1710
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "UUID" => "EC71E538-CC33-4BB8-B256-97F71B12BB12"
+          }
+        ]
+      }
+      7 => {
+        "ConfigVersion" => 1
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 4
+              "High" => 1080
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 4
+              "High" => 1080
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "UUID" => "3BFCEBB9-DD59-431E-9E05-68F3BED3052D"
+          }
+        ]
+      }
+      8 => {
+        "ConfigVersion" => 1
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 7
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "LinkDescription" => {
+              "BitDepth" => 10
+              "EOTF" => 2
+              "PixelEncoding" => 0
+              "Range" => 1
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 7
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "UUID" => "DAFD7C4E-5BC3-45B2-B601-42A2372D5261"
+          }
+        ]
+      }
+      9 => {
+        "ConfigVersion" => 1
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 4
+              "High" => 1080
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 4
+              "High" => 1080
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "UUID" => "FEECB20E-5168-4623-813C-BDF985E8EFA6"
+          }
+        ]
+      }
+      10 => {
+        "ConfigVersion" => 1
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 7
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "LinkDescription" => {
+              "BitDepth" => 10
+              "EOTF" => 2
+              "PixelEncoding" => 0
+              "Range" => 1
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 7
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "UUID" => "5A0EC244-545A-42FF-91F7-D307D12F67AA"
+          }
+        ]
+      }
+      11 => {
+        "ConfigVersion" => 1
+        "DefaultConfigVersion" => 1
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 956
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1470
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 956
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1470
+            }
+            "UUID" => "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+          }
+          1 => {
+            "CurrentInfo" => {
+              "Depth" => 7
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 1470
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 2560
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 7
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 2560
+            }
+            "UUID" => "5A0EC244-545A-42FF-91F7-D307D12F67AA"
+          }
+        ]
+      }
+      12 => {
+        "ConfigVersion" => 0
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1440
+              "Hz" => 100
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 2560
+            }
+            "UUID" => "821AA5D5-9868-42D0-9DDB-AD63A218CC18"
+          }
+        ]
+      }
+      13 => {
+        "ConfigVersion" => 0
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 1080
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 1080
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "UUID" => "159CF8B3-F89B-4405-AEEC-49BF4A95F205"
+          }
+        ]
+      }
+      14 => {
+        "ConfigVersion" => 1
+        "DisplayConfig" => [
+          0 => {
+            "CurrentInfo" => {
+              "Depth" => 8
+              "High" => 956
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1470
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 8
+              "High" => 956
+              "Hz" => 60
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 2
+              "Wide" => 1470
+            }
+            "UUID" => "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+          }
+          1 => {
+            "CurrentInfo" => {
+              "Depth" => 4
+              "High" => 1080
+              "Hz" => 30
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => -1920
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "Rotation" => 0
+            "UnmirrorInfo" => {
+              "Depth" => 4
+              "High" => 1080
+              "Hz" => 30
+              "IsLink" => false
+              "IsVRR" => false
+              "OriginX" => 0
+              "OriginY" => 0
+              "Scale" => 1
+              "Wide" => 1920
+            }
+            "UUID" => "3AF13759-BF51-4909-BDA1-D6B02925E177"
+          }
+        ]
+      }
+    ]
+    "Underscan" => {
+      "3AF13759-BF51-4909-BDA1-D6B02925E177" => 1
+      "3BFCEBB9-DD59-431E-9E05-68F3BED3052D" => 1
+      "5A0EC244-545A-42FF-91F7-D307D12F67AA" => 1
+      "37D8832A-2D66-02CA-B9F7-8F30A301B230" => 1
+      "159CF8B3-F89B-4405-AEEC-49BF4A95F205" => 1
+      "821AA5D5-9868-42D0-9DDB-AD63A218CC18" => 1
+      "C33C82CC-86D6-416C-B5FA-4696511CD65B" => 1
+      "C50DC49C-B5BF-4D0A-9774-D574F734B400" => 1
+      "DAFD7C4E-5BC3-45B2-B601-42A2372D5261" => 1
+      "EC71E538-CC33-4BB8-B256-97F71B12BB12" => 1
+      "EC96CDA7-658D-4717-94A4-569C8886FB1D" => 1
+      "F1FE57D0-EFF5-4E45-9F2B-63E3BA896673" => 1
+      "FEECB20E-5168-4623-813C-BDF985E8EFA6" => 1
+    }
+    "Version" => 2
+  }
+  "TVConnectPolicy" => 0
+}
+
+[exit_status] 0

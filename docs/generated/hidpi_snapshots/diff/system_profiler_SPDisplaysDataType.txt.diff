@@ -1,0 +1,11 @@
+--- /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/before_betterdisplay_apply/system_profiler_SPDisplaysDataType.txt	2026-05-20 10:39:27
++++ /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/after_betterdisplay_apply/system_profiler_SPDisplaysDataType.txt	2026-05-20 10:45:38
+@@ -20,7 +20,7 @@
+           Automatically Adjust Brightness: Yes
+           Connection Type: Internal
+         LS32D60xU:
+-          Resolution: 2560 x 1440 (QHD/WQHD - Wide Quad High Definition)
++          Resolution: 5120 x 2880 (5K/UHD+ - Ultra High Definition Plus)
+           UI Looks like: 2560 x 1440 @ 100.00Hz
+           Mirror: Off
+           Online: Yes

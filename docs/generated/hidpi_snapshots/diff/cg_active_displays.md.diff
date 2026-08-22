@@ -1,0 +1,19 @@
+--- /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/before_betterdisplay_apply/cg_active_displays.md	2026-05-20 10:39:34
++++ /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/after_betterdisplay_apply/cg_active_displays.md	2026-05-20 10:41:56
+@@ -24,11 +24,11 @@
+ - Built-in: false
+ - Online: true
+ - Active: true
+-- Current mode: 2560x1440 logical / 2560x1440 pixel @ 100.00Hz | HiDPI:false
++- Current mode: 2560x1440 logical / 5120x2880 pixel @ 100.00Hz | HiDPI:true
+ - Default mode count: 58
+-- duplicateLowResolutionModes=true mode count: 106
+-- HiDPI mode count: 48
+-- 5120x2880 pixel/backing mode present: false
+-- 2560x1440 logical / 5120x2880 pixel mode present: false
++- duplicateLowResolutionModes=true mode count: 107
++- HiDPI mode count: 49
++- 5120x2880 pixel/backing mode present: true
++- 2560x1440 logical / 5120x2880 pixel mode present: true
+ - 100 Hz HiDPI candidate present: true
+ 

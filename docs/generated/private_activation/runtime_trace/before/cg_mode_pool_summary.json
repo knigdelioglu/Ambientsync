@@ -1,0 +1,984 @@
+{
+  "displays" : [
+    {
+      "vendor" : 1552,
+      "serial" : 4251086178,
+      "displayID" : 1,
+      "modes" : [
+        {
+          "refreshRate" : 60,
+          "pixelHeight" : 1200,
+          "ioDisplayModeID" : 0,
+          "width" : 960,
+          "pixelWidth" : 1920,
+          "height" : 600
+        },
+        {
+          "height" : 640,
+          "refreshRate" : 60,
+          "pixelWidth" : 2048,
+          "width" : 1024,
+          "pixelHeight" : 1280,
+          "ioDisplayModeID" : 1
+        },
+        {
+          "pixelHeight" : 1332,
+          "refreshRate" : 60,
+          "height" : 666,
+          "pixelWidth" : 2048,
+          "width" : 1024,
+          "ioDisplayModeID" : 2
+        },
+        {
+          "height" : 800,
+          "width" : 1280,
+          "ioDisplayModeID" : 3,
+          "refreshRate" : 60,
+          "pixelWidth" : 2560,
+          "pixelHeight" : 1600
+        },
+        {
+          "height" : 832,
+          "pixelWidth" : 2560,
+          "ioDisplayModeID" : 4,
+          "pixelHeight" : 1664,
+          "width" : 1280,
+          "refreshRate" : 60
+        },
+        {
+          "pixelWidth" : 2940,
+          "width" : 1470,
+          "pixelHeight" : 1836,
+          "height" : 918,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 5
+        },
+        {
+          "refreshRate" : 60,
+          "pixelWidth" : 2940,
+          "width" : 1470,
+          "ioDisplayModeID" : 6,
+          "height" : 956,
+          "pixelHeight" : 1912
+        },
+        {
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 7,
+          "pixelWidth" : 3420,
+          "pixelHeight" : 2136,
+          "width" : 1710,
+          "height" : 1068
+        },
+        {
+          "height" : 1112,
+          "pixelWidth" : 3420,
+          "width" : 1710,
+          "pixelHeight" : 2224,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 8
+        },
+        {
+          "width" : 1920,
+          "pixelWidth" : 1920,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 9,
+          "pixelHeight" : 1200,
+          "height" : 1200
+        },
+        {
+          "pixelHeight" : 1280,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 10,
+          "height" : 1280,
+          "width" : 2048,
+          "pixelWidth" : 2048
+        },
+        {
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 11,
+          "pixelWidth" : 2048,
+          "height" : 1332,
+          "pixelHeight" : 1332,
+          "width" : 2048
+        },
+        {
+          "pixelHeight" : 1600,
+          "width" : 2560,
+          "ioDisplayModeID" : 12,
+          "refreshRate" : 60,
+          "height" : 1600,
+          "pixelWidth" : 2560
+        },
+        {
+          "height" : 1664,
+          "pixelHeight" : 1664,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 13,
+          "pixelWidth" : 2560,
+          "width" : 2560
+        }
+      ],
+      "defaultModeCount" : 5,
+      "duplicateLowResModeCount" : 14,
+      "product" : 41059
+    },
+    {
+      "defaultModeCount" : 58,
+      "vendor" : 19501,
+      "serial" : 809579314,
+      "duplicateLowResModeCount" : 106,
+      "displayID" : 3,
+      "product" : 30379,
+      "modes" : [
+        {
+          "height" : 450,
+          "pixelWidth" : 800,
+          "pixelHeight" : 450,
+          "ioDisplayModeID" : 0,
+          "width" : 800,
+          "refreshRate" : 100
+        },
+        {
+          "refreshRate" : 60,
+          "width" : 800,
+          "height" : 450,
+          "ioDisplayModeID" : 1,
+          "pixelHeight" : 450,
+          "pixelWidth" : 800
+        },
+        {
+          "pixelHeight" : 1200,
+          "pixelWidth" : 1600,
+          "width" : 800,
+          "refreshRate" : 100,
+          "height" : 600,
+          "ioDisplayModeID" : 2
+        },
+        {
+          "pixelHeight" : 600,
+          "ioDisplayModeID" : 3,
+          "width" : 800,
+          "pixelWidth" : 800,
+          "height" : 600,
+          "refreshRate" : 100
+        },
+        {
+          "height" : 600,
+          "pixelWidth" : 800,
+          "refreshRate" : 75,
+          "ioDisplayModeID" : 4,
+          "width" : 800,
+          "pixelHeight" : 600
+        },
+        {
+          "height" : 600,
+          "width" : 800,
+          "pixelHeight" : 1200,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 5,
+          "pixelWidth" : 1600
+        },
+        {
+          "height" : 600,
+          "refreshRate" : 60,
+          "pixelWidth" : 800,
+          "width" : 800,
+          "pixelHeight" : 600,
+          "ioDisplayModeID" : 6
+        },
+        {
+          "ioDisplayModeID" : 7,
+          "pixelWidth" : 840,
+          "refreshRate" : 100,
+          "width" : 840,
+          "height" : 468,
+          "pixelHeight" : 468
+        },
+        {
+          "width" : 840,
+          "pixelHeight" : 468,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 8,
+          "height" : 468,
+          "pixelWidth" : 840
+        },
+        {
+          "pixelWidth" : 1680,
+          "width" : 840,
+          "height" : 525,
+          "pixelHeight" : 1050,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 9
+        },
+        {
+          "pixelWidth" : 1920,
+          "height" : 540,
+          "refreshRate" : 100,
+          "width" : 960,
+          "pixelHeight" : 1080,
+          "ioDisplayModeID" : 10
+        },
+        {
+          "ioDisplayModeID" : 11,
+          "pixelHeight" : 1080,
+          "pixelWidth" : 1920,
+          "width" : 960,
+          "height" : 540,
+          "refreshRate" : 60
+        },
+        {
+          "height" : 540,
+          "pixelWidth" : 1920,
+          "width" : 960,
+          "refreshRate" : 50,
+          "pixelHeight" : 1080,
+          "ioDisplayModeID" : 12
+        },
+        {
+          "height" : 576,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 13,
+          "width" : 1024,
+          "pixelHeight" : 1152,
+          "pixelWidth" : 2048
+        },
+        {
+          "refreshRate" : 100,
+          "pixelWidth" : 1024,
+          "ioDisplayModeID" : 14,
+          "width" : 1024,
+          "height" : 576,
+          "pixelHeight" : 576
+        },
+        {
+          "pixelHeight" : 1152,
+          "height" : 576,
+          "refreshRate" : 60,
+          "pixelWidth" : 2048,
+          "width" : 1024,
+          "ioDisplayModeID" : 15
+        },
+        {
+          "width" : 1024,
+          "refreshRate" : 60,
+          "height" : 576,
+          "pixelWidth" : 1024,
+          "pixelHeight" : 576,
+          "ioDisplayModeID" : 16
+        },
+        {
+          "refreshRate" : 100,
+          "pixelWidth" : 1024,
+          "height" : 768,
+          "ioDisplayModeID" : 17,
+          "pixelHeight" : 768,
+          "width" : 1024
+        },
+        {
+          "width" : 1024,
+          "height" : 768,
+          "pixelHeight" : 768,
+          "refreshRate" : 75,
+          "ioDisplayModeID" : 18,
+          "pixelWidth" : 1024
+        },
+        {
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 19,
+          "width" : 1024,
+          "pixelWidth" : 1024,
+          "height" : 768,
+          "pixelHeight" : 768
+        },
+        {
+          "pixelHeight" : 648,
+          "ioDisplayModeID" : 20,
+          "refreshRate" : 100,
+          "pixelWidth" : 1152,
+          "width" : 1152,
+          "height" : 648
+        },
+        {
+          "pixelHeight" : 648,
+          "ioDisplayModeID" : 21,
+          "refreshRate" : 60,
+          "pixelWidth" : 1152,
+          "width" : 1152,
+          "height" : 648
+        },
+        {
+          "refreshRate" : 75,
+          "pixelHeight" : 864,
+          "height" : 864,
+          "ioDisplayModeID" : 22,
+          "pixelWidth" : 1152,
+          "width" : 1152
+        },
+        {
+          "refreshRate" : 100,
+          "pixelWidth" : 1280,
+          "ioDisplayModeID" : 23,
+          "width" : 1280,
+          "height" : 720,
+          "pixelHeight" : 720
+        },
+        {
+          "height" : 720,
+          "ioDisplayModeID" : 24,
+          "refreshRate" : 100,
+          "pixelHeight" : 1440,
+          "pixelWidth" : 2560,
+          "width" : 1280
+        },
+        {
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 25,
+          "height" : 720,
+          "pixelHeight" : 720,
+          "pixelWidth" : 1280,
+          "width" : 1280
+        },
+        {
+          "width" : 1280,
+          "pixelHeight" : 1440,
+          "height" : 720,
+          "pixelWidth" : 2560,
+          "ioDisplayModeID" : 26,
+          "refreshRate" : 60
+        },
+        {
+          "pixelWidth" : 1280,
+          "height" : 720,
+          "pixelHeight" : 720,
+          "width" : 1280,
+          "refreshRate" : 50,
+          "ioDisplayModeID" : 27
+        },
+        {
+          "width" : 1280,
+          "height" : 800,
+          "ioDisplayModeID" : 28,
+          "refreshRate" : 60,
+          "pixelHeight" : 800,
+          "pixelWidth" : 1280
+        },
+        {
+          "pixelHeight" : 960,
+          "pixelWidth" : 1280,
+          "width" : 1280,
+          "ioDisplayModeID" : 29,
+          "height" : 960,
+          "refreshRate" : 100
+        },
+        {
+          "ioDisplayModeID" : 30,
+          "height" : 960,
+          "pixelWidth" : 1280,
+          "width" : 1280,
+          "pixelHeight" : 960,
+          "refreshRate" : 60
+        },
+        {
+          "refreshRate" : 75,
+          "ioDisplayModeID" : 31,
+          "height" : 1024,
+          "pixelWidth" : 1280,
+          "width" : 1280,
+          "pixelHeight" : 1024
+        },
+        {
+          "pixelWidth" : 1280,
+          "pixelHeight" : 1024,
+          "width" : 1280,
+          "ioDisplayModeID" : 32,
+          "height" : 1024,
+          "refreshRate" : 60
+        },
+        {
+          "width" : 1344,
+          "height" : 756,
+          "pixelWidth" : 1344,
+          "refreshRate" : 100,
+          "pixelHeight" : 756,
+          "ioDisplayModeID" : 33
+        },
+        {
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 34,
+          "pixelHeight" : 756,
+          "width" : 1344,
+          "height" : 756,
+          "pixelWidth" : 1344
+        },
+        {
+          "pixelHeight" : 1008,
+          "width" : 1344,
+          "pixelWidth" : 1344,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 35,
+          "height" : 1008
+        },
+        {
+          "ioDisplayModeID" : 36,
+          "pixelHeight" : 1008,
+          "pixelWidth" : 1344,
+          "refreshRate" : 60,
+          "width" : 1344,
+          "height" : 1008
+        },
+        {
+          "pixelWidth" : 2880,
+          "height" : 810,
+          "refreshRate" : 100,
+          "pixelHeight" : 1620,
+          "width" : 1440,
+          "ioDisplayModeID" : 37
+        },
+        {
+          "pixelHeight" : 810,
+          "refreshRate" : 100,
+          "height" : 810,
+          "pixelWidth" : 1440,
+          "width" : 1440,
+          "ioDisplayModeID" : 38
+        },
+        {
+          "width" : 1440,
+          "ioDisplayModeID" : 39,
+          "refreshRate" : 60,
+          "height" : 810,
+          "pixelHeight" : 1620,
+          "pixelWidth" : 2880
+        },
+        {
+          "ioDisplayModeID" : 40,
+          "width" : 1440,
+          "pixelWidth" : 1440,
+          "height" : 810,
+          "pixelHeight" : 810,
+          "refreshRate" : 60
+        },
+        {
+          "width" : 1440,
+          "ioDisplayModeID" : 41,
+          "height" : 900,
+          "pixelHeight" : 900,
+          "pixelWidth" : 1440,
+          "refreshRate" : 60
+        },
+        {
+          "height" : 900,
+          "width" : 1600,
+          "pixelHeight" : 900,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 42,
+          "pixelWidth" : 1600
+        },
+        {
+          "ioDisplayModeID" : 43,
+          "refreshRate" : 60,
+          "height" : 900,
+          "pixelWidth" : 1600,
+          "width" : 1600,
+          "pixelHeight" : 900
+        },
+        {
+          "ioDisplayModeID" : 44,
+          "pixelWidth" : 1600,
+          "height" : 1200,
+          "pixelHeight" : 1200,
+          "refreshRate" : 100,
+          "width" : 1600
+        },
+        {
+          "ioDisplayModeID" : 45,
+          "refreshRate" : 60,
+          "pixelHeight" : 1200,
+          "width" : 1600,
+          "pixelWidth" : 1600,
+          "height" : 1200
+        },
+        {
+          "ioDisplayModeID" : 46,
+          "pixelWidth" : 1680,
+          "width" : 1680,
+          "pixelHeight" : 944,
+          "height" : 944,
+          "refreshRate" : 100
+        },
+        {
+          "pixelWidth" : 1680,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 47,
+          "width" : 1680,
+          "height" : 944,
+          "pixelHeight" : 944
+        },
+        {
+          "pixelWidth" : 3360,
+          "refreshRate" : 100,
+          "width" : 1680,
+          "height" : 945,
+          "ioDisplayModeID" : 48,
+          "pixelHeight" : 1890
+        },
+        {
+          "height" : 945,
+          "pixelHeight" : 1890,
+          "pixelWidth" : 3360,
+          "width" : 1680,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 49
+        },
+        {
+          "refreshRate" : 60,
+          "width" : 1680,
+          "pixelHeight" : 1050,
+          "ioDisplayModeID" : 50,
+          "height" : 1050,
+          "pixelWidth" : 1680
+        },
+        {
+          "pixelWidth" : 1920,
+          "pixelHeight" : 1080,
+          "width" : 1920,
+          "height" : 1080,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 51
+        },
+        {
+          "height" : 1080,
+          "pixelWidth" : 1920,
+          "ioDisplayModeID" : 52,
+          "width" : 1920,
+          "pixelHeight" : 1080,
+          "refreshRate" : 60
+        },
+        {
+          "pixelWidth" : 1920,
+          "ioDisplayModeID" : 53,
+          "pixelHeight" : 1080,
+          "width" : 1920,
+          "height" : 1080,
+          "refreshRate" : 50
+        },
+        {
+          "height" : 1152,
+          "refreshRate" : 100,
+          "width" : 2048,
+          "ioDisplayModeID" : 54,
+          "pixelHeight" : 1152,
+          "pixelWidth" : 2048
+        },
+        {
+          "pixelWidth" : 2048,
+          "refreshRate" : 60,
+          "height" : 1152,
+          "ioDisplayModeID" : 55,
+          "pixelHeight" : 1152,
+          "width" : 2048
+        },
+        {
+          "width" : 2560,
+          "ioDisplayModeID" : 56,
+          "pixelHeight" : 1440,
+          "refreshRate" : 100,
+          "height" : 1440,
+          "pixelWidth" : 2560
+        },
+        {
+          "pixelHeight" : 1440,
+          "height" : 1440,
+          "width" : 2560,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 57,
+          "pixelWidth" : 2560
+        },
+        {
+          "height" : 300,
+          "pixelHeight" : 600,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 78,
+          "pixelWidth" : 800,
+          "width" : 400
+        },
+        {
+          "pixelWidth" : 800,
+          "pixelHeight" : 600,
+          "width" : 400,
+          "refreshRate" : 75,
+          "ioDisplayModeID" : 79,
+          "height" : 300
+        },
+        {
+          "pixelHeight" : 600,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 80,
+          "width" : 400,
+          "pixelWidth" : 800,
+          "height" : 300
+        },
+        {
+          "width" : 400,
+          "pixelWidth" : 800,
+          "height" : 300,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 81,
+          "pixelHeight" : 600
+        },
+        {
+          "pixelWidth" : 1024,
+          "width" : 512,
+          "pixelHeight" : 768,
+          "height" : 384,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 82
+        },
+        {
+          "width" : 512,
+          "pixelWidth" : 1024,
+          "height" : 384,
+          "pixelHeight" : 768,
+          "refreshRate" : 75,
+          "ioDisplayModeID" : 83
+        },
+        {
+          "ioDisplayModeID" : 84,
+          "width" : 512,
+          "pixelWidth" : 1024,
+          "height" : 384,
+          "refreshRate" : 60,
+          "pixelHeight" : 768
+        },
+        {
+          "refreshRate" : 60,
+          "width" : 512,
+          "pixelWidth" : 1024,
+          "pixelHeight" : 768,
+          "ioDisplayModeID" : 85,
+          "height" : 384
+        },
+        {
+          "height" : 324,
+          "pixelHeight" : 648,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 86,
+          "pixelWidth" : 1152,
+          "width" : 576
+        },
+        {
+          "pixelWidth" : 1152,
+          "ioDisplayModeID" : 87,
+          "refreshRate" : 60,
+          "height" : 324,
+          "width" : 576,
+          "pixelHeight" : 648
+        },
+        {
+          "width" : 576,
+          "refreshRate" : 75,
+          "ioDisplayModeID" : 88,
+          "pixelWidth" : 1152,
+          "pixelHeight" : 864,
+          "height" : 432
+        },
+        {
+          "width" : 640,
+          "ioDisplayModeID" : 89,
+          "height" : 360,
+          "pixelHeight" : 720,
+          "refreshRate" : 100,
+          "pixelWidth" : 1280
+        },
+        {
+          "height" : 360,
+          "pixelWidth" : 1280,
+          "width" : 640,
+          "pixelHeight" : 720,
+          "ioDisplayModeID" : 90,
+          "refreshRate" : 60
+        },
+        {
+          "height" : 360,
+          "ioDisplayModeID" : 91,
+          "refreshRate" : 60,
+          "pixelWidth" : 1280,
+          "width" : 640,
+          "pixelHeight" : 720
+        },
+        {
+          "ioDisplayModeID" : 92,
+          "width" : 640,
+          "pixelHeight" : 720,
+          "refreshRate" : 50,
+          "pixelWidth" : 1280,
+          "height" : 360
+        },
+        {
+          "width" : 640,
+          "height" : 360,
+          "refreshRate" : 100,
+          "pixelWidth" : 640,
+          "ioDisplayModeID" : 93,
+          "pixelHeight" : 360
+        },
+        {
+          "height" : 360,
+          "ioDisplayModeID" : 94,
+          "pixelWidth" : 640,
+          "pixelHeight" : 360,
+          "refreshRate" : 60,
+          "width" : 640
+        },
+        {
+          "pixelWidth" : 1280,
+          "width" : 640,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 95,
+          "height" : 400,
+          "pixelHeight" : 800
+        },
+        {
+          "pixelWidth" : 1280,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 96,
+          "height" : 480,
+          "pixelHeight" : 960,
+          "width" : 640
+        },
+        {
+          "refreshRate" : 60,
+          "width" : 640,
+          "ioDisplayModeID" : 97,
+          "pixelWidth" : 1280,
+          "height" : 480,
+          "pixelHeight" : 960
+        },
+        {
+          "width" : 640,
+          "height" : 480,
+          "refreshRate" : 100,
+          "pixelHeight" : 480,
+          "ioDisplayModeID" : 98,
+          "pixelWidth" : 640
+        },
+        {
+          "pixelHeight" : 480,
+          "refreshRate" : 75,
+          "width" : 640,
+          "ioDisplayModeID" : 99,
+          "height" : 480,
+          "pixelWidth" : 640
+        },
+        {
+          "pixelWidth" : 640,
+          "height" : 480,
+          "pixelHeight" : 480,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 100,
+          "width" : 640
+        },
+        {
+          "pixelWidth" : 640,
+          "width" : 640,
+          "refreshRate" : 60,
+          "pixelHeight" : 480,
+          "height" : 480,
+          "ioDisplayModeID" : 101
+        },
+        {
+          "refreshRate" : 75,
+          "pixelWidth" : 1280,
+          "width" : 640,
+          "height" : 512,
+          "ioDisplayModeID" : 102,
+          "pixelHeight" : 1024
+        },
+        {
+          "ioDisplayModeID" : 103,
+          "pixelWidth" : 1280,
+          "pixelHeight" : 1024,
+          "width" : 640,
+          "height" : 512,
+          "refreshRate" : 60
+        },
+        {
+          "pixelWidth" : 1344,
+          "width" : 672,
+          "pixelHeight" : 756,
+          "height" : 378,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 104
+        },
+        {
+          "pixelHeight" : 756,
+          "ioDisplayModeID" : 105,
+          "refreshRate" : 60,
+          "pixelWidth" : 1344,
+          "height" : 378,
+          "width" : 672
+        },
+        {
+          "width" : 672,
+          "pixelWidth" : 1344,
+          "height" : 504,
+          "pixelHeight" : 1008,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 106
+        },
+        {
+          "pixelHeight" : 1008,
+          "height" : 504,
+          "pixelWidth" : 1344,
+          "refreshRate" : 60,
+          "width" : 672,
+          "ioDisplayModeID" : 107
+        },
+        {
+          "ioDisplayModeID" : 108,
+          "pixelHeight" : 810,
+          "pixelWidth" : 1440,
+          "width" : 720,
+          "refreshRate" : 100,
+          "height" : 405
+        },
+        {
+          "width" : 720,
+          "pixelWidth" : 1440,
+          "height" : 405,
+          "pixelHeight" : 810,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 109
+        },
+        {
+          "width" : 720,
+          "pixelHeight" : 900,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 110,
+          "pixelWidth" : 1440,
+          "height" : 450
+        },
+        {
+          "ioDisplayModeID" : 111,
+          "height" : 480,
+          "width" : 720,
+          "pixelWidth" : 720,
+          "pixelHeight" : 480,
+          "refreshRate" : 60
+        },
+        {
+          "width" : 720,
+          "pixelHeight" : 576,
+          "ioDisplayModeID" : 112,
+          "height" : 576,
+          "pixelWidth" : 720,
+          "refreshRate" : 50
+        },
+        {
+          "ioDisplayModeID" : 113,
+          "height" : 450,
+          "width" : 800,
+          "pixelWidth" : 1600,
+          "pixelHeight" : 900,
+          "refreshRate" : 100
+        },
+        {
+          "height" : 450,
+          "ioDisplayModeID" : 114,
+          "pixelHeight" : 900,
+          "width" : 800,
+          "refreshRate" : 60,
+          "pixelWidth" : 1600
+        },
+        {
+          "refreshRate" : 60,
+          "height" : 450,
+          "pixelHeight" : 900,
+          "pixelWidth" : 1600,
+          "ioDisplayModeID" : 115,
+          "width" : 800
+        },
+        {
+          "pixelWidth" : 800,
+          "pixelHeight" : 600,
+          "height" : 600,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 116,
+          "width" : 800
+        },
+        {
+          "pixelWidth" : 1680,
+          "width" : 840,
+          "height" : 472,
+          "pixelHeight" : 944,
+          "refreshRate" : 100,
+          "ioDisplayModeID" : 117
+        },
+        {
+          "width" : 840,
+          "pixelWidth" : 1680,
+          "pixelHeight" : 944,
+          "refreshRate" : 60,
+          "height" : 472,
+          "ioDisplayModeID" : 118
+        },
+        {
+          "refreshRate" : 100,
+          "pixelHeight" : 1080,
+          "pixelWidth" : 1920,
+          "height" : 540,
+          "width" : 960,
+          "ioDisplayModeID" : 119
+        },
+        {
+          "height" : 540,
+          "pixelHeight" : 1080,
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 120,
+          "width" : 960,
+          "pixelWidth" : 1920
+        },
+        {
+          "ioDisplayModeID" : 121,
+          "height" : 768,
+          "pixelWidth" : 1024,
+          "pixelHeight" : 768,
+          "refreshRate" : 60,
+          "width" : 1024
+        },
+        {
+          "pixelHeight" : 720,
+          "pixelWidth" : 1280,
+          "ioDisplayModeID" : 122,
+          "width" : 1280,
+          "height" : 720,
+          "refreshRate" : 60
+        },
+        {
+          "pixelWidth" : 1600,
+          "width" : 1600,
+          "refreshRate" : 60,
+          "height" : 900,
+          "pixelHeight" : 900,
+          "ioDisplayModeID" : 123
+        },
+        {
+          "pixelHeight" : 1080,
+          "refreshRate" : 100,
+          "pixelWidth" : 1920,
+          "height" : 1080,
+          "width" : 1920,
+          "ioDisplayModeID" : 124
+        },
+        {
+          "refreshRate" : 60,
+          "ioDisplayModeID" : 125,
+          "pixelWidth" : 1920,
+          "pixelHeight" : 1080,
+          "width" : 1920,
+          "height" : 1080
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+--- /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/before_betterdisplay_apply/windowserver_preferences_dump.txt	2026-05-20 10:39:34
++++ /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/after_betterdisplay_apply/windowserver_preferences_dump.txt	2026-05-20 10:41:56
+@@ -1,7 +1,7 @@
+ 
+ ## ls -lOe /Library/Preferences/com.apple.windowserver.displays.plist
+ 
+--rw-r--r--@ 1 root  admin  - 8619 May 20 10:30 /Library/Preferences/com.apple.windowserver.displays.plist
++-rw-r--r--@ 1 root  admin  - 8619 20 May 10:41 /Library/Preferences/com.apple.windowserver.displays.plist
+ 
+ [exit_status] 0
+ 
+@@ -1005,7 +1005,7 @@
+ 
+ ## ls -lOe /Library/Preferences/com.apple.windowserver.plist
+ 
+--rw-r--r--@ 1 root  wheel  - 74 May 19 18:17 /Library/Preferences/com.apple.windowserver.plist
++-rw-r--r--@ 1 root  wheel  - 74 19 May 18:17 /Library/Preferences/com.apple.windowserver.plist
+ 
+ [exit_status] 0
+ 

@@ -1,0 +1,39 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Swift Package Manager
+.build/
+.swiftpm/configuration/
+.swiftpm/xcode/
+Package.resolved
+
+# Xcode user and build data
+xcuserdata/
+DerivedData/
+*.xcuserstate
+*.xccheckout
+
+# Build products
+*.app/
+*.dSYM/
+*.ipa
+*.mobileprovision
+
+# Runtime output and local diagnostics
+*.log
+*.trace
+*.tmp
+*.swp
+
+# Local environment and editor files
+.env
+.env.*
+.idea/
+.vscode/
+
+# Generated local diagnostic exports
+docs/generated/local/
+docs/generated/**/raw/

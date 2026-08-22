@@ -1,0 +1,56 @@
+--- /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/before_betterdisplay_apply/filesystem_relevant_listing.txt	2026-05-20 10:39:34
++++ /Users/kadir/Desktop/Developer/ekle/docs/generated/hidpi_snapshots/after_betterdisplay_apply/filesystem_relevant_listing.txt	2026-05-20 10:41:56
+@@ -1,42 +1,30 @@
+ 
+ ## find /Library/Displays/Contents/Resources/Overrides -maxdepth 3 ( -iname *4c2d* -o -iname *76ab* -o -iname *samsung* ) -exec ls -ldOe {} ;
+ 
+-drwxr-xr-x  4 root  wheel  - 128 Sep 18  2025 /Library/Displays/Contents/Resources/Overrides/DisplayVendorID-4c2d
+--rw-r--r--  1 root  wheel  - 1228760 Sep 18  2025 /Library/Displays/Contents/Resources/Overrides/DisplayVendorID-4c2d/DisplayProductID-76ab.icns
+--rw-r--r--@ 1 root  wheel  - 1567 May 19 18:17 /Library/Displays/Contents/Resources/Overrides/DisplayVendorID-4c2d/DisplayProductID-76ab
++drwxr-xr-x  4 root  wheel  - 128 18 Eyl  2025 /Library/Displays/Contents/Resources/Overrides/DisplayVendorID-4c2d
++-rw-r--r--  1 root  wheel  - 1228760 18 Eyl  2025 /Library/Displays/Contents/Resources/Overrides/DisplayVendorID-4c2d/DisplayProductID-76ab.icns
++-rw-r--r--@ 1 root  wheel  - 1567 19 May 18:17 /Library/Displays/Contents/Resources/Overrides/DisplayVendorID-4c2d/DisplayProductID-76ab
+ 
+ [exit_status] 0
+ 
+ ## find /Library/Preferences -maxdepth 2 ( -iname *windowserver* -o -iname *display* -o -iname *betterdisplay* ) -exec ls -ldOe {} ;
+ 
+--rw-r--r--@ 1 root  admin  - 8619 May 20 10:30 /Library/Preferences/com.apple.windowserver.displays.plist
+--rw-r--r--@ 1 root  wheel  - 74 May 19 18:17 /Library/Preferences/com.apple.windowserver.plist
++-rw-r--r--@ 1 root  admin  - 8619 20 May 10:41 /Library/Preferences/com.apple.windowserver.displays.plist
++-rw-r--r--@ 1 root  wheel  - 74 19 May 18:17 /Library/Preferences/com.apple.windowserver.plist
+ 
+ [exit_status] 0
+ 
+ ## find /Users/kadir/Library/Preferences -maxdepth 2 ( -iname *windowserver* -o -iname *display* -o -iname *betterdisplay* ) -exec ls -ldOe {} ;
+ 
+--rw-------@ 1 kadir  staff  - 189 May 20 10:34 /Users/kadir/Library/Preferences/ByHost/com.apple.controlcenter.displayablemenuextras.ACCB63E0-BEF6-51F9-83A7-504CDB40B6CA.plist
+--rw-------@ 1 kadir  staff  - 5920 May 20 10:30 /Users/kadir/Library/Preferences/ByHost/com.apple.windowserver.displays.ACCB63E0-BEF6-51F9-83A7-504CDB40B6CA.plist
+--rw-------@ 1 kadir  staff  - 7363 May 20 10:10 /Users/kadir/Library/Preferences/pro.betterdisplay.BetterDisplay.plist
+--rw-------@ 1 kadir  staff  - 67 Sep 17  2025 /Users/kadir/Library/Preferences/com.apple.Displays-Settings.extension.plist
++-rw-------@ 1 kadir  staff  - 189 20 May 10:41 /Users/kadir/Library/Preferences/ByHost/com.apple.controlcenter.displayablemenuextras.ACCB63E0-BEF6-51F9-83A7-504CDB40B6CA.plist
++-rw-------@ 1 kadir  staff  - 5920 20 May 10:41 /Users/kadir/Library/Preferences/ByHost/com.apple.windowserver.displays.ACCB63E0-BEF6-51F9-83A7-504CDB40B6CA.plist
++-rw-------@ 1 kadir  staff  - 7364 20 May 10:41 /Users/kadir/Library/Preferences/pro.betterdisplay.BetterDisplay.plist
++-rw-------@ 1 kadir  staff  - 67 17 Eyl  2025 /Users/kadir/Library/Preferences/com.apple.Displays-Settings.extension.plist
+ 
+ [exit_status] 0
+ 
+ ## find /Users/kadir/Library/Application Support -maxdepth 2 ( -iname *BetterDisplay* -o -iname *betterdisplay* ) -exec ls -ldOe {} ;
+ 
+-find: /Users/kadir/Library/Application Support/MobileSync: Operation not permitted
+-find: /Users/kadir/Library/Application Support/com.apple.LaunchServicesTemplateApp.dv: Operation not permitted
+-find: /Users/kadir/Library/Application Support/CallHistoryTransactions: Operation not permitted
+-drwxr-xr-x@ 4 kadir  staff  - 128 May 20 08:49 /Users/kadir/Library/Application Support/BetterDisplay
+-find: /Users/kadir/Library/Application Support/CloudDocs: Operation not permitted
+-find: /Users/kadir/Library/Application Support/com.apple.sharedfilelist: Operation not permitted
+-find: /Users/kadir/Library/Application Support/Knowledge: Operation not permitted
+-find: /Users/kadir/Library/Application Support/com.apple.TCC: Operation not permitted
+-find: /Users/kadir/Library/Application Support/FileProvider: Operation not permitted
+-find: /Users/kadir/Library/Application Support/AddressBook: Operation not permitted
+-find: /Users/kadir/Library/Application Support/FaceTime: Operation not permitted
+-find: /Users/kadir/Library/Application Support/DifferentialPrivacy: Operation not permitted
+-find: /Users/kadir/Library/Application Support/CallHistoryDB: Operation not permitted
++drwxr-xr-x@ 4 kadir  staff  - 128 20 May 10:41 /Users/kadir/Library/Application Support/BetterDisplay
+ 
+-[exit_status] 1
++[exit_status] 0
