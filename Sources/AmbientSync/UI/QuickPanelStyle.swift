@@ -72,7 +72,7 @@ struct QuickPanelMetricTile: View {
 }
 
 struct QuickPanelInsetSurface<Content: View>: View {
-    @ViewBuilder let content: Content
+    let content: Content
 
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
