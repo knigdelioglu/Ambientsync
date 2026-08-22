@@ -9,15 +9,20 @@ final class DisplayConnectionController: ObservableObject {
     @Published private(set) var snapshot: DisplayConnectionSnapshot = .initial
     @Published private(set) var isBusy = false
 
+    private static let softwareDisconnectDefaultsKey = "AmbientSync.DisplayConnection.SoftwareDisconnected"
+
     private let backend: DisplayConnectionBackend
     private let identity: DisplayConnectionIdentity
+    private let defaults: UserDefaults
 
     init(
         backend: DisplayConnectionBackend = PrivateDisplayConnectionBackend(),
-        identity: DisplayConnectionIdentity = .samsungS60UD
+        identity: DisplayConnectionIdentity = .samsungS60UD,
+        defaults: UserDefaults = .standard
     ) {
         self.backend = backend
         self.identity = identity
+        self.defaults = defaults
     }
 
     @discardableResult
@@ -51,8 +56,13 @@ final class DisplayConnectionController: ObservableObject {
             let phase = DisplayConnectionPolicy.phase(
                 targetFoundInPrivateList: true,
                 isOnline: isOnline,
-                isActive: isActive
+                isActive: isActive,
+                softwareDisconnectRequested: softwareDisconnectRequested
             )
+
+            if phase == .connected {
+                setSoftwareDisconnectRequested(false)
+            }
 
             let message: String
             switch phase {
@@ -60,6 +70,8 @@ final class DisplayConnectionController: ObservableObject {
                 message = "Samsung S60UD bağlı."
             case .softwareDisconnected:
                 message = "Samsung S60UD yazılımsal olarak ayrıldı."
+            case .physicallyDisconnected:
+                message = "Samsung S60UD bağlı fakat aktif görünmüyor; yazılımsal ayırma işareti yok."
             default:
                 message = "Samsung S60UD bağlantı durumu güncellendi."
             }
@@ -127,8 +139,10 @@ final class DisplayConnectionController: ObservableObject {
 
         do {
             try backend.setDisplayEnabled(false, displayID: displayID)
+            setSoftwareDisconnectRequested(true)
             return refresh()
         } catch {
+            setSoftwareDisconnectRequested(false)
             return publishFailure(error, displayID: displayID)
         }
     }
@@ -164,6 +178,7 @@ final class DisplayConnectionController: ObservableObject {
             )
 
             try backend.setDisplayEnabled(true, displayID: displayID)
+            setSoftwareDisconnectRequested(false)
             Thread.sleep(forTimeInterval: 0.25)
             return refresh()
         } catch {
@@ -171,13 +186,34 @@ final class DisplayConnectionController: ObservableObject {
         }
     }
 
+    private var softwareDisconnectRequested: Bool {
+        defaults.bool(forKey: Self.softwareDisconnectDefaultsKey)
+    }
+
+    private func setSoftwareDisconnectRequested(_ value: Bool) {
+        defaults.set(value, forKey: Self.softwareDisconnectDefaultsKey)
+    }
+
     private func resolveTargetDisplayID(from ids: [CGDirectDisplayID]) -> CGDirectDisplayID? {
-        ids.first { displayID in
+        let hardwareMatches = ids.filter { displayID in
             guard CGDisplayIsBuiltin(displayID) == 0 else { return false }
             return CGDisplayVendorNumber(displayID) == identity.vendorID &&
-                CGDisplayModelNumber(displayID) == identity.productID &&
-                CGDisplaySerialNumber(displayID) == identity.serialNumber
+                CGDisplayModelNumber(displayID) == identity.productID
         }
+
+        if let exact = hardwareMatches.first(where: {
+            CGDisplaySerialNumber($0) == identity.serialNumber
+        }) {
+            return exact
+        }
+
+        // Some disabled-display paths temporarily expose an unreadable serial.
+        // Vendor/product fallback is accepted only when it is unambiguous.
+        if hardwareMatches.count == 1 {
+            return hardwareMatches[0]
+        }
+
+        return nil
     }
 
     private func activeDisplayIDs() -> [CGDirectDisplayID] {
