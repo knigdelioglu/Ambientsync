@@ -8,20 +8,34 @@ final class DisplayConnectionPolicyTests: XCTestCase {
             DisplayConnectionPolicy.phase(
                 targetFoundInPrivateList: true,
                 isOnline: true,
-                isActive: true
+                isActive: true,
+                softwareDisconnectRequested: false
             ),
             .connected
         )
     }
 
-    func testPrivateButInactiveDisplayIsSoftwareDisconnected() {
+    func testPrivateButInactiveDisplayIsSoftwareDisconnectedWhenRequested() {
         XCTAssertEqual(
             DisplayConnectionPolicy.phase(
                 targetFoundInPrivateList: true,
                 isOnline: false,
-                isActive: false
+                isActive: false,
+                softwareDisconnectRequested: true
             ),
             .softwareDisconnected
+        )
+    }
+
+    func testPrivateButInactiveDisplayIsPhysicalWhenNotRequested() {
+        XCTAssertEqual(
+            DisplayConnectionPolicy.phase(
+                targetFoundInPrivateList: true,
+                isOnline: false,
+                isActive: false,
+                softwareDisconnectRequested: false
+            ),
+            .physicallyDisconnected
         )
     }
 
@@ -30,7 +44,8 @@ final class DisplayConnectionPolicyTests: XCTestCase {
             DisplayConnectionPolicy.phase(
                 targetFoundInPrivateList: false,
                 isOnline: false,
-                isActive: false
+                isActive: false,
+                softwareDisconnectRequested: true
             ),
             .physicallyDisconnected
         )
