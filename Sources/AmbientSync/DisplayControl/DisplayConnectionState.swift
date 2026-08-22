@@ -49,10 +49,12 @@ enum DisplayConnectionPolicy {
     static func phase(
         targetFoundInPrivateList: Bool,
         isOnline: Bool,
-        isActive: Bool
+        isActive: Bool,
+        softwareDisconnectRequested: Bool
     ) -> DisplayConnectionPhase {
         guard targetFoundInPrivateList else { return .physicallyDisconnected }
-        return (isOnline && isActive) ? .connected : .softwareDisconnected
+        if isOnline && isActive { return .connected }
+        return softwareDisconnectRequested ? .softwareDisconnected : .physicallyDisconnected
     }
 
     static func canDisable(
