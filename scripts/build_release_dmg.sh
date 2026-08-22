@@ -14,11 +14,6 @@ mkdir -p "$DMG_ROOT"
 
 INSTALL_APP=0 "$ROOT/build_app.sh"
 
-# Ad-hoc signing gives the locally built bundle a consistent code signature.
-# It is intentionally not a Developer ID signature and is not notarization.
-codesign --force --sign - "$APP_DIR"
-codesign --verify --deep --strict "$APP_DIR"
-
 ditto "$APP_DIR" "$DMG_ROOT/${APP_NAME}.app"
 ln -s /Applications "$DMG_ROOT/Applications"
 

@@ -63,7 +63,7 @@ Dağıtıma uygun DMG üretmek için:
 ./scripts/build_release_dmg.sh
 ```
 
-DMG `dist/AmbientSync-<sürüm>.dmg` olarak oluşturulur ve `hdiutil verify` ile doğrulanır. Paket ad-hoc imzalanır; Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir.
+DMG `dist/AmbientSync-<sürüm>.dmg` olarak oluşturulur ve `hdiutil verify` ile doğrulanır. Paket Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir.
 
 ## Tanılama komutları
 

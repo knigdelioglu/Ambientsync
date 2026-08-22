@@ -71,7 +71,7 @@ jobs:
 
           ### Dağıtım notu
 
-          DMG ad-hoc imzalıdır; Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir. Gatekeeper uyarısı görülebilir. Harici monitör parlaklık/ses kontrolü için `m1ddc` ayrıca gereklidir.
+          DMG Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir. Gatekeeper uyarısı görülebilir. Harici monitör parlaklık/ses kontrolü için `m1ddc` ayrıca gereklidir.
           EOF
 
       - name: Publish GitHub Release
