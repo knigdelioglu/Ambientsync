@@ -297,6 +297,10 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
 
         refreshSharedRuntimeFeatures()
 
+        if applySoftwareDisconnectedDisplayStateIfNeeded() {
+            return
+        }
+
         guard let reader else {
             updateStatus("Işık sensörü bulunamadı")
             updateBrightnessState { state in
@@ -1050,7 +1054,38 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
         keepAwakeCoordinator.keepAwakeUntilText
     }
 
+    func applySoftwareDisconnectedDisplayStateIfNeeded() -> Bool {
+        let connection = displayConnectionController.reconcileDesiredState()
+        guard connection.phase == .softwareDisconnected else { return false }
+
+        currentDisplayInfo = nil
+        currentBrightness = nil
+        currentVolume = nil
+        volumeKeyRouter?.setEnabled(false)
+        availableModes = []
+        isHiDPIActive = false
+        hiDPIStatusText = "Samsung S60UD yazılımsal olarak ayrıldı"
+        currentEDIDSummary = nil
+        hdrBrightnessDiagnosticSummary = nil
+        ddcBrightnessMaxDiagnosticSummary = nil
+        ddcRawBrightnessProbeSummary = nil
+        brightnessMappingDiagnosticSummary = nil
+        clearManualBrightnessOverride()
+        updateVolumeTitle()
+        updateBrightnessState { state in
+            state.isAutoBrightnessEnabled = false
+            state.isBrightnessWriteSuppressed = true
+            state.suppressionReason = "Harici ekran yazılımsal olarak ayrıldı"
+        }
+        updateStatusBarImage(isActive: calibrationSession == nil)
+        updateStatus(connection.message)
+        return true
+    }
+
     private func reloadDisplayInfo() async {
+        if applySoftwareDisconnectedDisplayStateIfNeeded() {
+            return
+        }
         let previousDisplayKey = currentDisplayInfo?.displayKey
         if let display = await writer.refreshDisplay(preferredKey: store.preferences.selectedDisplayKey) {
             currentDisplayInfo = display
