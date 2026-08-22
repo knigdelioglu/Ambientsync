@@ -62,12 +62,10 @@ final class DisplayConnectionController: ObservableObject {
                 softwareDisconnectRequested: softwareDisconnectRequested
             )
 
-            if phase == .connected {
-                setSoftwareDisconnectRequested(false)
-            }
-
             let message: String
             switch phase {
+            case .connected where softwareDisconnectRequested:
+                message = "Samsung S60UD sistem tarafından yeniden etkinleşti; ayrılma isteği korunuyor."
             case .connected:
                 message = "Samsung S60UD bağlı."
             case .softwareDisconnected:
@@ -91,6 +89,19 @@ final class DisplayConnectionController: ObservableObject {
         }
     }
 
+    /// Reconciles the actual WindowServer state with the user's persisted intent.
+    /// If sleep/wake or another system event restores a display that AmbientSync had
+    /// intentionally disconnected, we safely disconnect it again as long as another
+    /// active display remains available.
+    @discardableResult
+    func reconcileDesiredState() -> DisplayConnectionSnapshot {
+        let current = refresh()
+        guard softwareDisconnectRequested, current.phase == .connected else {
+            return current
+        }
+        return disconnect(preserveRequestOnFailure: true)
+    }
+
     @discardableResult
     func toggle() async -> DisplayConnectionSnapshot {
         let current = refresh()
@@ -105,7 +116,7 @@ final class DisplayConnectionController: ObservableObject {
     }
 
     @discardableResult
-    func disconnect() -> DisplayConnectionSnapshot {
+    func disconnect(preserveRequestOnFailure: Bool = false) -> DisplayConnectionSnapshot {
         guard !isBusy else { return snapshot }
         isBusy = true
         defer { isBusy = false }
@@ -144,7 +155,9 @@ final class DisplayConnectionController: ObservableObject {
             setSoftwareDisconnectRequested(true)
             return refresh()
         } catch {
-            setSoftwareDisconnectRequested(false)
+            if !preserveRequestOnFailure {
+                setSoftwareDisconnectRequested(false)
+            }
             return publishFailure(error, displayID: displayID)
         }
     }
