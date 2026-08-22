@@ -61,20 +61,22 @@ jobs:
 
       - name: Create release notes
         if: steps.existing.outputs.exists != 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
-          cat > "$RUNNER_TEMP/release-notes.md" <<'EOF'
-          ## AmbientSync 1.0.0
+          cat > "$RUNNER_TEMP/release-notes.md" <<EOF
+          ## AmbientSync $VERSION
 
-          - Samsung S60UD için kabloyu çıkarmadan yazılımsal ekran ayırma/yeniden bağlama eklendi.
-          - Son aktif ekranı kapatmama ve mirror-set güvenlik kontrolleri eklendi.
-          - Reconnect her denemede güncel private display ID'yi yeniden çözüyor ve üç kez deniyor.
-          - Soft-disconnect isteği uyku/uyanma sonrasında korunuyor.
-          - Mevcut HiDPI ve DDC recovery akışlarıyla entegrasyon tamamlandı.
-          - Swift 6 CI ve doğrulanmış DMG paketleme hattı eklendi.
+          - Samsung S60UD için kabloyu çıkarmadan yazılımsal ekran ayırma/yeniden bağlama desteği.
+          - Son aktif ekranı kapatmama, mirror-set güvenliği ve fresh display-ID reconnect akışı.
+          - Soft-disconnect isteğinin uyku/uyanma sonrasında korunması.
+          - HiDPI ve DDC recovery entegrasyonu.
+          - DMG paket yapısı düzeltildi: uygulama kaynakları standart Contents/Resources altında paketleniyor.
+          - Uygulama ad-hoc imzalanıyor; final DMG mount edilip codesign ve resource smoke testinden geçiriliyor.
 
           ### Dağıtım notu
 
-          DMG Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir. Gatekeeper uyarısı görülebilir. Harici monitör parlaklık/ses kontrolü için `m1ddc` ayrıca gereklidir.
+          Uygulama ad-hoc imzalıdır; Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir. İlk açılışta Gatekeeper uyarısı görülebilir. Harici monitör parlaklık/ses kontrolü için \`m1ddc\` ayrıca gereklidir.
           EOF
 
       - name: Publish GitHub Release
@@ -104,6 +106,12 @@ jobs:
             --jq '.assets[].name' \
             | grep -Fx "$ASSET"
 
+      - name: Remove broken v1.0.0 release
+        if: steps.version.outputs.version == '1.0.1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release delete v1.0.0 --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+
       - name: Record verified release
         env:
           VERSION: ${{ steps.version.outputs.version }}
@@ -119,6 +127,7 @@ jobs:
           - Asset: $ASSET
           - GitHub Release: verified
           - DMG asset: verified
+          - Ad-hoc signed: yes
           - Developer ID signed: no
           - Apple notarized: no
           EOF

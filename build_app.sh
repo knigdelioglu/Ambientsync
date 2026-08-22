@@ -20,18 +20,24 @@ cp "$ROOT/Info.plist" "$APP_DIR/Contents/Info.plist"
 cp "$ROOT/Resources/AppIcon.icns" "$RES_DIR/AppIcon.icns"
 chmod +x "$BIN_DIR/$APP_NAME"
 
-# Bundle.module in the SwiftPM executable resolves package resources from a
-# sibling bundle at Bundle.main.bundleURL when the executable is wrapped in .app.
-RESOURCE_BUNDLE="$(find "$BIN_PATH" -maxdepth 1 -type d -name "${APP_NAME}_*.bundle" -print -quit)"
-if [[ -z "$RESOURCE_BUNDLE" ]]; then
-    echo "Error: SwiftPM resource bundle was not produced." >&2
-    exit 1
-fi
-cp -R "$RESOURCE_BUNDLE" "$APP_DIR/"
+# A signed macOS .app must keep application resources under Contents/Resources.
+# Do not place the SwiftPM resource bundle beside Contents at the .app root;
+# codesign treats that layout as unsealed/invalid bundle content.
+REFERENCE_NAME="Samsung_4C2D_76AB_reference.plist"
+REFERENCE_SOURCE="$ROOT/Sources/AmbientSync/Resources/HiDPIOverrides/$REFERENCE_NAME"
+HIDPI_RES_DIR="$RES_DIR/HiDPIOverrides"
+mkdir -p "$HIDPI_RES_DIR"
+cp "$REFERENCE_SOURCE" "$HIDPI_RES_DIR/$REFERENCE_NAME"
 
 plutil -lint "$APP_DIR/Contents/Info.plist" >/dev/null
 [[ -x "$BIN_DIR/$APP_NAME" ]]
-[[ -d "$APP_DIR/$(basename "$RESOURCE_BUNDLE")" ]]
+[[ -f "$HIDPI_RES_DIR/$REFERENCE_NAME" ]]
+
+# Apple Silicon requires signed executable code. In the absence of a configured
+# Developer ID certificate, use an ad-hoc signature so the bundle itself is
+# structurally valid and its code/resources are sealed consistently.
+codesign --force --deep --sign - --timestamp=none "$APP_DIR"
+codesign --verify --deep --strict --verbose=2 "$APP_DIR"
 
 if [[ "$INSTALL_APP" == "1" ]]; then
     rm -rf "$INSTALL_DIR"
