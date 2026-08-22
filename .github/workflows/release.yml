@@ -123,7 +123,7 @@ jobs:
           - Apple notarized: no
           EOF
 
-          if git diff --quiet -- "$STATUS_FILE"; then
+          if [[ -z "$(git status --porcelain -- "$STATUS_FILE")" ]]; then
             echo "Release status already recorded."
             exit 0
           fi
