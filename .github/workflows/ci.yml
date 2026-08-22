@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  swift-test:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Select Xcode 16.2
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+
+      - name: Verify Swift 6
+        run: |
+          swift --version
+          swift --version | grep -q "Swift version 6"
+
+      - name: Build and test
+        run: swift test
+
+      - name: Build and verify release DMG
+        run: |
+          chmod +x build_app.sh scripts/build_release_dmg.sh
+          ./scripts/build_release_dmg.sh
+          VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' Info.plist)
+          test -f "dist/AmbientSync-${VERSION}.dmg"
