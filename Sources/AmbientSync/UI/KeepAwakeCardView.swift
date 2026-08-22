@@ -2,7 +2,12 @@ import SwiftUI
 
 struct KeepAwakeCardView: View {
     @ObservedObject var app: AppState
-    
+
+    private let columns = [
+        GridItem(.flexible(), spacing: 8),
+        GridItem(.flexible(), spacing: 8)
+    ]
+
     private var defaultDurationText: String {
         let mode = app.keepAwakeState.defaultIdleTimeoutMode
         switch mode {
@@ -14,128 +19,95 @@ struct KeepAwakeCardView: View {
         default: return "Bilinmiyor"
         }
     }
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Ekranı Açık Tut")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                    
-                    if !app.keepAwakeState.featureEnabled {
-                        Text("Ekran açık kalma özelliği kapalı")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Varsayılan: \(defaultDurationText)")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                            
-                            HStack(spacing: 4) {
-                                Text("Boşta: \(app.currentIdleTimeString)")
-                                    .font(.caption2)
-                                Text("•")
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
-                                Text(app.remainingIdleTimeString)
-                                    .font(.caption2)
-                                    .foregroundStyle(app.isAwakeAssertionActive ? .primary : .secondary)
-                            }
-                        }
-                    }
-                }
-                
-                Spacer()
-                
-                if app.isAwakeAssertionActive {
-                    Text("Aktif")
-                        .font(.caption2.weight(.semibold))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.green.opacity(0.15))
-                        .foregroundStyle(.green)
-                        .clipShape(Capsule())
-                }
-            }
-            
-            Divider()
-                .opacity(0.4)
-            
+        VStack(alignment: .leading, spacing: 11) {
             HStack(spacing: 8) {
-                Button(action: {
-                    withAnimation {
-                        app.startSessionWithDefault()
-                    }
-                }) {
-                    Text("Varsayılanı Kullan")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-                .tint(app.keepAwakeState.temporaryOverrideActive == false && app.keepAwakeState.featureEnabled ? .blue : nil)
-                .disabled(!app.keepAwakeState.featureEnabled)
-                
-                Button(action: {
-                    withAnimation {
-                        app.startSessionWithDurationMode("15")
-                    }
-                }) {
-                    Text("15 dk")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-                .tint(app.keepAwakeState.temporaryOverrideActive && app.keepAwakeState.temporaryIdleTimeoutMode == "15" ? .blue : nil)
-                .disabled(!app.keepAwakeState.featureEnabled)
-                
-                Button(action: {
-                    withAnimation {
-                        app.startSessionWithDurationMode("60")
-                    }
-                }) {
-                    Text("1 sa")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-                .tint(app.keepAwakeState.temporaryOverrideActive && app.keepAwakeState.temporaryIdleTimeoutMode == "60" ? .blue : nil)
-                .disabled(!app.keepAwakeState.featureEnabled)
-                
-                Button(action: {
-                    withAnimation {
-                        app.startSessionWithDurationMode("never")
-                    }
-                }) {
-                    Text("Asla")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-                .tint(app.keepAwakeState.temporaryOverrideActive && app.keepAwakeState.temporaryIdleTimeoutMode == "never" ? .blue : nil)
-                .disabled(!app.keepAwakeState.featureEnabled)
+                Label("Ekranı Açık Tut", systemImage: "cup.and.saucer.fill")
+                    .font(.system(size: 13, weight: .semibold))
+                Spacer()
+                QuickPanelStatusPill(
+                    text: app.isAwakeAssertionActive ? "Aktif" : "Hazır",
+                    color: app.isAwakeAssertionActive ? .green : .secondary
+                )
             }
-            .font(.caption)
-            
-            if app.keepAwakeState.temporaryOverrideActive {
-                Button(action: {
-                    withAnimation {
-                        app.startSessionWithDefault()
+
+            if !app.keepAwakeState.featureEnabled {
+                Text("Bu özellik Ayarlar’dan kapatılmış.")
+                    .font(.system(size: 10.5))
+                    .foregroundStyle(.secondary)
+            } else {
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 5) {
+                        Text("Varsayılan")
+                            .foregroundStyle(.secondary)
+                        Text(defaultDurationText)
+                            .fontWeight(.semibold)
+                        Text("•")
+                            .foregroundStyle(.tertiary)
+                        Text("Boşta \(app.currentIdleTimeString)")
+                            .foregroundStyle(.secondary)
                     }
-                }) {
-                    HStack {
-                        Image(systemName: "stop.fill")
-                        Text("Durdur")
-                    }
-                    .frame(maxWidth: .infinity)
+
+                    Text(app.remainingIdleTimeString)
+                        .foregroundStyle(app.isAwakeAssertionActive ? .primary : .secondary)
+                        .lineLimit(1)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
-                .font(.caption.weight(.semibold))
-                .transition(.scale.combined(with: .opacity))
+                .font(.system(size: 10.5))
+                .monospacedDigit()
+
+                LazyVGrid(columns: columns, spacing: 8) {
+                    durationButton(title: "Varsayılan", mode: nil)
+                    durationButton(title: "15 dakika", mode: "15")
+                    durationButton(title: "1 saat", mode: "60")
+                    durationButton(title: "Süresiz", mode: "never")
+                }
+
+                if app.keepAwakeState.temporaryOverrideActive {
+                    Button {
+                        withAnimation {
+                            app.startSessionWithDefault()
+                        }
+                    } label: {
+                        Label("Geçici ayarı durdur", systemImage: "stop.fill")
+                            .font(.system(size: 11, weight: .semibold))
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.red)
+                    .controlSize(.small)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                }
             }
         }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color(NSColor.controlBackgroundColor).opacity(0.6))
-        )
+        .quickPanelCard()
+    }
+
+    private func durationButton(title: String, mode: String?) -> some View {
+        let isSelected: Bool = {
+            guard app.keepAwakeState.featureEnabled else { return false }
+            if let mode {
+                return app.keepAwakeState.temporaryOverrideActive && app.keepAwakeState.temporaryIdleTimeoutMode == mode
+            }
+            return !app.keepAwakeState.temporaryOverrideActive
+        }()
+
+        return Button {
+            withAnimation {
+                if let mode {
+                    app.startSessionWithDurationMode(mode)
+                } else {
+                    app.startSessionWithDefault()
+                }
+            }
+        } label: {
+            Text(title)
+                .font(.system(size: 10.5, weight: isSelected ? .semibold : .medium))
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.bordered)
+        .tint(isSelected ? .blue : .secondary)
+        .controlSize(.small)
+        .disabled(!app.keepAwakeState.featureEnabled)
     }
 }
