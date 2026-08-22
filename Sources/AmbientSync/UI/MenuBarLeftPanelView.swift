@@ -9,7 +9,7 @@ struct MenuBarLeftPanelView: View {
 
     private var powerStateText: String {
         switch app.powerSourceController.currentState() {
-        case .ac: return "AC"
+        case .ac: return "Fişte"
         case .battery: return "Pil"
         case .unknown: return "—"
         }
