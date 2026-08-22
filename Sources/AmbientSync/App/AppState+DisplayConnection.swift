@@ -6,7 +6,10 @@ extension AppState {
     }
 
     func refreshDisplayConnectionState() {
-        _ = displayConnectionController.refresh()
+        let result = displayConnectionController.reconcileDesiredState()
+        if result.phase == .softwareDisconnected {
+            _ = applySoftwareDisconnectedDisplayStateIfNeeded()
+        }
     }
 
     func toggleExternalDisplayConnection() {
@@ -14,10 +17,17 @@ extension AppState {
             let result = await displayConnectionController.toggle()
             statusText = result.message
 
-            // Reuse the existing DDC/HiDPI rediscovery pipeline after either direction.
-            // On disconnect it clears stale DDC state; on reconnect it rediscovers the
-            // monitor and lets the existing HiDPI refresh/reapply flow recover normally.
-            refreshDisplay()
+            switch result.phase {
+            case .connected:
+                // Reuse the existing DDC/HiDPI rediscovery pipeline after reconnect.
+                refreshDisplay()
+                HiDPIReapplyService.shared.triggerReapplyDebounced()
+            case .softwareDisconnected:
+                // Do not run normal DDC discovery for an intentionally disabled display.
+                _ = applySoftwareDisconnectedDisplayStateIfNeeded()
+            default:
+                break
+            }
         }
     }
 }
