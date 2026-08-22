@@ -10,6 +10,8 @@ final class DisplayConnectionController: ObservableObject {
     @Published private(set) var isBusy = false
 
     private static let softwareDisconnectDefaultsKey = "AmbientSync.DisplayConnection.SoftwareDisconnected"
+    private static let reconnectAttemptCount = 3
+    private static let reconnectRetryDelayNanoseconds: UInt64 = 400_000_000
 
     private let backend: DisplayConnectionBackend
     private let identity: DisplayConnectionIdentity
@@ -90,13 +92,13 @@ final class DisplayConnectionController: ObservableObject {
     }
 
     @discardableResult
-    func toggle() -> DisplayConnectionSnapshot {
+    func toggle() async -> DisplayConnectionSnapshot {
         let current = refresh()
         switch current.phase {
         case .connected:
             return disconnect()
         case .softwareDisconnected:
-            return reconnect()
+            return await reconnect()
         default:
             return current
         }
@@ -148,42 +150,75 @@ final class DisplayConnectionController: ObservableObject {
     }
 
     @discardableResult
-    func reconnect() -> DisplayConnectionSnapshot {
+    func reconnect() async -> DisplayConnectionSnapshot {
         guard !isBusy else { return snapshot }
         isBusy = true
         defer { isBusy = false }
 
         guard backend.isAvailable else { return refresh() }
 
-        do {
-            let allIDs = try backend.allDisplayIDs()
-            guard let displayID = resolveTargetDisplayID(from: allIDs) else {
-                return publish(
-                    phase: .physicallyDisconnected,
-                    displayID: nil,
-                    isOnline: false,
-                    isActive: false,
+        var lastError: Error?
+
+        for attempt in 1...Self.reconnectAttemptCount {
+            do {
+                // Always re-enumerate here. A software-disabled display drops out of
+                // public lists and its CGDirectDisplayID must not be treated as durable.
+                let allIDs = try backend.allDisplayIDs()
+                guard let displayID = resolveTargetDisplayID(from: allIDs) else {
+                    return publish(
+                        phase: .physicallyDisconnected,
+                        displayID: nil,
+                        isOnline: false,
+                        isActive: false,
+                        canToggle: false,
+                        message: "Samsung S60UD private ekran listesinde bulunamadı."
+                    )
+                }
+
+                if CGDisplayIsOnline(displayID) != 0 && CGDisplayIsActive(displayID) != 0 {
+                    setSoftwareDisconnectRequested(false)
+                    return refresh()
+                }
+
+                _ = publish(
+                    phase: .reconnecting,
+                    displayID: displayID,
+                    isOnline: CGDisplayIsOnline(displayID) != 0,
+                    isActive: CGDisplayIsActive(displayID) != 0,
                     canToggle: false,
-                    message: "Samsung S60UD private ekran listesinde bulunamadı."
+                    message: "Samsung S60UD yeniden bağlanıyor… (\(attempt)/\(Self.reconnectAttemptCount))"
                 )
+
+                try backend.setDisplayEnabled(true, displayID: displayID)
+                try? await Task.sleep(nanoseconds: Self.reconnectRetryDelayNanoseconds)
+
+                // Re-enumerate again before verification; the transaction itself may
+                // cause WindowServer to assign/re-surface a different display id.
+                let verificationIDs = try backend.allDisplayIDs()
+                if let verifiedDisplayID = resolveTargetDisplayID(from: verificationIDs),
+                   CGDisplayIsOnline(verifiedDisplayID) != 0,
+                   CGDisplayIsActive(verifiedDisplayID) != 0 {
+                    setSoftwareDisconnectRequested(false)
+                    return refresh()
+                }
+            } catch {
+                lastError = error
             }
 
-            _ = publish(
-                phase: .reconnecting,
-                displayID: displayID,
-                isOnline: CGDisplayIsOnline(displayID) != 0,
-                isActive: CGDisplayIsActive(displayID) != 0,
-                canToggle: false,
-                message: "Samsung S60UD yeniden bağlanıyor…"
-            )
-
-            try backend.setDisplayEnabled(true, displayID: displayID)
-            setSoftwareDisconnectRequested(false)
-            Thread.sleep(forTimeInterval: 0.25)
-            return refresh()
-        } catch {
-            return publishFailure(error)
+            if attempt < Self.reconnectAttemptCount {
+                try? await Task.sleep(nanoseconds: Self.reconnectRetryDelayNanoseconds)
+            }
         }
+
+        let detail = lastError.map { " Son hata: \($0.localizedDescription)" } ?? ""
+        return publish(
+            phase: .failed,
+            displayID: nil,
+            isOnline: false,
+            isActive: false,
+            canToggle: true,
+            message: "Samsung S60UD yeniden bağlanamadı. Kabloyu çıkarıp takmak veya yeniden başlatmak gerekebilir.\(detail)"
+        )
     }
 
     private var softwareDisconnectRequested: Bool {
