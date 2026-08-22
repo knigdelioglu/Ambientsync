@@ -10,27 +10,30 @@ struct DisplayConnectionCardView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Label("Harici Ekran", systemImage: statusIcon)
-                    .font(.headline)
+        VStack(alignment: .leading, spacing: 11) {
+            HStack(spacing: 8) {
+                Label("Ekran Bağlantısı", systemImage: statusIcon)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.primary)
                 Spacer()
-                Text(statusText)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(statusColor)
-                    .padding(.horizontal, 7)
-                    .padding(.vertical, 3)
-                    .background(.ultraThinMaterial, in: Capsule())
+                QuickPanelStatusPill(text: statusText, color: statusColor)
             }
 
-            HStack(spacing: 10) {
+            HStack(spacing: 11) {
+                Image(systemName: "display")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(statusColor)
+                    .frame(width: 34, height: 34)
+                    .background(statusColor.opacity(0.10), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(controller.snapshot.name)
-                        .font(.subheadline.weight(.medium))
+                        .font(.system(size: 12.5, weight: .semibold))
+                        .lineLimit(1)
                     Text(controller.snapshot.message)
-                        .font(.caption)
+                        .font(.system(size: 10.5))
                         .foregroundStyle(.secondary)
-                        .lineLimit(2)
+                        .lineLimit(1)
                 }
 
                 Spacer(minLength: 8)
@@ -39,21 +42,20 @@ struct DisplayConnectionCardView: View {
                     if controller.isBusy {
                         ProgressView()
                             .controlSize(.small)
-                            .frame(minWidth: 54)
+                            .frame(minWidth: 64)
                     } else {
-                        Text(actionTitle)
-                            .frame(minWidth: 54)
+                        Label(actionTitle, systemImage: actionIcon)
+                            .font(.system(size: 11, weight: .semibold))
+                            .frame(minWidth: 64)
                     }
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.bordered)
+                .tint(actionTint)
+                .controlSize(.small)
                 .disabled(!controller.snapshot.canToggle || controller.isBusy)
             }
         }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color(NSColor.controlBackgroundColor).opacity(0.6))
-        )
+        .quickPanelCard()
         .onAppear {
             app.refreshDisplayConnectionState()
         }
@@ -74,10 +76,34 @@ struct DisplayConnectionCardView: View {
         }
     }
 
+    private var actionIcon: String {
+        switch controller.snapshot.phase {
+        case .connected:
+            return "rectangle.portrait.and.arrow.right"
+        case .softwareDisconnected:
+            return "arrow.clockwise"
+        case .disconnecting, .reconnecting:
+            return "arrow.triangle.2.circlepath"
+        default:
+            return "ellipsis"
+        }
+    }
+
+    private var actionTint: Color {
+        switch controller.snapshot.phase {
+        case .softwareDisconnected:
+            return .blue
+        case .connected:
+            return .secondary
+        default:
+            return statusColor
+        }
+    }
+
     private var statusText: String {
         switch controller.snapshot.phase {
         case .connected:
-            return "Açık"
+            return "Bağlı"
         case .softwareDisconnected:
             return "Ayrıldı"
         case .physicallyDisconnected:
