@@ -106,10 +106,13 @@ struct MenuBarLeftPanelView: View {
                 // C. Parlaklık Kartı
                 BrightnessCardView(app: app)
 
-                // D. Uyanık Tut Kartı
+                // D. Harici Ekran Kartı
+                DisplayConnectionCardView(app: app)
+
+                // E. Uyanık Tut Kartı
                 KeepAwakeCardView(app: app)
 
-                // E. Alt Kısa Eylemler
+                // F. Alt Kısa Eylemler
                 HStack(spacing: 8) {
                     Button(action: {
                         app.openSettings()
