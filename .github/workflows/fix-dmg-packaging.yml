@@ -1,0 +1,129 @@
+name: Repair DMG packaging
+
+on:
+  push:
+    branches:
+      - fix/dmg-codesign
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: macos-14
+    steps:
+      - name: Checkout repair branch
+        uses: actions/checkout@v5
+        with:
+          ref: fix/dmg-codesign
+
+      - name: Select Xcode 16.2
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+
+      - name: Patch app bundle layout, signing, and release validation
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text()
+              if new in text:
+                  return False
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{path}: expected one match, found {count}")
+              p.write_text(text.replace(old, new, 1))
+              return True
+
+          replace_once(
+              "Sources/AmbientSync/DisplayControl/HiDPIOverrideReferenceStore.swift",
+              '''    public static var bundledReferenceURL: URL? {\n        let bundle = Bundle.module\n        let candidates: [URL?] = [\n            bundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension, subdirectory: "HiDPIOverrides"),\n            bundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension),\n            bundle.resourceURL?.appendingPathComponent("HiDPIOverrides/\\(bundledReferenceFileName).\\(bundledReferenceFileExtension)"),\n            bundle.resourceURL?.appendingPathComponent("\\(bundledReferenceFileName).\\(bundledReferenceFileExtension)")\n        ]\n        return candidates.compactMap { $0 }.first(where: { FileManager.default.fileExists(atPath: $0.path) })\n    }''',
+              '''    public static var bundledReferenceURL: URL? {\n        // A packaged macOS app must keep resources under Contents/Resources.\n        // Check the application bundle first so release builds do not need a\n        // SwiftPM .bundle beside Contents at the .app root (invalid for signing).\n        let mainBundle = Bundle.main\n        let mainCandidates: [URL?] = [\n            mainBundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension, subdirectory: "HiDPIOverrides"),\n            mainBundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension)\n        ]\n        if let packaged = mainCandidates.compactMap({ $0 }).first(where: { FileManager.default.fileExists(atPath: $0.path) }) {\n            return packaged\n        }\n\n        // SwiftPM test/debug builds continue to use Bundle.module.\n        let packageBundle = Bundle.module\n        let packageCandidates: [URL?] = [\n            packageBundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension, subdirectory: "HiDPIOverrides"),\n            packageBundle.url(forResource: bundledReferenceFileName, withExtension: bundledReferenceFileExtension),\n            packageBundle.resourceURL?.appendingPathComponent("HiDPIOverrides/\\(bundledReferenceFileName).\\(bundledReferenceFileExtension)"),\n            packageBundle.resourceURL?.appendingPathComponent("\\(bundledReferenceFileName).\\(bundledReferenceFileExtension)")\n        ]\n        return packageCandidates.compactMap { $0 }.first(where: { FileManager.default.fileExists(atPath: $0.path) })\n    }'''
+          )
+
+          replace_once(
+              "build_app.sh",
+              '''# Bundle.module in the SwiftPM executable resolves package resources from a\n# sibling bundle at Bundle.main.bundleURL when the executable is wrapped in .app.\nRESOURCE_BUNDLE="$(find "$BIN_PATH" -maxdepth 1 -type d -name "${APP_NAME}_*.bundle" -print -quit)"\nif [[ -z "$RESOURCE_BUNDLE" ]]; then\n    echo "Error: SwiftPM resource bundle was not produced." >&2\n    exit 1\nfi\ncp -R "$RESOURCE_BUNDLE" "$APP_DIR/"\n\nplutil -lint "$APP_DIR/Contents/Info.plist" >/dev/null\n[[ -x "$BIN_DIR/$APP_NAME" ]]\n[[ -d "$APP_DIR/$(basename "$RESOURCE_BUNDLE")" ]]''',
+              '''# macOS app bundles may not contain arbitrary content beside Contents.\n# Copy the runtime reference directly into the canonical Resources directory.\nREFERENCE_NAME="Samsung_4C2D_76AB_reference.plist"\nREFERENCE_SOURCE="$ROOT/Sources/AmbientSync/Resources/HiDPIOverrides/$REFERENCE_NAME"\nHIDPI_RES_DIR="$RES_DIR/HiDPIOverrides"\nmkdir -p "$HIDPI_RES_DIR"\ncp "$REFERENCE_SOURCE" "$HIDPI_RES_DIR/$REFERENCE_NAME"\n\nplutil -lint "$APP_DIR/Contents/Info.plist" >/dev/null\n[[ -x "$BIN_DIR/$APP_NAME" ]]\n[[ -f "$HIDPI_RES_DIR/$REFERENCE_NAME" ]]\n\n# Apple Silicon requires signed executable code. Use an ad-hoc signature for\n# direct distribution when no Developer ID certificate is configured.\ncodesign --force --deep --sign - --timestamp=none "$APP_DIR"\ncodesign --verify --deep --strict --verbose=2 "$APP_DIR"'''
+          )
+
+          main = Path("Sources/AmbientSync/main.swift")
+          main_text = main.read_text()
+          smoke = '''\nif CommandLine.arguments.contains("--release-bundle-smoke") {\n    do {\n        let record = try HiDPIOverrideReferenceStore.bundledReferenceRecord()\n        guard record.vendorID == HiDPIOverrideReferenceStore.targetVendorID,\n              record.productID == HiDPIOverrideReferenceStore.targetProductID,\n              record.perfectQHDRecordsPresent else {\n            fputs("Release bundle resource validation failed\\n", stderr)\n            exit(1)\n        }\n        print("Release bundle smoke check passed")\n        exit(0)\n    } catch {\n        fputs("Release bundle smoke check failed: \\(error.localizedDescription)\\n", stderr)\n        exit(1)\n    }\n}\n'''
+          if "--release-bundle-smoke" not in main_text:
+              marker = "import SwiftUI\n"
+              if main_text.count(marker) != 1:
+                  raise SystemExit("main.swift import marker mismatch")
+              main.write_text(main_text.replace(marker, marker + smoke, 1))
+
+          release_script = Path("scripts/build_release_dmg.sh")
+          release_text = release_script.read_text()
+          old_tail = '''hdiutil verify "$DMG_PATH"\n\necho "Built DMG: $DMG_PATH"'''
+          new_tail = '''hdiutil verify "$DMG_PATH"\n\n# Validate the exact application stored inside the final DMG, not only the\n# pre-image source tree. This catches invalid bundle layout/signature issues.\nMOUNT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/ambientsync-dmg.XXXXXX")"\ncleanup_mount() {\n    hdiutil detach "$MOUNT_DIR" >/dev/null 2>&1 || true\n    rmdir "$MOUNT_DIR" >/dev/null 2>&1 || true\n}\ntrap cleanup_mount EXIT\nhdiutil attach -nobrowse -readonly -mountpoint "$MOUNT_DIR" "$DMG_PATH" >/dev/null\ncodesign --verify --deep --strict --verbose=2 "$MOUNT_DIR/${APP_NAME}.app"\n"$MOUNT_DIR/${APP_NAME}.app/Contents/MacOS/${APP_NAME}" --release-bundle-smoke\nhdiutil detach "$MOUNT_DIR" >/dev/null\nrmdir "$MOUNT_DIR"\ntrap - EXIT\n\necho "Built and verified DMG: $DMG_PATH"'''
+          if new_tail not in release_text:
+              if release_text.count(old_tail) != 1:
+                  raise SystemExit("release script tail mismatch")
+              release_script.write_text(release_text.replace(old_tail, new_tail, 1))
+
+          info = Path("Info.plist")
+          info_text = info.read_text()
+          info_text = info_text.replace("<string>1.0.0</string>", "<string>1.0.1</string>", 1)
+          info_text = info_text.replace("<key>CFBundleVersion</key>\n\t<string>1</string>", "<key>CFBundleVersion</key>\n\t<string>2</string>", 1)
+          info.write_text(info_text)
+
+          release = Path(".github/workflows/release.yml")
+          release_text = release.read_text()
+          release_text = release_text.replace("cat > \"$RUNNER_TEMP/release-notes.md\" <<'EOF'", "cat > \"$RUNNER_TEMP/release-notes.md\" <<EOF", 1)
+          release_text = release_text.replace("## AmbientSync 1.0.0", "## AmbientSync $VERSION", 1)
+          if "DMG paket yapısı düzeltildi" not in release_text:
+              release_text = release_text.replace(
+                  "          - Swift 6 CI ve doğrulanmış DMG paketleme hattı eklendi.\n",
+                  "          - Swift 6 CI ve doğrulanmış DMG paketleme hattı eklendi.\n          - DMG paket yapısı düzeltildi; uygulama ad-hoc imzalanıyor ve mount edilmiş DMG içinden code-sign/resource smoke testi yapılıyor.\n",
+                  1
+              )
+          release_text = release_text.replace(
+              "          DMG Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir.",
+              "          Uygulama ad-hoc imzalıdır; Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir.",
+              1
+          )
+          cleanup_step = '''\n      - name: Remove broken v1.0.0 release\n        if: steps.version.outputs.version == '1.0.1'\n        env:\n          GH_TOKEN: ${{ github.token }}\n        run: gh release delete v1.0.0 --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true\n'''
+          anchor = "\n      - name: Record verified release\n"
+          if "Remove broken v1.0.0 release" not in release_text:
+              if release_text.count(anchor) != 1:
+                  raise SystemExit("release workflow status anchor mismatch")
+              release_text = release_text.replace(anchor, cleanup_step + anchor, 1)
+          release.write_text(release_text)
+
+          readme = Path("README.md")
+          readme_text = readme.read_text()
+          readme_text = readme_text.replace(
+              "DMG `dist/AmbientSync-<sürüm>.dmg` olarak oluşturulur ve `hdiutil verify` ile doğrulanır. Paket Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir.",
+              "DMG `dist/AmbientSync-<sürüm>.dmg` olarak oluşturulur, uygulama ad-hoc imzalanır; `codesign --verify`, mount edilmiş paket smoke testi ve `hdiutil verify` ile doğrulanır. Paket Developer ID ile imzalanmış veya Apple tarafından notarize edilmiş değildir."
+          )
+          readme_text = readme_text.replace(
+              "GitHub Releases üzerindeki DMG Developer ID ile imzalanmış veya notarize edilmiş değildir.",
+              "GitHub Releases içindeki uygulama ad-hoc imzalıdır; Developer ID ile imzalanmış veya notarize edilmiş değildir."
+          )
+          readme.write_text(readme_text)
+          PY
+
+      - name: Test
+        run: swift test
+
+      - name: Build and validate DMG
+        run: |
+          chmod +x build_app.sh scripts/build_release_dmg.sh
+          ./scripts/build_release_dmg.sh
+
+      - name: Commit repaired packaging
+        run: |
+          if git diff --quiet; then
+            echo "Packaging repair already applied."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Info.plist README.md build_app.sh scripts/build_release_dmg.sh Sources/AmbientSync/main.swift Sources/AmbientSync/DisplayControl/HiDPIOverrideReferenceStore.swift .github/workflows/release.yml
+          git commit -m "Fix damaged DMG packaging and ad-hoc signing"
+          git push origin HEAD:fix/dmg-codesign
