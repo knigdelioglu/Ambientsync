@@ -7,6 +7,23 @@ import IOKit.pwr_mgt
 import Darwin
 import SwiftUI
 
+if CommandLine.arguments.contains("--release-bundle-smoke") {
+    do {
+        let record = try HiDPIOverrideReferenceStore.bundledReferenceRecord()
+        guard record.vendorID == HiDPIOverrideReferenceStore.targetVendorID,
+              record.productID == HiDPIOverrideReferenceStore.targetProductID,
+              record.perfectQHDRecordsPresent else {
+            fputs("Release bundle resource validation failed\n", stderr)
+            exit(1)
+        }
+        print("Release bundle smoke check passed")
+        exit(0)
+    } catch {
+        fputs("Release bundle smoke check failed: \(error.localizedDescription)\n", stderr)
+        exit(1)
+    }
+}
+
 if CommandLine.arguments.contains("--diagnostic") {
     HiDPIDiagnostic.run()
     exit(0)
