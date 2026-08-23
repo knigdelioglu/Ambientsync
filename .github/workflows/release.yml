@@ -67,12 +67,13 @@ jobs:
           cat > "$RUNNER_TEMP/release-notes.md" <<EOF
           ## AmbientSync $VERSION
 
-          - Quick Actions paneli baştan sona UX polish aldı; panel genişliği ve dikey ritim iyileştirildi.
-          - Üst durum alanı tek bir kompakt şeride dönüştürüldü; güç durumu “Fişte / Pil” olarak sadeleştirildi.
-          - Monitör sesi, dahili/harici parlaklık ve değer rozetleri ortak görsel sistem altında toplandı.
-          - Parlaklık kartında dahili ve harici ekran kontrolleri ayrıştırıldı; Ortam / Hedef / DDC metrikleri kompakt kutulara taşındı.
-          - Harici ekran bağlantı kartı sadeleştirildi; Ayır/Bağla eyleminin görsel ağırlığı azaltıldı.
-          - Ekranı Açık Tut seçenekleri tek satırlık kompakt süre kontrolüne dönüştürüldü.
+          - Tray, MemWatch çizgisinde 430×640 iki sütunlu metrik dashboard olarak yeniden tasarlandı.
+          - Ortam ışığı, harici ekran parlaklığı ve monitör sesi için canlı mini grafikler eklendi.
+          - Parlaklık, ses, ekran bağlantısı ve HiDPI kontrolleri odaklı detay ekranlarına ayrıldı.
+          - Ekranı Açık Tut için dashboard üzerinde hızlı süre seçenekleri ve durum halkası eklendi.
+          - Kullanıcı artık 1–10.080 dakika arasında manuel süre girerek ekranı açık tutma oturumu başlatabiliyor.
+          - Manuel süre mevcut custom keep-awake yaşam döngüsüne bağlandı; süre doğrulama ve otomatik özellik etkinleştirme eklendi.
+          - Custom geçici süre state'i için birim test kapsamı eklendi.
           - Mevcut soft-disconnect, HiDPI, DDC recovery ve güvenlik davranışları korunuyor.
           - Final DMG mount edilip codesign ve resource smoke testinden geçiriliyor.
 
