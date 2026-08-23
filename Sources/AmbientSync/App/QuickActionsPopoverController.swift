@@ -20,10 +20,10 @@ final class QuickActionsPopoverController: NSObject {
         popover.behavior = .transient
         popover.animates = true
         let visibleHeight = NSScreen.main?.visibleFrame.height ?? 720
-        // Size the popover to its final resting position up front so we do not
-        // need to nudge the window after it appears.
+        // Match the MemWatch-style dashboard width and size the popover to its
+        // final resting position up front so it does not jump after appearing.
         popover.contentSize = NSSize(
-            width: 296,
+            width: 430,
             height: min(640, max(500, visibleHeight - 48 - menuBarClearance))
         )
         popover.contentViewController = NSHostingController(rootView: MenuBarLeftPanelView(app: app))
@@ -37,18 +37,18 @@ final class QuickActionsPopoverController: NSObject {
             removeMonitors()
             return
         }
-        
+
         NSApp.activate(ignoringOtherApps: true)
         // NSStatusBarButton is standard coordinate system, minY is bottom edge.
         popover.show(relativeTo: view.bounds, of: view, preferredEdge: .minY)
-        
-        // Add monitors to close the popover when clicking outside
+
+        // Add monitors to close the popover when clicking outside.
         setupMonitors()
     }
-    
+
     private func setupMonitors() {
         removeMonitors()
-        
+
         localEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
             if let strongSelf = self, strongSelf.popover.isShown {
                 if event.window != strongSelf.popover.contentViewController?.view.window {
@@ -58,15 +58,15 @@ final class QuickActionsPopoverController: NSObject {
             }
             return event
         }
-        
-        globalEventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+
+        globalEventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
             if let strongSelf = self, strongSelf.popover.isShown {
                 strongSelf.popover.performClose(nil)
                 strongSelf.removeMonitors()
             }
         }
     }
-    
+
     private func removeMonitors() {
         if let local = localEventMonitor {
             NSEvent.removeMonitor(local)
