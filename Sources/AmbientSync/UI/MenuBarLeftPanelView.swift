@@ -5,12 +5,20 @@ struct MenuBarLeftPanelView: View {
     @ObservedObject private var displayController: DisplayConnectionController
 
     @State private var route: PanelRoute = .dashboard
+
+    @State private var brightnessDraft: Double = 0
+    @State private var isAdjustingBrightness = false
+    @State private var brightnessTask: Task<Void, Never>? = nil
+
     @State private var volumeDraft: Double = 0
     @State private var isAdjustingVolume = false
     @State private var volumeTask: Task<Void, Never>? = nil
+
     @State private var luxHistory: [Double] = []
     @State private var brightnessHistory: [Double] = []
     @State private var volumeHistory: [Double] = []
+
+    private let dashboardCardHeight: CGFloat = 158
 
     private enum PanelRoute: Equatable {
         case dashboard
@@ -61,7 +69,9 @@ struct MenuBarLeftPanelView: View {
         .animation(.easeInOut(duration: 0.16), value: route)
         .onAppear {
             route = .dashboard
+            brightnessDraft = Double(app.monitorBrightnessControlValue)
             volumeDraft = Double(app.monitorVolumeControlValue)
+            isAdjustingBrightness = false
             isAdjustingVolume = false
             app.refreshDisplayConnectionState()
             seedHistoryIfNeeded()
@@ -73,6 +83,9 @@ struct MenuBarLeftPanelView: View {
         }
         .onChange(of: app.monitorBrightnessControlValue) { newValue in
             appendHistory(&brightnessHistory, value: Double(newValue))
+            if !isAdjustingBrightness {
+                brightnessDraft = Double(newValue)
+            }
         }
         .onChange(of: app.currentVolume) { newValue in
             if let newValue {
@@ -89,6 +102,8 @@ struct MenuBarLeftPanelView: View {
         }
     }
 
+    // MARK: - Dashboard
+
     private var dashboardView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
@@ -101,40 +116,10 @@ struct MenuBarLeftPanelView: View {
                     ],
                     spacing: 12
                 ) {
-                    metricModuleCard(
-                        route: .brightness,
-                        title: "Ortam Işığı",
-                        symbol: "sun.max.fill",
-                        value: app.currentLux.map { String(format: "%.0f lx", $0) } ?? "—",
-                        detail: "Sensörden canlı ölçüm",
-                        accent: .orange,
-                        history: luxHistory,
-                        fixedRange: nil
-                    )
-
-                    metricModuleCard(
-                        route: .brightness,
-                        title: "Parlaklık",
-                        symbol: "display.2",
-                        value: "\(app.monitorBrightnessControlValue)%",
-                        detail: brightnessModuleDetail,
-                        accent: .blue,
-                        history: brightnessHistory,
-                        fixedRange: 0...100
-                    )
-
-                    metricModuleCard(
-                        route: .audio,
-                        title: "Monitör Sesi",
-                        symbol: "speaker.wave.2.fill",
-                        value: displayedVolume,
-                        detail: "DDC ses kontrolü",
-                        accent: .purple,
-                        history: volumeHistory,
-                        fixedRange: 0...100
-                    )
-
-                    displayModuleCard
+                    ambientLightDashboardCard
+                    brightnessDashboardCard
+                    audioDashboardCard
+                    displayDashboardCard
                 }
 
                 keepAwakeDashboardCard
@@ -157,7 +142,7 @@ struct MenuBarLeftPanelView: View {
 
                 Spacer()
 
-                Text("\(app.monitorBrightnessControlValue)%")
+                Text(displayedBrightness)
                     .font(.caption.monospacedDigit().weight(.semibold))
                     .foregroundStyle(.secondary)
             }
@@ -181,122 +166,207 @@ struct MenuBarLeftPanelView: View {
         }
     }
 
-    private func metricModuleCard(
-        route destination: PanelRoute,
-        title: String,
-        symbol: String,
-        value: String,
-        detail: String,
-        accent: Color,
-        history: [Double],
-        fixedRange: ClosedRange<Double>?
-    ) -> some View {
-        Button {
-            route = destination
-        } label: {
-            VStack(alignment: .leading, spacing: 9) {
-                HStack {
-                    Image(systemName: symbol)
-                        .font(.title3)
-                        .foregroundStyle(accent)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.tertiary)
-                }
+    private var ambientLightDashboardCard: some View {
+        dashboardCard(accent: .orange) {
+            cardHeader(symbol: "sun.max.fill", accent: .orange, destination: .brightness)
 
-                Text(title)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.primary)
+            Text("Ortam Işığı")
+                .font(.subheadline.weight(.semibold))
 
-                Text(value)
-                    .font(.headline.monospacedDigit())
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+            Text(app.currentLux.map { String(format: "%.0f lx", $0) } ?? "—")
+                .font(.headline.monospacedDigit())
+                .lineLimit(1)
 
-                QuickPanelSparkline(values: history, tint: accent, fixedRange: fixedRange)
-                    .frame(height: 34)
+            QuickPanelSparkline(values: luxHistory, tint: .orange)
+                .frame(height: 30)
 
-                Text(detail)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-            }
-            .padding(14)
-            .frame(maxWidth: .infinity, minHeight: 154, alignment: .topLeading)
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(accent.opacity(0.28), lineWidth: 1)
-            }
-            .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            Text("Sensörden canlı ölçüm")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
         }
-        .buttonStyle(.plain)
     }
 
-    private var displayModuleCard: some View {
-        Button {
-            route = .display
-        } label: {
-            VStack(alignment: .leading, spacing: 9) {
-                HStack {
-                    Image(systemName: displayStatusIcon)
-                        .font(.title3)
-                        .foregroundStyle(displayStatusColor)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.tertiary)
-                }
+    private var brightnessDashboardCard: some View {
+        dashboardCard(accent: .blue) {
+            cardHeader(symbol: "display.2", accent: .blue, destination: .brightness)
 
-                Text("Ekran")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.primary)
+            Text("Parlaklık")
+                .font(.subheadline.weight(.semibold))
 
-                Text(displayStatusText)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
+            Text(displayedBrightness)
+                .font(.headline.monospacedDigit())
+                .lineLimit(1)
 
-                HStack(spacing: 10) {
-                    QuickPanelRingGauge(
-                        value: Double(app.monitorBrightnessControlValue) / 100.0,
-                        tint: .blue,
-                        valueText: "\(app.monitorBrightnessControlValue)%",
-                        label: "Parlaklık"
-                    )
-                    .frame(width: 62, height: 62)
+            HStack(spacing: 7) {
+                Image(systemName: "sun.min.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
 
-                    VStack(alignment: .leading, spacing: 4) {
-                        Label(
-                            app.isHiDPIActive ? "HiDPI açık" : "HiDPI kapalı",
-                            systemImage: app.isHiDPIActive ? "checkmark.circle.fill" : "circle"
-                        )
-                        .foregroundStyle(app.isHiDPIActive ? .purple : .secondary)
+                Slider(
+                    value: Binding(
+                        get: { brightnessDraft },
+                        set: { newValue in
+                            let intValue = Int(newValue.rounded())
+                            let changed = intValue != Int(brightnessDraft.rounded())
+                            brightnessDraft = newValue
 
-                        Text(displayController.snapshot.name)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
+                            if changed {
+                                brightnessTask?.cancel()
+                                brightnessTask = Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 120_000_000)
+                                    guard !Task.isCancelled else { return }
+                                    app.setMonitorBrightness(intValue)
+                                }
+                            }
+                        }
+                    ),
+                    in: 0...100,
+                    step: 1,
+                    onEditingChanged: { isEditing in
+                        isAdjustingBrightness = isEditing
+                        if isEditing {
+                            app.pauseAutoBrightnessTemporarily()
+                        }
                     }
-                    .font(.caption2)
-                }
+                )
+                .tint(.blue)
+                .controlSize(.small)
 
-                Text(displayController.snapshot.message)
+                Image(systemName: "sun.max.fill")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                    .foregroundStyle(.tertiary)
             }
-            .padding(14)
-            .frame(maxWidth: .infinity, minHeight: 154, alignment: .topLeading)
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(displayStatusColor.opacity(0.28), lineWidth: 1)
-            }
-            .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .frame(height: 30)
+
+            Text(brightnessModuleDetail)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
         }
-        .buttonStyle(.plain)
+    }
+
+    private var audioDashboardCard: some View {
+        dashboardCard(accent: .purple) {
+            cardHeader(symbol: "speaker.wave.2.fill", accent: .purple, destination: .audio)
+
+            Text("Monitör Sesi")
+                .font(.subheadline.weight(.semibold))
+
+            Text(displayedVolume)
+                .font(.headline.monospacedDigit())
+                .lineLimit(1)
+
+            HStack(spacing: 7) {
+                Image(systemName: "speaker.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+
+                Slider(
+                    value: Binding(
+                        get: { volumeDraft },
+                        set: { newValue in
+                            let intValue = Int(newValue.rounded())
+                            let changed = intValue != Int(volumeDraft.rounded())
+                            volumeDraft = newValue
+
+                            if changed {
+                                volumeTask?.cancel()
+                                volumeTask = Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 120_000_000)
+                                    guard !Task.isCancelled else { return }
+                                    app.setMonitorVolumeForSettings(intValue)
+                                }
+                            }
+                        }
+                    ),
+                    in: 0...100,
+                    step: 1,
+                    onEditingChanged: { isAdjustingVolume = $0 }
+                )
+                .tint(.purple)
+                .controlSize(.small)
+
+                Image(systemName: "speaker.wave.3.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+            .frame(height: 30)
+
+            Text("DDC ses kontrolü")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
+    }
+
+    private var displayDashboardCard: some View {
+        dashboardCard(accent: displayStatusColor) {
+            cardHeader(symbol: displayStatusIcon, accent: displayStatusColor, destination: .display)
+
+            Text("Ekran")
+                .font(.subheadline.weight(.semibold))
+
+            Text(displayStatusText)
+                .font(.headline)
+                .lineLimit(1)
+
+            HStack(spacing: 8) {
+                ProgressView(value: Double(app.monitorBrightnessControlValue), total: 100)
+                    .progressViewStyle(.linear)
+                    .tint(.blue)
+
+                Text("\(app.monitorBrightnessControlValue)%")
+                    .font(.caption2.monospacedDigit().weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+            .frame(height: 30)
+
+            Text(displayCardDetail)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
+    }
+
+    @ViewBuilder
+    private func dashboardCard<Content: View>(
+        accent: Color,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            content()
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, minHeight: dashboardCardHeight, maxHeight: dashboardCardHeight, alignment: .topLeading)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(accent.opacity(0.28), lineWidth: 1)
+        }
+    }
+
+    private func cardHeader(symbol: String, accent: Color, destination: PanelRoute) -> some View {
+        HStack {
+            Image(systemName: symbol)
+                .font(.title3)
+                .foregroundStyle(accent)
+
+            Spacer()
+
+            Button {
+                route = destination
+            } label: {
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+                    .frame(width: 24, height: 24)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .help("Ayrıntıları aç")
+        }
+        .frame(height: 24)
     }
 
     private var keepAwakeDashboardCard: some View {
@@ -326,26 +396,87 @@ struct MenuBarLeftPanelView: View {
                 } label: {
                     Image(systemName: "chevron.right")
                         .font(.caption.weight(.semibold))
-                        .frame(width: 26, height: 26)
-                        .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 7, style: .continuous))
+                        .frame(width: 28, height: 28)
+                        .background(Color.primary.opacity(0.055), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
                 .buttonStyle(.plain)
                 .help("Süre ve ayrıntılar")
             }
 
-            HStack(spacing: 7) {
-                quickAwakeButton(title: "15 dk", mode: "15")
-                quickAwakeButton(title: "30 dk", mode: "30")
-                quickAwakeButton(title: "1 saat", mode: "60")
-                quickAwakeButton(title: "Süresiz", mode: "never")
-                Button("Özel…") {
-                    route = .keepAwake
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
+            HStack(spacing: 6) {
+                awakePresetButton(title: "15 dk", mode: "15")
+                awakePresetButton(title: "30 dk", mode: "30")
+                awakePresetButton(title: "1 saat", mode: "60")
+                awakePresetButton(title: "Süresiz", mode: "never")
+                customAwakeButton
+            }
+            .padding(4)
+            .background(Color.primary.opacity(0.032), in: RoundedRectangle(cornerRadius: 11, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 11, style: .continuous)
+                    .stroke(Color.primary.opacity(0.04), lineWidth: 1)
             }
         }
         .quickPanelCard()
+    }
+
+    private func awakePresetButton(title: String, mode: String) -> some View {
+        let isSelected = app.keepAwakeState.temporaryOverrideActive
+            && app.keepAwakeState.temporaryIdleTimeoutMode == mode
+
+        return Button {
+            if !app.keepAwakeState.featureEnabled {
+                app.setKeepAwakeFeatureEnabled(true)
+            }
+            app.startSessionWithDurationMode(mode)
+        } label: {
+            Text(title)
+                .font(.caption2.weight(isSelected ? .semibold : .medium))
+                .foregroundStyle(isSelected ? keepAwakeColor : Color.primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .frame(maxWidth: .infinity, minHeight: 28)
+                .background(
+                    isSelected ? keepAwakeColor.opacity(0.14) : Color.primary.opacity(0.035),
+                    in: RoundedRectangle(cornerRadius: 8, style: .continuous)
+                )
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(
+                            isSelected ? keepAwakeColor.opacity(0.30) : Color.primary.opacity(0.035),
+                            lineWidth: 1
+                        )
+                }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var customAwakeButton: some View {
+        let isSelected = app.keepAwakeState.temporaryOverrideActive
+            && app.keepAwakeState.temporaryIdleTimeoutMode == "custom"
+
+        return Button {
+            route = .keepAwake
+        } label: {
+            Text("Özel")
+                .font(.caption2.weight(isSelected ? .semibold : .medium))
+                .foregroundStyle(isSelected ? keepAwakeColor : Color.primary)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, minHeight: 28)
+                .background(
+                    isSelected ? keepAwakeColor.opacity(0.14) : Color.primary.opacity(0.035),
+                    in: RoundedRectangle(cornerRadius: 8, style: .continuous)
+                )
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(
+                            isSelected ? keepAwakeColor.opacity(0.30) : Color.primary.opacity(0.035),
+                            lineWidth: 1
+                        )
+                }
+        }
+        .buttonStyle(.plain)
+        .help("Özel süre gir")
     }
 
     private var dashboardFooter: some View {
@@ -365,6 +496,8 @@ struct MenuBarLeftPanelView: View {
         }
         .controlSize(.small)
     }
+
+    // MARK: - Detail routes
 
     private func detailContainer<Content: View>(
         title: String,
@@ -505,7 +638,7 @@ struct MenuBarLeftPanelView: View {
                             if changed {
                                 volumeTask?.cancel()
                                 volumeTask = Task { @MainActor in
-                                    try? await Task.sleep(nanoseconds: 150_000_000)
+                                    try? await Task.sleep(nanoseconds: 120_000_000)
                                     guard !Task.isCancelled else { return }
                                     app.setMonitorVolumeForSettings(intValue)
                                 }
@@ -544,15 +677,13 @@ struct MenuBarLeftPanelView: View {
         .scrollIndicators(.hidden)
     }
 
-    private func quickAwakeButton(title: String, mode: String) -> some View {
-        Button(title) {
-            if !app.keepAwakeState.featureEnabled {
-                app.setKeepAwakeFeatureEnabled(true)
-            }
-            app.startSessionWithDurationMode(mode)
+    // MARK: - Derived UI state
+
+    private var displayedBrightness: String {
+        if isAdjustingBrightness {
+            return "\(Int(brightnessDraft.rounded()))%"
         }
-        .buttonStyle(.bordered)
-        .controlSize(.small)
+        return "\(app.monitorBrightnessControlValue)%"
     }
 
     private var displayedVolume: String {
@@ -636,6 +767,15 @@ struct MenuBarLeftPanelView: View {
         }
     }
 
+    private var displayCardDetail: String {
+        let hidpi = app.isHiDPIActive ? "HiDPI açık" : "HiDPI kapalı"
+        let name = displayController.snapshot.name
+        if name.isEmpty {
+            return hidpi
+        }
+        return "\(name) · \(hidpi)"
+    }
+
     private var keepAwakeStatusText: String {
         if !app.keepAwakeState.featureEnabled { return "Kapalı" }
         return app.isAwakeAssertionActive ? "Aktif" : "Hazır"
@@ -648,7 +788,7 @@ struct MenuBarLeftPanelView: View {
 
     private var keepAwakeSummaryText: String {
         if !app.keepAwakeState.featureEnabled {
-            return "İstersen süre seçerek doğrudan başlatabilirsin"
+            return "Süre seçerek doğrudan başlatabilirsin"
         }
         if app.keepAwakeState.temporaryOverrideActive {
             return app.remainingIdleTimeString
@@ -666,6 +806,8 @@ struct MenuBarLeftPanelView: View {
         default: return "—"
         }
     }
+
+    // MARK: - History
 
     private func seedHistoryIfNeeded() {
         if luxHistory.isEmpty, let lux = app.currentLux {
