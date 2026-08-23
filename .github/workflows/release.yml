@@ -67,14 +67,14 @@ jobs:
           cat > "$RUNNER_TEMP/release-notes.md" <<EOF
           ## AmbientSync $VERSION
 
-          - Tray, MemWatch çizgisinde 430×640 iki sütunlu metrik dashboard olarak yeniden tasarlandı.
-          - Ortam ışığı, harici ekran parlaklığı ve monitör sesi için canlı mini grafikler eklendi.
-          - Parlaklık, ses, ekran bağlantısı ve HiDPI kontrolleri odaklı detay ekranlarına ayrıldı.
-          - Ekranı Açık Tut için dashboard üzerinde hızlı süre seçenekleri ve durum halkası eklendi.
-          - Kullanıcı artık 1–10.080 dakika arasında manuel süre girerek ekranı açık tutma oturumu başlatabiliyor.
-          - Manuel süre mevcut custom keep-awake yaşam döngüsüne bağlandı; süre doğrulama ve otomatik özellik etkinleştirme eklendi.
-          - Custom geçici süre state'i için birim test kapsamı eklendi.
-          - Mevcut soft-disconnect, HiDPI, DDC recovery ve güvenlik davranışları korunuyor.
+          - Dashboard içindeki Parlaklık kartına doğrudan DDC parlaklık slider'ı eklendi.
+          - Dashboard içindeki Monitör Sesi kartına doğrudan DDC ses slider'ı eklendi.
+          - Dört ana dashboard kartı aynı sabit yükseklik ve aynı iç yerleşim şablonuna geçirildi.
+          - Kartlardaki ikon, başlık, değer, kontrol/grafik alanı ve alt açıklamalar ortak dikey ritme hizalandı.
+          - Ekran kartı diğer kartlarla aynı yoğunluğa getirildi; parlaklık seviyesi kompakt progress görünümünde gösteriliyor.
+          - Ekranı Açık Tut süre seçenekleri bordered sistem butonları yerine dashboard kartlarıyla uyumlu yuvarlatılmış segment görünümüne geçirildi.
+          - Aktif geçici süre seçimi ve özel süre durumu görsel olarak vurgulanıyor.
+          - Detay ekranları, manuel özel süre girişi, soft-disconnect, HiDPI ve mevcut DDC davranışları korunuyor.
           - Final DMG mount edilip codesign ve resource smoke testinden geçiriliyor.
 
           ### Dağıtım notu
