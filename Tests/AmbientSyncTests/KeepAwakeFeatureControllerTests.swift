@@ -26,6 +26,30 @@ final class KeepAwakeFeatureControllerTests: XCTestCase {
         XCTAssertNil(state.temporaryIdleTimeoutMinutes)
     }
 
+    func testStartCustomMinutesActivatesCustomTemporaryOverride() {
+        let controller = KeepAwakeFeatureController()
+        var state = KeepAwakeState(
+            featureEnabled: true,
+            defaultIdleTimeoutMode: "15",
+            defaultIdleTimeoutMinutes: 15,
+            temporaryIdleTimeoutMode: nil,
+            temporaryIdleTimeoutMinutes: nil,
+            temporaryOverrideActive: false,
+            onlyWhilePluggedIn: false,
+            keepDisplayAwake: true,
+            idleSleepAssertionID: 0,
+            displaySleepAssertionID: 0,
+            lastWakeTriggerAt: nil,
+            lastStopReason: "none"
+        )
+
+        controller.startCustomMinutes(95, state: &state)
+
+        XCTAssertTrue(state.temporaryOverrideActive)
+        XCTAssertEqual(state.temporaryIdleTimeoutMode, "custom")
+        XCTAssertEqual(state.temporaryIdleTimeoutMinutes, 95)
+    }
+
     func testStartDefaultSessionClearsTemporaryOverride() {
         let controller = KeepAwakeFeatureController()
         var state = KeepAwakeState(
