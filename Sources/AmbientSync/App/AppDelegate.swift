@@ -373,8 +373,6 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
             state.lastAutoWriteAttempted = false
         }
 
-        let autoManualStateText = isManualOverrideActive ? "Manual override active" : "Auto brightness active"
-
         if isManualOverrideActive {
             recordAutoSuppression(
                 reason: .manualOverrideActive,
@@ -386,22 +384,6 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
                 state.suppressionReason = "Manual override active"
             }
             updateStatus("Parlaklık %\(currentBrightness ?? lastSentBrightness ?? 50) (manuel)")
-            writeDiagnosticReport(
-                lux: smoothedLux,
-                target: autoTargetBrightnessPercent,
-                smoothed: smoothedRequestedPercent,
-                actualBefore: actualBefore,
-                writeAttempted: false,
-                writePercent: nil,
-                writeRaw: nil,
-                readbackRaw: nil,
-                readbackCurrent: nil,
-                readbackMax: nil,
-                actualAfter: actualBefore,
-                suppressionReason: "Manual override active",
-                autoManualState: autoManualStateText,
-                diagnosis: "Auto brightness is paused due to manual user interaction."
-            )
             return
         }
 
@@ -467,22 +449,6 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
             if reason == .monitorLimiterCooldown {
                 updateStatus("Monitör parlaklık komutunu sınırlıyor; otomatik yazma bekletiliyor")
             }
-            writeDiagnosticReport(
-                lux: smoothedLux,
-                target: target,
-                smoothed: smoothedCandidate,
-                actualBefore: currentActual,
-                writeAttempted: false,
-                writePercent: nil,
-                writeRaw: nil,
-                readbackRaw: nil,
-                readbackCurrent: nil,
-                readbackMax: nil,
-                actualAfter: currentActual,
-                suppressionReason: reportSuppressionReason,
-                autoManualState: autoManualStateText,
-                diagnosis: diagnosis
-            )
             return
         case .proceed(let candidate, let statusText):
             writeCandidate = candidate
@@ -510,19 +476,13 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
                 result: result,
                 candidate: writeCandidate,
                 currentActual: currentActual,
-                smoothedLux: smoothedLux,
-                target: target,
-                displayKey: display.displayKey,
-                autoManualStateText: autoManualStateText
+                displayKey: display.displayKey
             )
         } else {
             handleAutoBrightnessWriteFailure(
                 result: result,
                 candidate: writeCandidate,
-                currentActual: currentActual,
-                smoothedLux: smoothedLux,
-                target: target,
-                autoManualStateText: autoManualStateText
+                currentActual: currentActual
             )
         }
     }
@@ -531,10 +491,7 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
         result: M1DDCBrightnessWriteResult,
         candidate: Int,
         currentActual: Int,
-        smoothedLux: Double,
-        target: Int,
-        displayKey: String,
-        autoManualStateText: String
+        displayKey: String
     ) {
         let outcome = brightnessAutoWriteOutcomePlanner.plan(result: result, candidate: candidate)
         lastWriteDate = Date()
@@ -567,32 +524,12 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
             brightnessLimiterCooldownUntil = .distantPast
         }
         updateStatus(outcome.statusText)
-
-        writeDiagnosticReport(
-            lux: smoothedLux,
-            target: target,
-            smoothed: candidate,
-            actualBefore: currentActual,
-            writeAttempted: true,
-            writePercent: candidate,
-            writeRaw: result.computedRawTarget,
-            readbackRaw: result.rawAfter,
-            readbackCurrent: outcome.actualAfter,
-            readbackMax: result.rawMax,
-            actualAfter: outcome.actualAfter,
-            suppressionReason: nil,
-            autoManualState: autoManualStateText,
-            diagnosis: outcome.writeDiagnosis
-        )
     }
 
     private func handleAutoBrightnessWriteFailure(
         result: M1DDCBrightnessWriteResult,
         candidate: Int,
-        currentActual: Int,
-        smoothedLux: Double,
-        target: Int,
-        autoManualStateText: String
+        currentActual: Int
     ) {
         let outcome = brightnessAutoWriteOutcomePlanner.planFailure(
             result: result,
@@ -613,23 +550,6 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
         lastSentBrightness = outcome.actualAfter
 
         updateStatus(outcome.statusText)
-
-        writeDiagnosticReport(
-            lux: smoothedLux,
-            target: target,
-            smoothed: candidate,
-            actualBefore: currentActual,
-            writeAttempted: true,
-            writePercent: candidate,
-            writeRaw: result.computedRawTarget,
-            readbackRaw: nil,
-            readbackCurrent: nil,
-            readbackMax: result.rawMax,
-            actualAfter: currentActual,
-            suppressionReason: "Write failed: \(result.message)",
-            autoManualState: autoManualStateText,
-            diagnosis: outcome.writeDiagnosis
-        )
     }
 
     private func updateStatus(_ title: String) {
@@ -909,51 +829,6 @@ final class AppState: NSObject, NSApplicationDelegate, ObservableObject {
         }
         if let observedBrightness = result.actualUIPercentAfter ?? result.readbackBrightnessPercent {
             currentBrightness = observedBrightness
-        }
-    }
-
-    private func writeDiagnosticReport(
-        lux: Double,
-        target: Int,
-        smoothed: Int,
-        actualBefore: Int,
-        writeAttempted: Bool,
-        writePercent: Int?,
-        writeRaw: Int?,
-        readbackRaw: Int?,
-        readbackCurrent: Int?,
-        readbackMax: Int?,
-        actualAfter: Int?,
-        suppressionReason: String?,
-        autoManualState: String,
-        diagnosis: String
-    ) {
-        let docsDir = URL(fileURLWithPath: "/Users/kadir/Desktop/Developer/ekle/docs/generated")
-        do {
-            try FileManager.default.createDirectory(at: docsDir, withIntermediateDirectories: true)
-            let fileURL = docsDir.appendingPathComponent("brightness_auto_loop_report.md")
-            
-            let report = """
-# Brightness Auto Loop Report
-
-- **ambient lux**: \(String(format: "%.1f", lux))
-- **auto target**: \(target)%
-- **smoothed request**: \(smoothed)%
-- **actual DDC before**: \(actualBefore)%
-- **difference**: \(abs(target - actualBefore))%
-- **threshold**: >= 3%
-- **write attempted**: \(writeAttempted ? "Yes" : "No")
-- **write percent**: \(writePercent.map { "\($0)%" } ?? "N/A")
-- **write raw value**: \(writeRaw.map { String($0) } ?? "N/A")
-- **readback raw/current/max**: \(readbackRaw.map { String($0) } ?? "N/A") / \(readbackCurrent.map { "\($0)%" } ?? "N/A") / \(readbackMax.map { String($0) } ?? "N/A")
-- **actual DDC after**: \(actualAfter.map { "\($0)%" } ?? "N/A")
-- **suppression reason**: \(suppressionReason ?? "None")
-- **auto/manual state**: \(autoManualState)
-- **diagnosis**: \(diagnosis)
-"""
-            try report.write(to: fileURL, atomically: true, encoding: .utf8)
-        } catch {
-            print("Failed to write diagnostic report: \(error)")
         }
     }
 
